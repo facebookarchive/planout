@@ -24,3 +24,6 @@ class PlanOutExperiment:
   def get_params(self):
     d = self.__dict__
     return dict([(i, d[i]) for i in d if i != 'exp'])
+
+  def __str__(self):
+    return str(self.get_params())

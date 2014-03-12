@@ -111,3 +111,18 @@ class WeightedChoice(PlanOutOpRandom):
     for choice in cum_weights:
       if stop_value <= cum_weights[choice]:
         return choice
+
+class Sample(PlanOutOpRandom):
+  def options(self):
+    return {
+      'choices': {'required': 1, 'description': 'choices to sample'},
+      'draws': {'required': 0, 'description': 'number of samples to draw'}}
+
+  # implements Fisher-Yates shuffle
+  def simpleExecute(self):
+    choices = self.parameters['choices']
+    num_draws = self.parameters.get('draws', len(choices))
+    for i in xrange(len(choices) - 1, 0, -1):
+      j = self.getHash(i) % (i + 1)
+      choices[i], choices[j] = choices[j], choices[i]
+    return choices[:num_draws]
