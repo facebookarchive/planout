@@ -17,7 +17,7 @@ from planoutkit import *
 
 @experiment('demo_experiment')
 def myExperiment(exp, userid, country):
-  exp.button_color = ['#ff0000', '#00ff00']
+  exp.button_color = UniformChoice(choices=['#ff0000', '#00ff00'], unit=userid)
   if country == 'US':
     exp.button_text = 'signup now!'
   else:
@@ -33,6 +33,6 @@ print my_exp
 which outputs:
 
 ```
-signup now! ['#ff0000', '#00ff00']
-{'button_color': ['#ff0000', '#00ff00'], 'input': {'country': 'US', 'userid': 1212}, 'button_text': 'signup now!'}
+signup now! #ff0000
+{'button_color': '#ff0000', 'input': {'country': 'US', 'userid': 1212}, 'button_text': 'signup now!'}
 ```
