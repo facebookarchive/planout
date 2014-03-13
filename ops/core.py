@@ -61,7 +61,7 @@ class Set(PlanOutOp):
 
   def pretty(self):
     strp = ops.Operators.pretty(self.args['value'])
-    return "%s <- %s;" % (self.args['var'], strp)
+    return "%s = %s;" % (self.args['var'], strp)
 
 
 class SetOverride(Set):
