@@ -26,5 +26,13 @@ def myExperiment(exp, userid, country):
 
 my_exp = myExperiment(userid=1212, country='US')
 print my_exp.button_text, my_exp.button_color
+print my_exp
 
+```
+
+which outputs:
+
+```
+signup now! ['#ff0000', '#00ff00']
+{'button_color': ['#ff0000', '#00ff00'], 'input': {'country': 'US', 'userid': 1212}, 'button_text': 'signup now!'}
 ```
