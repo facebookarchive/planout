@@ -3,6 +3,8 @@ from utils import Operators
 
 
 class PlanOutOp(object):
+  # all PlanOut operator have some set of parameters that act as required and
+  # optional arguments
   def __init__(self, **parameters):
     self.args = parameters
 

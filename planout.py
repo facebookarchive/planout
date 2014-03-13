@@ -30,7 +30,6 @@ class PlanOut(object):
     self._env[name] = value
     return self
 
-
   def setOverrides(self, overrides):
     Operators.enableOverrides()
     self._overrides = overrides
@@ -42,7 +41,6 @@ class PlanOut(object):
 
   def getOverrides(self):
     return self._overrides
-
 
   def execute(self, plan):
     if Operators.isOperator(plan):

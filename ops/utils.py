@@ -22,6 +22,8 @@ class Operators():
       "/": core.Divide,
       "not": core.Not,
       "negative": core.Negative,
+      "product": core.Product,
+      "sum": core.Sum,
       "randomFloat": random.RandomFloat,
       "randomInteger": random.RandomInteger,
       "bernoulliTrial": random.BernoulliTrial,

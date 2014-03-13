@@ -112,7 +112,8 @@ class Cond(PlanOutOp):
     'cond': {'required': 1, 'description': 'array of if-else tuples'}}
 
   def execute(self, context):
-    for (if_clause, then_clause) in self.args['cond']:
+    for i in self.args['cond']:
+      if_clause, then_clause = i['if'], i['then']
       if context.execute(if_clause):
         return context.execute(then_clause)
 
@@ -163,6 +164,30 @@ class And(PlanOutOp):
   def pretty(self):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
     return '&& '.join(pretty_c)
+
+
+class Product(PlanOutOpCommutative):
+  def commutativeExecute(self, values):
+    print values
+    return reduce(lambda x,y: x*y, values)
+
+  def pretty(self):
+    pretty_c = Operators.pretty(self.args['values'])
+    return '* '.join(pretty_c)
+
+
+class Sum(PlanOutOp):
+  def options(self):
+    return {
+      'values': {'required': 1, 'description': 'array of values'}}
+
+  def execute(self, context):
+    return sum(self.args['values'])
+
+  def pretty(self):
+    pretty_c = [Operators.pretty(c) for c in self.args['values']]
+    return '+ '.join(pretty_c)
+
 
 
 class Equals(PlanOutOpBinary):

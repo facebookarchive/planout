@@ -27,3 +27,32 @@ class PlanOutExperiment:
 
   def __str__(self):
     return str(self.get_params())
+
+
+class PlanOutQE(PlanOutExperiment):
+  def __init__(self, experiment_salt):
+    self.e = PlanOutExperiment(experiment_salt)
+
+  def setLogger(self, logger):
+    pass
+
+  def logExposure(self):
+    pass
+
+  def logOutcome(self):
+    pass
+
+  def get_params(self):
+    self.e.get_params()
+
+  def __str__(self):
+    return str(self.get_params())
+
+def experiment(name):
+  def wrap(f):
+    def wrapped_f(**kwargs):
+      e = PlanOutExperiment(name)
+      e.input = kwargs
+      return f(e, **kwargs)
+    return wrapped_f
+  return wrap 
