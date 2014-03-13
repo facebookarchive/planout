@@ -16,23 +16,28 @@ Here is an example of how to use PyPlanOut. To create a PlanOutKit experiment, y
 from planoutkit import *
 
 @experiment('demo_experiment')
-def myExperiment(exp, userid, country):
+def myExperiment(exp, userid):
   exp.button_color = UniformChoice(choices=['#ff0000', '#00ff00'], unit=userid)
-  if country == 'US':
-    exp.button_text = 'signup now!'
-  else:
-    exp.button_text = 'sorry!'
+  exp.button_text = WeightedChoice(
+      choices=['Join now!', 'Sign up.'],
+      weights=[0.2, 0.8], unit=userid)
   return exp
 
-my_exp = myExperiment(userid=1212, country='US')
+my_exp = myExperiment(userid=12)
+# parameters may be accessed via the . operator
 print my_exp.button_text, my_exp.button_color
-print my_exp
 
+# experiment objects include all input data
+for i in xrange(4):
+  print myExperiment(userid=i)
 ```
 
 which outputs:
 
 ```
-signup now! #ff0000
-{'button_color': '#ff0000', 'input': {'country': 'US', 'userid': 1212}, 'button_text': 'signup now!'}
+Sign up. #ff0000
+{'button_color': '#00ff00', 'input': {'userid': 0}, 'button_text': 'Join now!'}
+{'button_color': '#00ff00', 'input': {'userid': 1}, 'button_text': 'Join now!'}
+{'button_color': '#ff0000', 'input': {'userid': 2}, 'button_text': 'Join now!'}
+{'button_color': '#ff0000', 'input': {'userid': 3}, 'button_text': 'Sign up.'}
 ```
