@@ -1,7 +1,7 @@
 from ops.utils import Operators
 Operators.initFactory()
 
-class PlanOut(object):
+class PlanOutInterpreter(object):
   """PlanOut interpreter"""
 
   def __init__(self, serialization):
