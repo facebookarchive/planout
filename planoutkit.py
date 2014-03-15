@@ -1,19 +1,19 @@
 from ops.random import *
 from ops.core import PlanOutOp
-from planout import PlanOutInterpreter
+from planout import PlanOutInterpreterMapper
 import logging
 from experiment import SimpleExperiment
 
-class PlanOutKit:
+class PlanOutKitMapper:
   def __init__(self, experiment_salt):
-    self.exp = PlanOutInterpreter({})
-    self.exp.set('global_salt', experiment_salt)
+    self.interpreter = PlanOutInterpreterMapper({})
+    self.interpreter.set('global_salt', experiment_salt)
 
   def __setattr__(self, name, value):
     if isinstance(value, PlanOutOp): 
       if 'salt' not in value.args:
         value.args['salt'] = name
-      self.__dict__[name] = value.execute(self.exp)
+      self.__dict__[name] = value.execute(self.interpreter)
     else:
       self.__dict__[name] = value
 
@@ -25,27 +25,55 @@ class PlanOutKit:
 
   def getParams(self):
     d = self.__dict__
-    return dict([(i, d[i]) for i in d if i != 'exp'])
+    return dict([(i, d[i]) for i in d if i != 'interpreter'])
 
   def __str__(self):
     return str(self.getParams())
 
+## deprecated...
 # in case you don't need QE fanciness
-def experiment(name):
+def experiment_decorator(name):
   def wrap(f):
     def wrapped_f(**kwargs):
-      e = PlanOutKit(name)
+      e = PlanOutKitMapper(name)
       e.input = kwargs
       return f(e, **kwargs)
     return wrapped_f
   return wrap 
 
-class SimpleExample(SimpleExperiment):
+
+
+class myExample(SimpleExperiment):
   def execute(self, userid, pageid):
-    e = PlanOutKit('myhash')
+    e = PlanOutKitMapper(self.salt)
     e.foo = UniformChoice(choices=["red", "blue"], unit=userid)
-    e.bar = BernoulliTrial(p=0.2, unit=pageid)
+    e.bar = BernoulliTrial(p=0.5, unit=pageid)
     return e
 
-x = SimpleExample(userid=3, pageid=4)
-print x.get('foo'), x.get('bar')
+class myExample2(SimpleExperiment):
+  def setExperimentProperties(self):
+    self.salt = 'blah'
+    self.name = 'my_experimenT_name'
+
+  def execute(self, userid, pageid):
+    e = PlanOutKitMapper(self.salt)
+    e.foo = UniformChoice(choices=["red", "blue"], unit=userid)
+    e.bar = BernoulliTrial(p=0.5, unit=pageid)
+    return e
+
+
+
+class NamespaceExperimentProvider(SimpleExperiment):
+  def execute(self, namespace, **kwargs):
+    e = self.getExperimentForNamespace(namespace, kwargs)
+    return e
+
+  def getExperimentForNamespace(self, namespace, userid, pageid):
+    e = PlanOutKitMapper(self.salt)
+    e.salt = '%s.%s' % (namespace , e.salt)
+    e.foo = UniformChoice(choices=["red", "blue"], unit=userid)
+    e.bar = BernoulliTrial(p=0.5, unit=pageid)
+    return e
+
+
+#print NamespaceExperimentProvider('bob dylan', userid=1, pageid=2 % 3)

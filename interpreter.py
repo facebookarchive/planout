@@ -1,7 +1,9 @@
 from ops.utils import Operators
+from mapper import PlanOutMapper
+
 Operators.initFactory()
 
-class PlanOutInterpreter(object):
+class PlanOutInterpreterMapper(PlanOutMapper):
   """PlanOut interpreter"""
 
   def __init__(self, serialization):
@@ -9,7 +11,7 @@ class PlanOutInterpreter(object):
     self._env = {}
     self._overrides = {}
 
-  def result(self):
+  def getParams(self):
     self.execute(self._serialization)
     return self._env
 

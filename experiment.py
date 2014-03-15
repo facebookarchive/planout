@@ -1,25 +1,69 @@
 import logging
 from abc import ABCMeta, abstractmethod
 
-class ExperimentBase(object):
+class Experiment(object):
+  """Abstract base class for PlanOut experiments"""
   __metaclass__ = ABCMeta
 
   def __init__(self, **inputs):
-    self.params = None
-    self.exp = None
-    self.inputs = inputs
-    self.configureLogger()
-    self.__assign()
+    self.inputs = inputs       # input data
+    self.params = None         # stores parameter assignment results
+    self.expInstance = None    # stores instance of the PlanOut mapper
+    self._logged = False       # True when assignments have been exposure logged
+    self._salt = None          # Experiment-level salt
+    self._name = None          # Name of the experiment
+
+    self.setExperimentProperties()          # sets name, salt, etc.
+    self.configureLogger()                  # sets up loggers
+    self.__assign()                         # assign inputs to parameters
+
+    # check if inputs+params were previously logged
+    self._logged = self.previouslyLogged()  
+
+    # auto-exposure logging is enabled by default
+    self._auto_exposure_log = True         
+
+  def setExperimentProperties(self):
+    """Set experiment properties, e.g., experiment name and salt."""
+    # If the experiment name is not specified, just use the class name
+    self.name = self.__class__.__name__
+
+  @property
+  def salt(self):
+    # use the experiment name as the salt if the salt is not set
+    return self._salt if self._salt else self.name
+
+  @salt.setter
+  def salt(self, value):
+    self._salt = value
+
+  @property
+  def name(self):
+    return self._name
+
+  @name.setter
+  def name(self, value):
+    self._name = value.lower().replace(' ', '_')
+
 
   def __assign(self):
+    """Execute assignment procedure and set parameters"""
     # exp must implement basic PlanOut methods
-    self.exp = self.execute(**self.inputs)
-    self.params = self.exp.getParams()
+    self.expInstance = \
+        self.execute(**self.inputs)
+    self.params = self.expInstance.getParams()
     return self
 
+  @abstractmethod
+  def execute(**kwargs):
+    """Returns evaluated PlanOut mapper with experiment assignment"""
+    pass
+
   def __asBlob(self, extras={}):
-    # represent data to log as a dictionary
+    """Dictionary representation of experiment data"""
     d = {
+      'name': self.name,
+      'salt': self.salt,
       'inputs': self.inputs,
       'params': self.params
     }
@@ -27,55 +71,94 @@ class ExperimentBase(object):
       d[k] = extras[k]
     return d
 
+  # the logged setter / getter may be unnecessary
+  @property
+  def logged(self):
+    return self._logged
+
+  @logged.setter
+  def logged(self, value):
+    self._logged = value 
+
+  def setAutoExposureLogging(self, value):
+    """
+    Disables / enables auto exposure logging (enabled by default).
+    """
+    self._auto_exposure_log = value
+
   def getParams(self):
-    if not self.alreadyLogged():
+    """
+    Get all PlanOut parameters. Triggers exposure log.
+    """
+    if self._auto_exposure_log and not self.logged:
       self.logExposure()
-    return self.exp.getParams()
+    return self.expInstance.getParams()
 
   def get(self, name, default=None):
-    if not self.alreadyLogged():
+    """
+    Get PlanOut parameter (returns default if undefined). Triggers exposure log.
+    """
+    if self._auto_exposure_log and not self.logged:
       self.logExposure()
-    return self.exp.get(name, default)
+    return self.expInstance.get(name, default)
 
   def __str__(self):
+    """
+    String representation of exposure log data. Triggers exposure log.
+    """
+    if self._auto_exposure_log and not self.logged:
+      self.logExposure()
     return str(self.__asBlob())
 
-  # not sure if this should be private.
-  def logExposure(self):
+  def logExposure(self, extras={}):
+    """Manual call to log exposure"""
     self.logged = True
-    self.log(self.__asBlob({'event': 'exposure'}))
+    if extras:
+      exta_payload = dict(extras.items() + ('event', 'exposure'))
+    else:
+      extra_payload = extras
+    self.log(self.__asBlob(extra_payload))
 
   def logOutcome(self):
+    """Log outcome event"""
     self.logged = True
-    self.log(self.__asBlob({'event': 'outcome'}))
+    exta_payload = dict(extras.items() + ('event', 'outcome'))
+    self.log(self.__asBlob(extra_payload))
 
   @abstractmethod
   def configureLogger(self):
+    """Set up files, database connections, sockets, etc for logging."""
     pass
 
   @abstractmethod
   def log(self, data):
+    """Log experimental data"""
     pass
 
   @abstractmethod
-  def alreadyLogged(self):
-    """check if the input has already been logged"""
-    # for high-use applications, one might have this method to check if
+  def previouslyLogged(self):
+    """Check if the input has already been logged.
+       Gets called once during in the constructor."""
+    # For high-use applications, one might have this method to check if
     # there is a memcache key associated with the checksum of the inputs+params
     pass
 
-class SimpleExperiment(ExperimentBase):
+class SimpleExperiment(Experiment):
+  """Simple experiment base class which exposure logs to a file"""
   def configureLogger(self):
-    """sets up logger"""
-    # For the base experiment class we just log using logging
-    # to standard out. We could instead log to a file, e.g.,
-    # logging.basicConfig(filename='example.log',level=logging.DEBUG)
-    self.logged = False
-    logging.basicConfig(level=logging.DEBUG)
+    """Sets up logger to log to experiment_name.log"""
+    self.logger = logging.getLogger(self.name)
+    self.logger.setLevel(logging.INFO)
+    self.logger.addHandler(logging.FileHandler('%s.log' % self.name))
 
   def log(self, data):
-    # alternative loggers may write to a database or thrift
-    logging.info(data)
+    """Logs data to a file"""
+    self.logger.info(data)
 
-  def alreadyLogged(self):
-    return self.logged
+  def previouslyLogged(self):
+    """Check if the input has already been logged.
+       Gets called once during in the constructor."""
+    # SimpleExperiment doesn't connect with any services, so we just assume
+    # that if the object is a new instance, this is the first time we are
+    # seeing the inputs/outputs given.
+    return False

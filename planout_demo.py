@@ -15,7 +15,7 @@ def runPlan(config, init, overrides={}):
     print '=== printing experiment in human ==='
     print experiment.pretty()
     print '=== experiment results ==='
-    print experiment.result()
+    print experiment.getParams()
   else:
     print "experiment is invalid!"
     print "=== dump of broken experiment ==="
