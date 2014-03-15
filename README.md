@@ -15,24 +15,25 @@ Here is an example of how to use PyPlanOut. To create a PlanOutKit experiment, y
 
 from planoutkit import *
 
-@experiment('demo_experiment')
-def myExperiment(exp, userid):
-  exp.button_color = UniformChoice(choices=['#ff0000', '#00ff00'], unit=userid)
-  exp.button_text = WeightedChoice(
-      choices=['Join now!', 'Sign up.'],
-      weights=[0.2, 0.8], unit=userid)
-  return exp
+class firstExperiment(SimpleExperiment):
+  def execute(self, userid):
+    e = PlanOutKitMapper(self.salt)
+    e.button_color = UniformChoice(choices=['#ff0000', '#00ff00'], unit=userid)
+    e.button_text = WeightedChoice(
+        choices=['Join now!', 'Sign up.'],
+        weights=[0.2, 0.8], unit=userid)
+    return e
 
-my_exp = myExperiment(userid=12)
+my_exp = firstExperiment(userid=12)
 # parameters may be accessed via the . operator
-print my_exp.button_text, my_exp.button_color
+print firstExperiment.get('button_text'), firstExperiment.get('button_color')
 
 # experiment objects include all input data
 for i in xrange(4):
-  print myExperiment(userid=i)
+  print firstExperiment(userid=i)
 ```
 
-which outputs:
+which outputs (update this):
 
 ```
 Sign up. #ff0000
