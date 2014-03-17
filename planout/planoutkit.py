@@ -1,6 +1,6 @@
 from ops.random import *
 from ops.core import PlanOutOp
-from planout import PlanOutInterpreterMapper
+from interpreter import PlanOutInterpreterMapper
 import logging
 from experiment import SimpleExperiment
 

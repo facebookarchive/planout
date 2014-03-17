@@ -1,4 +1,4 @@
-from planoutkit import *
+from planout.planoutkit import *
 
 
 class exp1(SimpleExperiment):

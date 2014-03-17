@@ -1,9 +1,9 @@
-from planout import PlanOut
+from planout.interpreter import PlanOutInterpreterMapper
 
 
 def runPlan(config, init, overrides={}):
   print '\n====== SETTING UP NEW EXPERIMENT ======'
-  experiment = PlanOut(config)
+  experiment = PlanOutInterpreterMapper(config)
   print 'using %s as input.' % init
   experiment.setEnv(init)
   if(overrides):

@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-class PlanOutMapper(Object):
+class PlanOutMapper:
   """Abstract base class for PlanOut Mappers"""
   __metaclass__ = ABCMeta
 
