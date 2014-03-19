@@ -45,3 +45,6 @@ Sign up. #ff0000
 {'inputs': {'userid': 4}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#ff0000', 'button_text': 'Sign up.'}}
 {'inputs': {'userid': 5}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#00ff00', 'button_text': 'Join now!'}}
 ```
+
+### Learn more
+Learn more about PlanOut by [reading the PlanOut paper](http://www-personal.umich.edu/~ebakshy/planout.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. WWW '14. April 7–11, 2014, Seoul, Korea.
