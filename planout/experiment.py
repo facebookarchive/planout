@@ -6,11 +6,14 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 import logging
+import re
 from abc import ABCMeta, abstractmethod
 
 class Experiment(object):
   """Abstract base class for PlanOut experiments"""
   __metaclass__ = ABCMeta
+
+  logger_configured = False
 
   def __init__(self, **inputs):
     self.inputs = inputs       # input data
@@ -29,6 +32,7 @@ class Experiment(object):
 
     # auto-exposure logging is enabled by default
     self._auto_exposure_log = True         
+
 
   def setExperimentProperties(self):
     """Set experiment properties, e.g., experiment name and salt."""
@@ -50,7 +54,7 @@ class Experiment(object):
 
   @name.setter
   def name(self, value):
-    self._name = value.lower().replace(' ', '_')
+    self._name = re.sub(r'\s+', '-', value)
 
 
   def __assign(self):
@@ -152,15 +156,24 @@ class Experiment(object):
 
 class SimpleExperiment(Experiment):
   """Simple experiment base class which exposure logs to a file"""
+  
+  # We only want to set up the logger once, the first time the object is
+  # instantiated. We do this by maintaining this class variable.
+  _logger_configured = False
+
   def configureLogger(self):
     """Sets up logger to log to experiment_name.log"""
-    self.logger = logging.getLogger(self.name)
-    self.logger.setLevel(logging.INFO)
-    self.logger.addHandler(logging.FileHandler('%s.log' % self.name))
+    # only want to set logging handler once
+    if not self.__class__._logger_configured:
+      self.__class__.logger = logging.getLogger(self.name)
+      self.__class__.logger.setLevel(logging.INFO)
+      self.__class__.logger.addHandler(logging.FileHandler('%s.log' % self.name))
+      self.__class__._logger_configured = True
+
 
   def log(self, data):
     """Logs data to a file"""
-    self.logger.info(data)
+    self.__class__.logger.info(data)
 
   def previouslyLogged(self):
     """Check if the input has already been logged.
