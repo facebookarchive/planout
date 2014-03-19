@@ -5,7 +5,7 @@ class Literal(PlanOutOp):
   def options(self):
     return {'value': {'required': 1}}
 
-  def execute(self, context):
+  def execute(self, mapper):
     return self.args['value']
 
 
@@ -13,8 +13,8 @@ class Get(PlanOutOp):
   def options(self):
     return {'var': {'required': 1, 'description': 'variable to get'}}
 
-  def execute(self, context):
-    return context.get(self.args['var'])
+  def execute(self, mapper):
+    return mapper.get(self.args['var'])
 
   def pretty(self):
     return self.args['var']
@@ -27,9 +27,9 @@ class Seq(PlanOutOp):
         'required': 1,
         'description': 'sequence of operators to execute'}}
 
-  def execute(self, context):
+  def execute(self, mapper):
     for op in self.args['seq']:
-      context.execute(op)
+      mapper.evaluate(op)
 
   def validate(self):
     is_valid = True
@@ -49,12 +49,12 @@ class Set(PlanOutOp):
       'var': {'required': 1, 'description': 'variable to set'},
       'value': {'required': 1, 'description': 'value of variable being set'}}
 
-  def execute(self, context):
+  def execute(self, mapper):
     var, value = self.args['var'], self.args['value']
     # if a salt is not specified, use the variable name as the salt
     if ops.Operators.isOperator(value) and 'salt' not in value:
       value['salt'] = var
-    context.set(var, context.execute(value))
+    mapper.set(var, mapper.evaluate(value))
 
   def validate(self):
     return ops.Operators.validateOperator(self.args['value'])
@@ -65,18 +65,18 @@ class Set(PlanOutOp):
 
 
 class SetOverride(Set):
-  def execute(self, context):
+  def execute(self, mapper):
     var, value = self.args['var'], self.args['value']
-    if not context.hasOverride(var):
-      context.set(var, context.execute(value))
+    if not mapper.hasOverride(var):
+      mapper.set(var, mapper.evaluate(value))
 
 
 class Array(PlanOutOp):
   def options(self):
     return {'values': {'required': 1, 'description': 'array of values'}}
 
-  def execute(self, context):
-    return [context.execute(value) for value in self.args['values']]
+  def execute(self, mapper):
+    return [mapper.evaluate(value) for value in self.args['values']]
 
   def validate(self):
     is_valid = True
@@ -111,11 +111,11 @@ class Cond(PlanOutOp):
     return {
     'cond': {'required': 1, 'description': 'array of if-else tuples'}}
 
-  def execute(self, context):
+  def execute(self, mapper):
     for i in self.args['cond']:
       if_clause, then_clause = i['if'], i['then']
-      if context.execute(if_clause):
-        return context.execute(then_clause)
+      if mapper.evaluate(if_clause):
+        return mapper.evaluate(then_clause)
 
   def validate(self):
     is_valid = True
@@ -148,9 +148,9 @@ class And(PlanOutOp):
     return {
       'values': {'required': 1, 'description': 'array of truthy values'}}
 
-  def execute(self, context):
+  def execute(self, mapper):
     for clause in self.args['values']:
-      if not context.execute(clause):
+      if not mapper.evaluate(clause):
         return False
     return True
 
@@ -181,7 +181,7 @@ class Sum(PlanOutOp):
     return {
       'values': {'required': 1, 'description': 'array of values'}}
 
-  def execute(self, context):
+  def execute(self, mapper):
     return sum(self.args['values'])
 
   def pretty(self):

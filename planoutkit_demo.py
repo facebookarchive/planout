@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 from planout.planoutkit import *
+from planout.experiment import SimpleExperiment
 
 class Exp1(SimpleExperiment):
   def execute(self, userid):

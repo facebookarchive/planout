@@ -1,6 +1,7 @@
 import hashlib
 import base
 
+
 class PlanOutOpRandom(base.PlanOutOpSimple):
   LONG_SCALE = float(0xFFFFFFFFFFFFFFF)
 
@@ -10,11 +11,8 @@ class PlanOutOpRandom(base.PlanOutOpSimple):
      'salt': {'required': 1,'description':
        'salt for hash. should generally be unique for each random variable'}}
 
-  def getExperimentSalt(self):
-    return self.context.get('global_salt', 'global_salt')
-
   def getUnit(self, appended_unit=None):
-    unit = self.parameters.get('unit', self.context.get('unit'))
+    unit = self.parameters.get('unit')
     if type(unit) is not list:
       unit = [unit]
     if appended_unit is not None:
@@ -23,7 +21,7 @@ class PlanOutOpRandom(base.PlanOutOpSimple):
 
   def getHash(self, bonus_unit=None):
     salt = self.parameters['salt']
-    salty = '%s.%s' % (self.getExperimentSalt(), salt)
+    salty = '%s.%s' % (self.mapper.experiment_salt, salt)
     unit_str = '.'.join(map(str, self.getUnit(bonus_unit)))
     return int(hashlib.sha1(salty + unit_str).hexdigest()[:15], 16)
 

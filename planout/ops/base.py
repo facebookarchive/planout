@@ -1,15 +1,20 @@
 import logging
+from abc import ABCMeta, abstractmethod
 from utils import Operators
 
+from abc import ABCMeta, abstractmethod
 
 class PlanOutOp(object):
+  """Abstract base class for PlanOut Operators"""
+  __metaclass__ = ABCMeta
   # all PlanOut operator have some set of parameters that act as required and
   # optional arguments
   def __init__(self, **parameters):
     self.args = parameters
 
   # all PlanOut operators must implement execute
-  def execute(self, context):
+  @abstractmethod
+  def execute(self, mapper):
     pass
 
   # all PlanOut operators must specify required and optional parameters
@@ -84,17 +89,19 @@ class PlanOutOp(object):
 
 # PlanOutOpSimple is the easiest way to implement simple operators.
 # The class automatically evaluates the values of all parameters passed in via
-# execute(), and stores the PlanOut object context and evaluated
+# execute(), and stores the PlanOut mapper object and evaluated
 # parameters as instance variables.  The user can then simply extend
 # PlanOutOpSimple and implement simpleExecute().
 # See the Equals operator as an example.
 
 class PlanOutOpSimple(PlanOutOp):
-  def execute(self, context):
-    self.context = context
+  __metaclass__ = ABCMeta
+
+  def execute(self, mapper):
+    self.mapper = mapper
     self.parameters = {}    # evaluated parameters
     for param in self.args:
-      self.parameters[param] = context.execute(self.args[param])
+      self.parameters[param] = mapper.evaluate(self.args[param])
     return self.simpleExecute()
 
   def validate(self):
@@ -105,6 +112,8 @@ class PlanOutOpSimple(PlanOutOp):
     return is_valid
 
 class PlanOutOpBinary(PlanOutOpSimple):
+  __metaclass__ = ABCMeta
+
   def options(self):
     return {
       'left': {'required': 1, 'description': 'left side of binary operator'},
@@ -113,9 +122,6 @@ class PlanOutOpBinary(PlanOutOpSimple):
   def simpleExecute(self):
     return self.binaryExecute(self.parameters['left'], self.parameters['right'])
 
-  def binaryExecute(self, left, right):
-    pass
-
   def pretty(self):
     return '%s %s %s' % (
       Operators.pretty(self.args['left']),
@@ -123,10 +129,15 @@ class PlanOutOpBinary(PlanOutOpSimple):
       Operators.pretty(self.args['right']))
 
   def getInfixString(self):
-    return self.args['op'] 
+    return self.args['op']
+
+  @abstractmethod
+  def binaryExecute(self, left, right):
+    pass
 
 
 class PlanOutOpUnary(PlanOutOpSimple):
+  __metaclass__ = ABCMeta
   def options(self):
     return {
       'value': {'required': 1, 'description': 'input value to commutative operator'}}
@@ -134,19 +145,18 @@ class PlanOutOpUnary(PlanOutOpSimple):
   def simpleExecute(self):
     return self.unaryExecute(self.parameters['value'])
 
-  def unaryExecute(self, value):
-    pass
-
   def pretty(self):
     return self.getUnaryString + Operators.pretty(self.args['value'])
 
   def getUnaryString(self):
     return self.args['op']
 
+  @abstractmethod
+  def unaryExecute(self, value):
+    pass
 
 class PlanOutOpCommutative(PlanOutOpSimple):
-  def commutativeExecute(self, values):
-    pass
+  __metaclass__ = ABCMeta
 
   def options(self):
     return {
@@ -158,6 +168,10 @@ class PlanOutOpCommutative(PlanOutOpSimple):
   def pretty(self):
     pretty_values = Operators.pretty(self.args['values'])
     return '%s(%s)' % (self.getUnaryString(), ', '.join(pretty_values))
-    
+
   def getUnaryString(self):
     return self.args['op']
+
+  @abstractmethod
+  def commutativeExecute(self, values):
+    pass

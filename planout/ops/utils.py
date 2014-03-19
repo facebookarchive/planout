@@ -58,8 +58,8 @@ class Operators():
 
   @staticmethod
   def prettyParamFormat(params):
-    return \
-      ', '.join([p+'='+Operators.pretty(params[p]) for p in params if p != 'op'])
+    ps = [p+'='+Operators.pretty(params[p]) for p in params if p != 'op']
+    return ', '.join(ps)
 
   @staticmethod
   def pretty(params):

@@ -13,13 +13,14 @@ Operators.initFactory()
 class PlanOutInterpreterMapper(PlanOutMapper):
   """PlanOut interpreter"""
 
-  def __init__(self, serialization):
+  def __init__(self, serialization, experiment_salt='global_salt'):
     self._serialization = serialization
     self._env = {}
     self._overrides = {}
+    self._experiment_salt = experiment_salt
 
   def getParams(self):
-    self.execute(self._serialization)
+    self.evaluate(self._serialization)
     return self._env
 
   def setEnv(self, new_env):
@@ -27,7 +28,7 @@ class PlanOutInterpreterMapper(PlanOutMapper):
     for v in self._overrides:
       ne[v] = self._overrides[v]
     self._env = ne
-    return self  
+    return self
 
   def has(self, name):
     return name in self._env
@@ -51,11 +52,11 @@ class PlanOutInterpreterMapper(PlanOutMapper):
   def getOverrides(self):
     return self._overrides
 
-  def execute(self, plan):
-    if Operators.isOperator(plan):
-      return Operators.operatorInstance(plan).execute(self)
+  def evaluate(self, data):
+    if Operators.isOperator(data):
+      return Operators.operatorInstance(data).execute(self)
     else:
-      return plan  # plan is a literal
+      return data  # data is a literal
 
   def validate(self):
     config = self._serialization
