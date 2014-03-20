@@ -18,20 +18,21 @@ class Experiment(object):
   def __init__(self, **inputs):
     self.inputs = inputs       # input data
     self.params = None         # stores parameter assignment results
-    self.expInstance = None    # stores instance of the PlanOut mapper
+    self.mapper = None    # stores instance of the PlanOut mapper
     self._logged = False       # True when assignments have been exposure logged
     self._salt = None          # Experiment-level salt
     self._name = None          # Name of the experiment
+    self._in_experiment = True
 
     self.setExperimentProperties()          # sets name, salt, etc.
     self.configureLogger()                  # sets up loggers
     self.__assign()                         # assign inputs to parameters
 
     # check if inputs+params were previously logged
-    self._logged = self.previouslyLogged()  
+    self._logged = self.previouslyLogged()
 
     # auto-exposure logging is enabled by default
-    self._auto_exposure_log = True         
+    self._auto_exposure_log = True
 
 
   def setExperimentProperties(self):
@@ -56,13 +57,16 @@ class Experiment(object):
   def name(self, value):
     self._name = re.sub(r'\s+', '-', value)
 
+  def in_experiment(self):
+    return self._in_experiment
 
   def __assign(self):
     """Execute assignment procedure and set parameters"""
     # exp must implement basic PlanOut methods
-    self.expInstance = \
+    self.mapper = \
         self.execute(**self.inputs)
-    self.params = self.expInstance.getParams()
+    self.params = self.mapper.getParams()
+    self._in_experiment = self.params.get('in_experiment', True)
     return self
 
   @abstractmethod
@@ -89,7 +93,7 @@ class Experiment(object):
 
   @logged.setter
   def logged(self, value):
-    self._logged = value 
+    self._logged = value
 
   def setAutoExposureLogging(self, value):
     """
@@ -101,23 +105,23 @@ class Experiment(object):
     """
     Get all PlanOut parameters. Triggers exposure log.
     """
-    if self._auto_exposure_log and not self.logged:
+    if self._auto_exposure_log and self.in_experiment() and not self.logged:
       self.logExposure()
-    return self.expInstance.getParams()
+    return self.mapper.getParams()
 
   def get(self, name, default=None):
     """
     Get PlanOut parameter (returns default if undefined). Triggers exposure log.
     """
-    if self._auto_exposure_log and not self.logged:
+    if self._auto_exposure_log and self.in_experiment() and not self.logged:
       self.logExposure()
-    return self.expInstance.get(name, default)
+    return self.mapper.get(name, default)
 
   def __str__(self):
     """
     String representation of exposure log data. Triggers exposure log.
     """
-    if self._auto_exposure_log and not self.logged:
+    if self._auto_exposure_log and self.in_experiment() and not self.logged:
       self.logExposure()
     return str(self.__asBlob())
 
@@ -156,7 +160,7 @@ class Experiment(object):
 
 class SimpleExperiment(Experiment):
   """Simple experiment base class which exposure logs to a file"""
-  
+
   # We only want to set up the logger once, the first time the object is
   # instantiated. We do this by maintaining this class variable.
   _logger_configured = False

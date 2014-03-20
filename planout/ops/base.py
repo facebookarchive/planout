@@ -90,9 +90,8 @@ class PlanOutOp(object):
 # PlanOutOpSimple is the easiest way to implement simple operators.
 # The class automatically evaluates the values of all parameters passed in via
 # execute(), and stores the PlanOut mapper object and evaluated
-# parameters as instance variables.  The user can then simply extend
-# PlanOutOpSimple and implement simpleExecute().
-# See the Equals operator as an example.
+# parameters as instance variables.  The user can then extend PlanOutOpSimple
+# and implement simpleExecute().
 
 class PlanOutOpSimple(PlanOutOp):
   __metaclass__ = ABCMeta
