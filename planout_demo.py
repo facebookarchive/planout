@@ -114,4 +114,3 @@ if __name__ == "__main__":
   runPlan(valid_config, {"userid": 21, "pageid": 9})
   runPlan(valid_config, {"userid": 21, "pageid": 9}, {'prob_show': 0.8})
   runPlan(valid_config, {"userid": 4, "pageid": 9}, {'prob_show': 0.8})
-
