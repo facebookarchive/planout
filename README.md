@@ -1,11 +1,14 @@
 # PlanOut
 
-PlanOut is a language for online field experimentation. It lets you implement both simple and complex experiments with only a few lines of code.
+PlanOut is a language for online field experimentation. It lets you implement both simple and complex experiments with only a few lines of code. PlanOut defines a number of operators for assigning values to parameters --- for example, for randomly assigning users to a parameter controlling the color of a button. An experimental design is defined by using one or more of these operators to set parameters that control your Internet service.
+
+For relatively simple environments, the experimental design can be specified by defining a Python method that uses these operators directly. For more complex environments, the design can be specified in a serialized representation of the calls to these operators, which is then interpreted and executed on demand.
+
+PlanOut was created to make it easy to run more sophisticated experiment and to quickly iterate on these experiments, while satisfying the constraints of running as part of a large Internet service.
 
 This release currently includes
-
-  * The reference implementation of the PlanOut interpreter. This reads serialized PlanOut code and executes it. It's intended to be ported and run on top of an experimentation Platform. Currently it requires a compiler to convert from the PlanOut domain-specific language (see PlanOut paper).
-  * PlanOutKit, an easy-to-use library for designing simple PlanOut experiments in python without the hassle of serializing experiments. It is recommended for students and those first learning how to implement experiments.
+  * The reference implementation of the PlanOut interpreter. This reads serialized PlanOut scripts and executes them. It is intended to be used as part of a large experimentation platform, potentially including such tools as a GUI for creating experiments. It requires a compiler to convert from the PlanOut domain-specific language (see PlanOut paper) to the serialization; a JavaScript implemention is provided.
+  * PlanOutKit, an easy-to-use library for implementing PlanOut experiments in Python without the hassle of serializing experiments. It is recommended for students, those first learning how to implement experiments, and environments without the need for serialization.
   * An Experiment class / framework for implementing and logging experiments that works with both PlanOut language and PlanOutKit experiments.
 
 ## PlanOutKit
