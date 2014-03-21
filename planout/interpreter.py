@@ -4,9 +4,10 @@
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
-
+from copy import deepcopy
 from ops.utils import Operators
 from mapper import PlanOutMapper
+
 
 Operators.initFactory()
 
@@ -18,22 +19,27 @@ class PlanOutInterpreterMapper(PlanOutMapper):
     self._env = {}
     self._overrides = {}
     self._experiment_salt = experiment_salt
+    self._evaluated = False
 
   def getParams(self):
-    self.evaluate(self._serialization)
+    if not self._evaluated:
+      self.evaluate(self._serialization)
+      self._evaluated = True
     return self._env
 
   def setEnv(self, new_env):
-    ne = new_env
+    self.env = deepcopy(new_env)
     for v in self._overrides:
-      ne[v] = self._overrides[v]
-    self._env = ne
+      self._env[v] = self._overrides[v]
     return self
 
   def has(self, name):
     return name in self._env
 
   def get(self, name, default=None):
+    if not self._evaluated:
+      self.evaluate(self._serialization)
+      self._evaluated = True
     return self._env.get(name, default)
 
   def set(self, name, value):
@@ -43,7 +49,7 @@ class PlanOutInterpreterMapper(PlanOutMapper):
   def setOverrides(self, overrides):
     Operators.enableOverrides()
     self._overrides = overrides
-    self.setEnv(self._env)
+    self.setEnv(self._env)  # this will reset overrides
     return self
 
   def hasOverride(self, name):
