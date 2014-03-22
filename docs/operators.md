@@ -12,6 +12,10 @@ There are two main types of PlanOut mappers: `PlanOutKitMapper`, which is useful
 
 ## Experiment class
 
-``
-hello there
-``
+The experiment class implements core functionality associated with each experiment. In particular, every experiment has a:
+ - name
+ - experiment-level salt
+ - an assignment scheme using a PlanOut mapper that translates inputs to parameter values.
+ - logging, which by default maintains an "exposure log" of when inputs (e.g., userids) get mapped to parameter. This makes it easier to keep track of who was in your experiment, and restrict your analysis to the experiment.
+
+To define a new experiment, one subclasses the Experiment class. By default, the name of the experiment will be the name of the subclass, and the experiment-level salt will be the name of the experiment.

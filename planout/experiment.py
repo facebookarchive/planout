@@ -161,6 +161,7 @@ class Experiment(object):
 class SimpleExperiment(Experiment):
   """Simple experiment base class which exposure logs to a file"""
 
+  __metaclass__ = ABCMeta
   # We only want to set up the logger once, the first time the object is
   # instantiated. We do this by maintaining this class variable.
   _logger_configured = False
@@ -174,7 +175,6 @@ class SimpleExperiment(Experiment):
       self.__class__.logger.addHandler(logging.FileHandler('%s.log' % self.name))
       self.__class__._logger_configured = True
 
-
   def log(self, data):
     """Logs data to a file"""
     self.__class__.logger.info(data)
@@ -186,3 +186,14 @@ class SimpleExperiment(Experiment):
     # that if the object is a new instance, this is the first time we are
     # seeing the inputs/outputs given.
     return False
+
+class SimpleInterpretedExperiment(SimpleExperiment):
+  """Simple class for loading a file-based PlanOut interpreter experiment"""
+  __metaclass__ = ABCMeta
+  filename = None
+
+  def execute(self, **kwargs):
+    code = read(self.filename)
+    mapper = PlanOutInterpreterMapper(code, self.salt)
+    mapper.setEnv(kwargs)
+    return mapper ## typically we validate the code before it is saved.
