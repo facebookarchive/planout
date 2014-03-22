@@ -10,19 +10,19 @@ from planout.interpreter import PlanOutInterpreterMapper
 
 def runPlan(config, init, overrides={}):
   print '\n====== SETTING UP NEW EXPERIMENT ======'
-  experiment = PlanOutInterpreterMapper(config)
+  mapper = PlanOutInterpreterMapper(config)
   print 'using %s as input.' % init
-  experiment.setEnv(init)
+  mapper.setEnv(init)
   if(overrides):
     print 'applying overrides: %s.' % overrides
-    experiment.setOverrides(overrides)
+    mapper.setOverrides(overrides)
   print 'validating experiment...'
-  if experiment.validate():
+  if mapper.validate():
     print 'success!'
     print '=== printing experiment in human ==='
-    print experiment.pretty()
+    print mapper.pretty()
     print '=== experiment results ==='
-    print experiment.getParams()
+    print mapper.getParams()
   else:
     print "experiment is invalid!"
     print "=== dump of broken experiment ==="

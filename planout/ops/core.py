@@ -8,6 +8,9 @@ class Literal(PlanOutOp):
   def execute(self, mapper):
     return self.args['value']
 
+  def pretty(self):
+    return self.args['value']
+
 
 class Get(PlanOutOp):
   def options(self):
@@ -165,10 +168,31 @@ class And(PlanOutOp):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
     return '&& '.join(pretty_c)
 
+class Or(PlanOutOp):
+  def options(self):
+    return {
+      'values': {'required': 1, 'description': 'array of truthy values'}}
+
+  def execute(self, mapper):
+    for clause in self.args['values']:
+      if mapper.evaluate(clause):
+        return True
+    return False
+
+  def validate(self):
+    is_valid = True
+    for clause in self.args['values']:
+      if not ops.Operators.validateOperator(clause):
+        is_valid = False
+    return is_valid
+
+  def pretty(self):
+    pretty_c = [Operators.pretty(c) for c in self.args['values']]
+    #pretty_c = Operators.pretty(self.args['values'])
+    return '|| '.join(pretty_c)
 
 class Product(PlanOutOpCommutative):
   def commutativeExecute(self, values):
-    print values
     return reduce(lambda x,y: x*y, values)
 
   def pretty(self):
@@ -187,7 +211,6 @@ class Sum(PlanOutOp):
   def pretty(self):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
     return '+ '.join(pretty_c)
-
 
 
 class Equals(PlanOutOpBinary):
@@ -220,7 +243,7 @@ class Mod(PlanOutOpBinary):
 
 class Divide(PlanOutOpBinary):
   def binaryExecute(self, left, right):
-    return left / right
+    return float(left) / float(right)
 
 class Not(PlanOutOpUnary):
   def unaryExecute(self, value):
@@ -237,9 +260,13 @@ class Negative(PlanOutOpUnary):
     return '-'
 
 class Min(PlanOutOpCommutative):
-  def commutativeExecute(values):
-    return min(*values)
+  def commutativeExecute(self, values):
+    return min(values)
 
 class Max(PlanOutOpCommutative):
-  def commutativeExecute(values):
-    return max(*values)
+  def commutativeExecute(self, values):
+    return max(values)
+
+class Length(PlanOutOpCommutative):
+  def commutativeExecute(self, values):
+    return len(values)

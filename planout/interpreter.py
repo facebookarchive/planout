@@ -28,7 +28,7 @@ class PlanOutInterpreterMapper(PlanOutMapper):
     return self._env
 
   def setEnv(self, new_env):
-    self.env = deepcopy(new_env)
+    self._env = deepcopy(new_env)
     for v in self._overrides:
       self._env[v] = self._overrides[v]
     return self
@@ -37,9 +37,6 @@ class PlanOutInterpreterMapper(PlanOutMapper):
     return name in self._env
 
   def get(self, name, default=None):
-    if not self._evaluated:
-      self.evaluate(self._serialization)
-      self._evaluated = True
     return self._env.get(name, default)
 
   def set(self, name, value):
