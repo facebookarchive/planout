@@ -1,6 +1,11 @@
 from base import *
 import utils as ops
 
+def indent(s, n=1):
+  l = [i + ("  " * n) for i in s.split('\n')]
+  return '\n'.join(l)
+
+
 class Literal(PlanOutOp):
   def options(self):
     return {'value': {'required': 1}}
@@ -43,7 +48,7 @@ class Seq(PlanOutOp):
 
   def pretty(self):
     l = ['  ' + ops.Operators.pretty(v) for v in self.args['seq']]
-    return '{\n%s\n}' % '\n'.join(l)
+    return '{\n%s\n}' % indent('\n'.join(l))
 
 
 class Set(PlanOutOp):
