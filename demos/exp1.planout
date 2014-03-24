@@ -1,0 +1,8 @@
+group_size = uniformChoice(choices=[1, 10], unit=userid);
+specific_goal = bernoulliTrial(p=0.8, unit=userid);
+
+if (specific_goal) {
+  ratings_per_user_goal = uniformChoice(
+    choices=[8, 16, 32, 64], unit=userid);
+  ratings_goal = group_size * ratings_per_user_goal;
+}

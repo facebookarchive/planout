@@ -8,6 +8,7 @@
 import logging
 import re
 from abc import ABCMeta, abstractmethod
+import json
 
 class Experiment(object):
   """Abstract base class for PlanOut experiments"""
@@ -186,14 +187,3 @@ class SimpleExperiment(Experiment):
     # that if the object is a new instance, this is the first time we are
     # seeing the inputs/outputs given.
     return False
-
-class SimpleInterpretedExperiment(SimpleExperiment):
-  """Simple class for loading a file-based PlanOut interpreter experiment"""
-  __metaclass__ = ABCMeta
-  filename = None
-
-  def execute(self, **kwargs):
-    code = read(self.filename)
-    mapper = PlanOutInterpreterMapper(code, self.salt)
-    mapper.setEnv(kwargs)
-    return mapper ## typically we validate the code before it is saved.

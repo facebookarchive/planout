@@ -5,22 +5,24 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 
-from planout.interpreter import PlanOutInterpreterMapper
-
+from planout.interpreter import *
+from planout.experiment import SimpleExperiment
+import json
 
 def runPlan(config, init, overrides={}):
   print '\n====== SETTING UP NEW EXPERIMENT ======'
-  mapper = PlanOutInterpreterMapper(config)
+  mapper = PlanOutInterpreterMapper(config, '', init)
   print 'using %s as input.' % init
-  mapper.setEnv(init)
+  #mapper.setEnv(init)
   if(overrides):
     print 'applying overrides: %s.' % overrides
     mapper.setOverrides(overrides)
   print 'validating experiment...'
-  if mapper.validate():
+  inspector = PlanOutInterpreterInspector(config)
+  if inspector.validate():
     print 'success!'
     print '=== printing experiment in human ==='
-    print mapper.pretty()
+    print inspector.pretty()
     print '=== experiment results ==='
     print mapper.getParams()
   else:
@@ -114,3 +116,24 @@ if __name__ == "__main__":
   runPlan(valid_config, {"userid": 21, "pageid": 9})
   runPlan(valid_config, {"userid": 21, "pageid": 9}, {'prob_show': 0.8})
   runPlan(valid_config, {"userid": 4, "pageid": 9}, {'prob_show': 0.8})
+
+
+class SimpleInterpretedExperiment(SimpleExperiment):
+  """Simple class for loading a file-based PlanOut interpreter experiment"""
+  #__metaclass__ = ABCMeta
+  filename = None
+
+  def execute(self, **kwargs):
+    code = json.load(open(self.filename))
+    mapper = PlanOutInterpreterMapper(code, self.salt, kwargs)
+    #mapper.setEnv(kwargs)
+    return mapper ## typically we validate the code before it is saved.
+
+class Exp1(SimpleInterpretedExperiment):
+  filename = "demos/exp1.json"
+
+code = json.load(open("demos/exp1.json"))
+i = PlanOutInterpreterInspector(code)
+print i.validate()
+print i.pretty()
+print Exp1(userid=4)

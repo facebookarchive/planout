@@ -7,6 +7,7 @@ class Operators():
     Operators.operators = {
       "literal": core.Literal,
       "get": core.Get,
+      u'get': core.Get,
       "seq": core.Seq,
       "set": core.Set,
       "index": core.Index,

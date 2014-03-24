@@ -71,7 +71,7 @@ class SetOverride(Set):
   def execute(self, mapper):
     var, value = self.args['var'], self.args['value']
     if not mapper.hasOverride(var):
-      mapper.set(var, mapper.evaluate(value))
+      super(SetOverride, self).execute(mapper)
 
 
 class Array(PlanOutOp):
@@ -134,17 +134,19 @@ class Cond(PlanOutOp):
         is_valid = False
       return is_valid
 
-    def pretty():
-      pretty_str = ""
-      first_if = True
-      for ifthen_clause in self.args['cond']:
-        if ifthen_clause[0] == 'true':
-          pretty_str += 'else\n'
-        else:
-          prefix = 'if(%)\n' if first_if else 'if else(%)\n'
-          pretty_str +=  prefix % Operators.pretty(ifthen_clause[0])
-        pretty_str +=  Operators.pretty(ifthen_clause[1]) + ';'
-      return pretty_str
+  def pretty(self):
+    pretty_str = ""
+    first_if = True
+    for i in self.args['cond']:
+      if_clause, then_clause = i['if'], i['then']
+      if if_clause == 'true':
+        pretty_str += 'else\n'
+      else:
+        prefix = 'if(%s)\n' if first_if else 'else if(%s)\n'
+        pretty_str += prefix % ops.Operators.pretty(if_clause)
+      pretty_str += ops.Operators.pretty(then_clause)
+    return pretty_str
+
 
 class And(PlanOutOp):
   def options(self):
@@ -196,17 +198,13 @@ class Product(PlanOutOpCommutative):
     return reduce(lambda x,y: x*y, values)
 
   def pretty(self):
-    pretty_c = Operators.pretty(self.args['values'])
-    return '* '.join(pretty_c)
+    pretty_c = [Operators.pretty(c) for c in self.args['values']]
+    return ' * '.join(pretty_c)
 
 
-class Sum(PlanOutOp):
-  def options(self):
-    return {
-      'values': {'required': 1, 'description': 'array of values'}}
-
-  def execute(self, mapper):
-    return sum(self.args['values'])
+class Sum(PlanOutOpCommutative):
+  def execute(self, values):
+    return sum(values)
 
   def pretty(self):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
