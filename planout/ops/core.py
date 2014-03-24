@@ -2,7 +2,7 @@ from base import *
 import utils as ops
 
 def indent(s, n=1):
-  l = [i + ("  " * n) for i in s.split('\n')]
+  l = [("  " * n) + i for i in s.split('\n')]
   return '\n'.join(l)
 
 
@@ -47,8 +47,8 @@ class Seq(PlanOutOp):
     return is_valid
 
   def pretty(self):
-    l = ['  ' + ops.Operators.pretty(v) for v in self.args['seq']]
-    return '{\n%s\n}' % indent('\n'.join(l))
+    l = [ops.Operators.pretty(v) for v in self.args['seq']]
+    return '\n'.join(l)
 
 
 class Set(PlanOutOp):
@@ -145,11 +145,11 @@ class Cond(PlanOutOp):
     for i in self.args['cond']:
       if_clause, then_clause = i['if'], i['then']
       if if_clause == 'true':
-        pretty_str += 'else\n'
+        pretty_str += 'else {\n'
       else:
-        prefix = 'if(%s)\n' if first_if else 'else if(%s)\n'
+        prefix = 'if(%s) {\n' if first_if else 'else if(%s) {\n'
         pretty_str += prefix % ops.Operators.pretty(if_clause)
-      pretty_str += ops.Operators.pretty(then_clause)
+      pretty_str += indent(ops.Operators.pretty(then_clause)) + '\n}'
     return pretty_str
 
 

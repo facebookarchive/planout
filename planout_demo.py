@@ -120,13 +120,11 @@ if __name__ == "__main__":
 
 class SimpleInterpretedExperiment(SimpleExperiment):
   """Simple class for loading a file-based PlanOut interpreter experiment"""
-  #__metaclass__ = ABCMeta
   filename = None
 
   def execute(self, **kwargs):
     code = json.load(open(self.filename))
     mapper = PlanOutInterpreterMapper(code, self.salt, kwargs)
-    #mapper.setEnv(kwargs)
     return mapper ## typically we validate the code before it is saved.
 
 class Exp1(SimpleInterpretedExperiment):
