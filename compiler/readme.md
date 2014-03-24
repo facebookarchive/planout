@@ -16,7 +16,7 @@ Alternatively, the script may be run from a web page.
 </script>
 ```
 
-Here is a [demo](#).
+Here is a [demo](http://facebook.github.io/planout/demo/planout-compiler.html).
 
 ## Extending the PlanOut language
 The PlanOut grammar is specified in `planout.jison`. If you wish to extend PlanOut to support custom operators, you can modify the grammar file and generate a new compiler script using [Jison](http://zaach.github.io/jison/) library.
