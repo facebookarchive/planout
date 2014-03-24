@@ -34,7 +34,8 @@ class Operators():
       "bernoulliTrial": random.BernoulliTrial,
       "bernoulliFilter": random.BernoulliFilter,
       "uniformChoice": random.UniformChoice,
-      "weightedChoice": random.WeightedChoice
+      "weightedChoice": random.WeightedChoice,
+      "sample": random.Sample
     }
 
   @staticmethod

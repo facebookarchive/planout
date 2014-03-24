@@ -2,8 +2,6 @@ import logging
 from abc import ABCMeta, abstractmethod
 from utils import Operators
 
-from abc import ABCMeta, abstractmethod
-
 class PlanOutOp(object):
   """Abstract base class for PlanOut Operators"""
   __metaclass__ = ABCMeta
