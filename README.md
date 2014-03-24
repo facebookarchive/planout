@@ -50,4 +50,12 @@ Sign up. #ff0000
 ```
 
 ### Learn more
-Learn more about PlanOut by [reading the PlanOut paper](http://www-personal.umich.edu/~ebakshy/planout.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. WWW '14. April 7–11, 2014, Seoul, Korea.
+Learn more about PlanOut by [reading the PlanOut paper](http://www-personal.umich.edu/~ebakshy/planout.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:
+``` bibtex
+@inproceedings{bakshy2014www,
+	Author = {Bakshy, E. and Eckles, D. and Bernstein, M.S.},
+	Booktitle = {Proceedings of the 23rd ACM conference on the World Wide Web},
+	Organization = {ACM},
+	Title = {Designing and Deploying Online Field Experiments},
+	Year = {2014}}
+```
