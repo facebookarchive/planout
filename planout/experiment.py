@@ -25,18 +25,18 @@ class Experiment(object):
     self._name = None          # Name of the experiment
     self._in_experiment = True
 
-    self.setExperimentProperties()          # sets name, salt, etc.
-    self.configureLogger()                  # sets up loggers
+    self.set_experiment_properties()          # sets name, salt, etc.
+    self.configure_logger()                  # sets up loggers
     self.__assign()                         # assign inputs to parameters
 
     # check if inputs+params were previously logged
-    self._logged = self.previouslyLogged()
+    self._logged = self.previously_logged()
 
     # auto-exposure logging is enabled by default
     self._auto_exposure_log = True
 
 
-  def setExperimentProperties(self):
+  def set_experiment_properties(self):
     """Set experiment properties, e.g., experiment name and salt."""
     # If the experiment name is not specified, just use the class name
     self.name = self.__class__.__name__
@@ -66,7 +66,7 @@ class Experiment(object):
     # exp must implement basic PlanOut methods
     self.mapper = \
         self.execute(**self.inputs)
-    self.params = self.mapper.getParams()
+    self.params = self.mapper.get_params()
     self._in_experiment = self.params.get('in_experiment', True)
     return self
 
@@ -96,26 +96,26 @@ class Experiment(object):
   def logged(self, value):
     self._logged = value
 
-  def setAutoExposureLogging(self, value):
+  def set_auto_exposure_logging(self, value):
     """
     Disables / enables auto exposure logging (enabled by default).
     """
     self._auto_exposure_log = value
 
-  def getParams(self):
+  def get_params(self):
     """
     Get all PlanOut parameters. Triggers exposure log.
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
-      self.logExposure()
-    return self.mapper.getParams()
+      self.log_exposure()
+    return self.mapper.get_params()
 
   def get(self, name, default=None):
     """
     Get PlanOut parameter (returns default if undefined). Triggers exposure log.
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
-      self.logExposure()
+      self.log_exposure()
     return self.mapper.get(name, default)
 
   def __str__(self):
@@ -123,10 +123,10 @@ class Experiment(object):
     String representation of exposure log data. Triggers exposure log.
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
-      self.logExposure()
+      self.log_exposure()
     return str(self.__asBlob())
 
-  def logExposure(self, extras={}):
+  def log_exposure(self, extras={}):
     """Manual call to log exposure"""
     self.logged = True
     if extras:
@@ -135,14 +135,14 @@ class Experiment(object):
       extra_payload = extras
     self.log(self.__asBlob(extra_payload))
 
-  def logOutcome(self):
+  def log_outcome(self):
     """Log outcome event"""
     self.logged = True
     exta_payload = dict(extras.items() + ('event', 'outcome'))
     self.log(self.__asBlob(extra_payload))
 
   @abstractmethod
-  def configureLogger(self):
+  def configure_logger(self):
     """Set up files, database connections, sockets, etc for logging."""
     pass
 
@@ -152,7 +152,7 @@ class Experiment(object):
     pass
 
   @abstractmethod
-  def previouslyLogged(self):
+  def previously_logged(self):
     """Check if the input has already been logged.
        Gets called once during in the constructor."""
     # For high-use applications, one might have this method to check if
@@ -167,7 +167,7 @@ class SimpleExperiment(Experiment):
   # instantiated. We do this by maintaining this class variable.
   _logger_configured = False
 
-  def configureLogger(self):
+  def configure_logger(self):
     """Sets up logger to log to experiment_name.log"""
     # only want to set logging handler once
     if not self.__class__._logger_configured:
@@ -180,7 +180,7 @@ class SimpleExperiment(Experiment):
     """Logs data to a file"""
     self.__class__.logger.info(data)
 
-  def previouslyLogged(self):
+  def previously_logged(self):
     """Check if the input has already been logged.
        Gets called once during in the constructor."""
     # SimpleExperiment doesn't connect with any services, so we just assume

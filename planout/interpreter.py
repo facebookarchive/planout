@@ -6,12 +6,12 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 from copy import deepcopy
 from ops.utils import Operators
-from mapper import PlanOutMapper
+from mapper import Mapper
 
 
 Operators.initFactory()
 
-class PlanOutInterpreterMapper(PlanOutMapper):
+class InterpreterMapper(Mapper):
   """PlanOut interpreter"""
 
   def __init__(self, serialization, experiment_salt='global_salt', inputs={}):
@@ -20,15 +20,15 @@ class PlanOutInterpreterMapper(PlanOutMapper):
     self._overrides = {}
     self._experiment_salt = experiment_salt
     self._evaluated = False
-    self._inputs = inputs
+    self._inputs = deepcopy(inputs)
 
-  def getParams(self):
+  def get_params(self):
     if not self._evaluated:
       self.evaluate(self._serialization)
       self._evaluated = True
     return self._env
 
-  def setEnv(self, new_env):
+  def set_env(self, new_env):
     self._env = deepcopy(new_env)
     for v in self._overrides:
       self._env[v] = self._overrides[v]
@@ -44,16 +44,16 @@ class PlanOutInterpreterMapper(PlanOutMapper):
     self._env[name] = value
     return self
 
-  def setOverrides(self, overrides):
-    Operators.enableOverrides()
+  def set_overrides(self, overrides):
+    Operators.enable_overrides()
     self._overrides = overrides
-    self.setEnv(self._env)  # this will reset overrides
+    self.set_env(self._env)  # this will reset overrides
     return self
 
-  def hasOverride(self, name):
+  def has_override(self, name):
     return name in self._overrides
 
-  def getOverrides(self):
+  def get_overrides(self):
     return self._overrides
 
   def evaluate(self, data):
@@ -65,7 +65,7 @@ class PlanOutInterpreterMapper(PlanOutMapper):
       return data  # data is a literal
 
 
-class PlanOutInterpreterInspector():
+class InterpreterInspector():
   """Class for inspecting serialized PlanOut experiment definitions"""
   def __init__(self, serialization):
     self._serialization = serialization
@@ -80,10 +80,10 @@ class PlanOutInterpreterInspector():
     config = self._serialization
     return Operators.operatorInstance(config).pretty()
 
-  def getVariables(self):
+  def get_variables(self):
     """get all variables set by PlanOut script"""
     pass
 
-  def getInputVariables(self):
+  def get_input_variables(self):
     """get all variables used not defined by the PlanOut script"""
     pass

@@ -75,7 +75,7 @@ class Set(PlanOutOp):
 class SetOverride(Set):
   def execute(self, mapper):
     var, value = self.args['var'], self.args['value']
-    if not mapper.hasOverride(var):
+    if not mapper.has_override(var):
       super(SetOverride, self).execute(mapper)
 
 
@@ -208,7 +208,7 @@ class Product(PlanOutOpCommutative):
 
 
 class Sum(PlanOutOpCommutative):
-  def execute(self, values):
+  def commutativeExecute(self, values):
     return sum(values)
 
   def pretty(self):

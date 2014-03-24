@@ -38,7 +38,7 @@ class Operators():
     }
 
   @staticmethod
-  def enableOverrides():
+  def enable_overrides():
     import core
     Operators.operators['set'] = core.SetOverride
 

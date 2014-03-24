@@ -1,5 +1,18 @@
 # Extending PlanOut
 
+Experiments
+- Logging
+- Assignment scheme
+- Salt
+- Uses a mapper
+
+Assignment schemes
+- Mappers are helpers for doing deterministic pseudorandom assignment
+
+Mappers:
+ - One where you code in python
+ - 
+
 ## Core concepts
 An *Experiment* object takes inputs and maps it to parameter assignments.  Experiment objects also handle logging and caching.
 

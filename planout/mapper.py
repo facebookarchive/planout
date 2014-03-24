@@ -7,7 +7,7 @@
 
 from abc import ABCMeta, abstractmethod
 
-class PlanOutMapper:
+class Mapper:
   """Abstract base class for PlanOut Mappers"""
   __metaclass__ = ABCMeta
 
@@ -30,5 +30,5 @@ class PlanOutMapper:
     pass
 
   @abstractmethod
-  def getParams(self):
+  def get_params(self):
     pass
