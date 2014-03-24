@@ -24,16 +24,17 @@ class Experiment(object):
     self._salt = None          # Experiment-level salt
     self._name = None          # Name of the experiment
     self._in_experiment = True
+    # auto-exposure logging is enabled by default
+    self._auto_exposure_log = True
 
     self.set_experiment_properties()          # sets name, salt, etc.
     self.configure_logger()                  # sets up loggers
-    self.__assign()                         # assign inputs to parameters
+    self.mapper = self.assign(**self.inputs)
+    self.params = self.mapper.get_params()
+    self._in_experiment = self.params.get('in_experiment', True)
 
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
-
-    # auto-exposure logging is enabled by default
-    self._auto_exposure_log = True
 
 
   def set_experiment_properties(self):
@@ -61,17 +62,8 @@ class Experiment(object):
   def in_experiment(self):
     return self._in_experiment
 
-  def __assign(self):
-    """Execute assignment procedure and set parameters"""
-    # exp must implement basic PlanOut methods
-    self.mapper = \
-        self.execute(**self.inputs)
-    self.params = self.mapper.get_params()
-    self._in_experiment = self.params.get('in_experiment', True)
-    return self
-
   @abstractmethod
-  def execute(**kwargs):
+  def assign(**kwargs):
     """Returns evaluated PlanOut mapper with experiment assignment"""
     pass
 

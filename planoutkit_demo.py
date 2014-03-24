@@ -9,7 +9,7 @@ from planout.planoutkit import *
 from planout.experiment import SimpleExperiment
 
 class Exp1(SimpleExperiment):
-  def execute(self, userid):
+  def assign(self, userid):
     e = PlanOutKitMapper(self.salt)
     e.group_size = UniformChoice(choices=[1, 10], unit=userid);
     e.specific_goal = BernoulliTrial(p=0.8, unit=userid);
@@ -19,7 +19,7 @@ class Exp1(SimpleExperiment):
     return e
 
 class Exp2(SimpleExperiment):
-  def execute(self, userid, pageid, liking_friends):
+  def assign(self, userid, pageid, liking_friends):
     e = PlanOutKitMapper(self.salt)
     e.num_cues = RandomInteger(
       min=1,
@@ -34,7 +34,7 @@ class Exp2(SimpleExperiment):
     return e
 
 class Exp3(SimpleExperiment):
-  def execute(self, userid):
+  def assign(self, userid):
     e = PlanOutKitMapper(self.salt)
     e.has_banner = BernoulliTrial(p=0.97, unit=userid)
     cond_probs = [0.5, 0.95]
@@ -45,7 +45,7 @@ class Exp3(SimpleExperiment):
 
 
 class Exp4(SimpleExperiment):
-  def execute(self, sourceid, storyid, viewerid):
+  def assign(self, sourceid, storyid, viewerid):
     e = PlanOutKitMapper(self.salt)
     e.prob_collapse = RandomFloat(min=0.0, max=1.0, unit=sourceid)
     e.collapse = BernoulliTrial(p=e.prob_collapse, unit=[storyid, viewerid])

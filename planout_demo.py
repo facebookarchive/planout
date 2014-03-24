@@ -122,7 +122,7 @@ class SimpleInterpretedExperiment(SimpleExperiment):
   """Simple class for loading a file-based PlanOut interpreter experiment"""
   filename = None
 
-  def execute(self, **kwargs):
+  def assign(self, **kwargs):
     code = json.load(open(self.filename))
     mapper = InterpreterMapper(code, self.salt, kwargs)
     return mapper ## typically we validate the code before it is saved.

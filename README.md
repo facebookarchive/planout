@@ -13,14 +13,14 @@ This release currently includes
 
 ## PlanOutKit
 
-Here is an example of how to use PlanOutKit. To create a PlanOutKit experiment, you subclass an ``Experiment`` object, and implement an execute method that includes all of your experiments inputs. Then, you construct a ``PlanOutKitMapper`` object that takes care of random assignment.  You can use PlanOut's random assignment operators by setting ``e.varname``, where ``e`` is the name of ``PlanOutKitMapper`` instance, and ``varname`` is the name of the variable you are setting.  Because we are using the ``SimpleExperiment`` class in the example below, the name of the experiment, ``FirstExperiment``, variable name, and the input data (``userid``) are used to perform the random assignment.  Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
+Here is an example of how to use PlanOutKit. To create a PlanOutKit experiment, you subclass an ``Experiment`` object, and implement an assignment method that includes all of your experiments inputs. Then, you construct a ``PlanOutKitMapper`` object that takes care of random assignment.  You can use PlanOut's random assignment operators by setting ``e.varname``, where ``e`` is the name of ``PlanOutKitMapper`` instance, and ``varname`` is the name of the variable you are setting.  Because we are using the ``SimpleExperiment`` class in the example below, the name of the experiment, ``FirstExperiment``, variable name, and the input data (``userid``) are used to perform the random assignment.  Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
 
 ```python
 
 from planoutkit import *
 
 class FirstExperiment(SimpleExperiment):
-  def execute(self, userid):
+  def assign(self, userid):
     e = PlanOutKitMapper(self.salt)
     e.button_color = UniformChoice(choices=['#ff0000', '#00ff00'], unit=userid)
     e.button_text = WeightedChoice(
