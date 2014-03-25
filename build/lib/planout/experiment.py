@@ -9,6 +9,8 @@ import logging
 import re
 from abc import ABCMeta, abstractmethod
 import json
+import inspect
+import hashlib
 
 from .assignment import Assignment
 
@@ -23,7 +25,7 @@ class Experiment(object):
     self._logged = False       # True when assignments have been exposure logged
     self._salt = None          # Experiment-level salt
     self._name = None          # Name of the experiment
-    self._in_experiment = True
+    self.in_experiment = True
     # auto-exposure logging is enabled by default
     self._auto_exposure_log = True
 
@@ -31,8 +33,10 @@ class Experiment(object):
     self.configure_logger()                  # sets up loggers
 
     self._assignment = self.get_assignment()
+    self._checksum = self.checksum()
     self.assign(self._assignment, **self.inputs)
-    self._in_experiment = self._assignment.get('in_experiment', True)
+    self.in_experiment = \
+      self._assignment.get('in_experiment', self.in_experiment)
 
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
@@ -63,11 +67,8 @@ class Experiment(object):
   def name(self, value):
     self._name = re.sub(r'\s+', '-', value)
 
-  def in_experiment(self):
-    return self._in_experiment
-
   @abstractmethod
-  def assign(**kwargs):
+  def assign(params, **kwargs):
     """Returns evaluated PlanOut mapper with experiment assignment"""
     pass
 
@@ -81,7 +82,14 @@ class Experiment(object):
     }
     for k in extras:
       d[k] = extras[k]
+    if self._checksum:
+      d['checksum'] = self._checksum
     return d
+
+  def checksum(self):
+    # src doesn't count first line of code, which includes function name
+    src = ''.join(inspect.getsourcelines(self.assign)[0][1:])
+    return hashlib.sha1(src).hexdigest()[:8]
 
   # the logged setter / getter may be unnecessary
   @property
@@ -102,7 +110,7 @@ class Experiment(object):
     """
     Get all PlanOut parameters. Triggers exposure log.
     """
-    if self._auto_exposure_log and self.in_experiment() and not self.logged:
+    if self._auto_exposure_log and self.in_experiment and not self.logged:
       self.log_exposure()
     return dict(self._assignment)
 
@@ -110,7 +118,7 @@ class Experiment(object):
     """
     Get PlanOut parameter (returns default if undefined). Triggers exposure log.
     """
-    if self._auto_exposure_log and self.in_experiment() and not self.logged:
+    if self._auto_exposure_log and self.in_experiment and not self.logged:
       self.log_exposure()
     return self._assignment.get(name, default)
 
@@ -118,7 +126,7 @@ class Experiment(object):
     """
     String representation of exposure log data. Triggers exposure log.
     """
-    if self._auto_exposure_log and self.in_experiment() and not self.logged:
+    if self._auto_exposure_log and self.in_experiment and not self.logged:
       self.log_exposure()
     return str(self.__asBlob())
 
