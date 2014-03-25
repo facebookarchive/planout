@@ -19,11 +19,9 @@ class InterpreterTest(unittest.TestCase):
     v = Validator(self.compiled)
     self.assertTrue(v.validate())
 
-    incomplete_op = Validator({'op': 'uniformChoice', 'value': 42})
-    self.assertFalse(incomplete_op.validate())
-
-    bogus_op = Validator({'op': 'bogoOp', 'value': 42})
-    self.assertFalse(bogus_op.validate())
+    v_bad = Validator({'op': 'uniformChoice', 'value': 42})
+    v_bad = Validator({'op': 'bogoup', 'value': 42})
+    self.assertFalse(v_bad.validate()) # wtf
 
   def test_interpreter(self):
     proc = Interpreter(self.compiled, 'foo', {'userid': 123456})

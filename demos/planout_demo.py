@@ -18,7 +18,7 @@ def run_plan(config, init, overrides={}):
     print 'applying overrides: %s.' % overrides
     mapper.set_overrides(overrides)
   print 'validating experiment...'
-  inspector = InterpreterInspector(config)
+  inspector = Validator(config)
   if inspector.validate():
     print 'success!'
     print '=== printing experiment in human ==='
@@ -131,22 +131,25 @@ class SimpleInterpretedExperiment(SimpleExperiment):
     params.update(procedure.get_params())
 
 class Exp1(SimpleInterpretedExperiment):
-  filename = "demos/exp1.json"
+  filename = "sample_scripts/exp1.json"
 
 class Exp2(SimpleInterpretedExperiment):
-  filename = "demos/exp2.json"
+  filename = "sample_scripts/exp2.json"
 
 class Exp3(SimpleInterpretedExperiment):
-  filename = "demos/exp3.json"
+  filename = "sample_scripts/exp3.json"
+
+class Exp4(SimpleInterpretedExperiment):
+  filename = "sample_scripts/exp4.json"
+
 
 print Exp2(userid=4, pageid=2, liking_friends=[4,5,6,7,8])
 print Exp3(userid=4)
+print Exp3(userid=5)
+print Exp4(sourceid=4, storyid=9, viewerid=3)
 
-
-code = json.load(open("demos/exp1.json"))
-i = InterpreterInspector(code)
+code = json.load(open("sample_scripts/exp1.json"))
+i = Validator(code)
 print i.validate()
 print i.pretty()
 print Exp1(userid=4)
-
-#Exp1().assign(userid=4)
