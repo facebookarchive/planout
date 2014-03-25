@@ -5,8 +5,8 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 
-from planout.planoutkit import *
 from planout.experiment import SimpleExperiment
+from planout.ops.random import *
 
 class Exp1(SimpleExperiment):
   def assign(self, e, userid):
@@ -45,33 +45,3 @@ class Exp4(SimpleExperiment):
     e.prob_collapse = RandomFloat(min=0.0, max=1.0, unit=sourceid)
     e.collapse = BernoulliTrial(p=e.prob_collapse, unit=[storyid, viewerid])
     return e
-
-print \
-  """ Demoing PlanOutKit implementations of experiments from
-  'Designing and Deploying Online Field Experiments'\n"""
-
-print 'Demoing experiment 1 decorator...'
-print Exp1(userid=42)
-
-print '\nDemoing experiment 1...'
-exp1_runs = [Exp1(userid=i) for i in xrange(10)]
-print [(e.get('group_size'), e.get('ratings_goal')) for e in exp1_runs]
-
-
-print '\nDemoing experiment 2...'
-# number of cues and selection of cues depends on userid and pageid
-for u in xrange(1,4):
-  for p in xrange(1, 4):
-    print Exp2(userid=u, pageid=p, liking_friends=['a','b','c','d'])
-
-print '\nDemoing experiment 3...'
-for i in xrange(5):
-  print Exp3(userid=i)
-
-print '\nDemoing experiment 4...'
-for i in xrange(5):
-  # probability of collapsing is deterministic on sourceid
-  e = Exp4(sourceid=i, storyid=1, viewerid=1)
-  # whether or not the story is collapsed depends on the sourceid
-  exps = [Exp4(sourceid=i, storyid=1, viewerid=v) for v in xrange(10)]
-  print e.get('prob_collapse'), [exp.get('collapse') for exp in exps]

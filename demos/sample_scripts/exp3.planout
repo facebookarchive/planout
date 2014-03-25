@@ -1,5 +1,5 @@
 has_banner = bernoulliTrial(p=0.97, unit=userid);
-cond_probs = [0.5, 0.98];
+cond_probs = [0.5, 0.95];
 has_feed_stories = bernoulliTrial(
    p=cond_probs[has_banner], unit=userid);
 button_text = uniformChoice(

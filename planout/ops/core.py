@@ -202,7 +202,6 @@ class Or(PlanOutOp):
 
   def pretty(self):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
-    #pretty_c = Operators.pretty(self.args['values'])
     return '|| '.join(pretty_c)
 
 class Product(PlanOutOpCommutative):
@@ -212,7 +211,6 @@ class Product(PlanOutOpCommutative):
   def pretty(self):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
     return ' * '.join(pretty_c)
-
 
 class Sum(PlanOutOpCommutative):
   def commutativeExecute(self, values):
