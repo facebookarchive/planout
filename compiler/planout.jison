@@ -169,7 +169,7 @@ if_expression
   : IF '(' simple_expression ')' simple_expression optional_else_expression
     { $$ = {"op": "cond", "cond": [{"if": $3, "then": $5}]};
       if ($6["cond"]) {
-        $$["cond"].concat($6["cond"]);
+        $$["cond"] = $$["cond"].concat($6["cond"]);
       }
     }
   ;
@@ -177,6 +177,8 @@ if_expression
 optional_else_expression
   : /* empty */
     { $$ = {}; }
+  | ELSE if_expression
+    { $$ = $2; }
   | ELSE simple_expression
     { $$ = {"op": "cond", "cond": [{"if": true, "then": $2}]}; }
   ;
