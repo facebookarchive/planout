@@ -7,10 +7,9 @@
 
 from abc import ABCMeta, abstractmethod
 
-class Mapper:
+class AbstractAssignment:
   """Abstract base class for PlanOut Mappers"""
   __metaclass__ = ABCMeta
-
 
   @property
   def experiment_salt(self):

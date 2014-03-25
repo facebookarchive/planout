@@ -9,44 +9,39 @@ from planout.planoutkit import *
 from planout.experiment import SimpleExperiment
 
 class Exp1(SimpleExperiment):
-  def assign(self, userid):
-    e = PlanOutKitMapper(self.salt)
+  def assign(self, e, userid):
     e.group_size = UniformChoice(choices=[1, 10], unit=userid);
     e.specific_goal = BernoulliTrial(p=0.8, unit=userid);
     if e.specific_goal:
-      e.ratings_per_user_goal = UniformChoice(choices=[8, 16, 32, 64], unit=userid)
+      e.ratings_per_user_goal = UniformChoice(
+        choices=[8, 16, 32, 64], unit=userid)
       e.ratings_goal = e.group_size * e.ratings_per_user_goal
     return e
 
 class Exp2(SimpleExperiment):
-  def assign(self, userid, pageid, liking_friends):
-    e = PlanOutKitMapper(self.salt)
-    e.num_cues = RandomInteger(
+  def assign(self, params, userid, pageid, liking_friends):
+    params.num_cues = RandomInteger(
       min=1,
       max=min(len(liking_friends), 3),
       unit=[userid, pageid]
     )
-    e.friends_shown = Sample(
+    params.friends_shown = Sample(
       choices=liking_friends,
-      draws=e.num_cues,
+      draws=params.num_cues,
       unit=[userid, pageid]
     )
-    return e
 
 class Exp3(SimpleExperiment):
-  def assign(self, userid):
-    e = PlanOutKitMapper(self.salt)
+  def assign(self, e, userid):
     e.has_banner = BernoulliTrial(p=0.97, unit=userid)
     cond_probs = [0.5, 0.95]
     e.has_feed_stories = BernoulliTrial(p=cond_probs[e.has_banner], unit=userid)
     e.button_text = UniformChoice(
       choices=["I'm a voter", "I'm voting"], unit=userid)
-    return e
 
 
 class Exp4(SimpleExperiment):
-  def assign(self, sourceid, storyid, viewerid):
-    e = PlanOutKitMapper(self.salt)
+  def assign(self, e, sourceid, storyid, viewerid):
     e.prob_collapse = RandomFloat(min=0.0, max=1.0, unit=sourceid)
     e.collapse = BernoulliTrial(p=e.prob_collapse, unit=[storyid, viewerid])
     return e

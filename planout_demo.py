@@ -11,7 +11,7 @@ import json
 
 def run_plan(config, init, overrides={}):
   print '\n====== SETTING UP NEW EXPERIMENT ======'
-  mapper = InterpreterMapper(config, '', init)
+  mapper = Interpreter(config, '', init)
   print 'using %s as input.' % init
   #mapper.setEnv(init)
   if(overrides):
@@ -112,26 +112,41 @@ if __name__ == "__main__":
 
   ]}
 
-  demoInvalidPlanOut()
-  run_plan(valid_config, {"userid": 21, "pageid": 9})
-  run_plan(valid_config, {"userid": 21, "pageid": 9}, {'prob_show': 0.8})
-  run_plan(valid_config, {"userid": 4, "pageid": 9}, {'prob_show': 0.8})
+  #demoInvalidPlanOut()
+  #run_plan(valid_config, {"userid": 21, "pageid": 9})
+  #run_plan(valid_config, {"userid": 21, "pageid": 9}, {'prob_show': 0.8})
+  #run_plan(valid_config, {"userid": 4, "pageid": 9}, {'prob_show': 0.8})
 
 
 class SimpleInterpretedExperiment(SimpleExperiment):
   """Simple class for loading a file-based PlanOut interpreter experiment"""
   filename = None
 
-  def assign(self, **kwargs):
-    code = json.load(open(self.filename))
-    mapper = InterpreterMapper(code, self.salt, kwargs)
-    return mapper ## typically we validate the code before it is saved.
+  def assign(self, params, **kwargs):
+    procedure = Interpreter(
+      json.load(open(self.filename)),
+      self.salt,
+      kwargs
+      )
+    params.update(procedure.get_params())
 
 class Exp1(SimpleInterpretedExperiment):
   filename = "demos/exp1.json"
+
+class Exp2(SimpleInterpretedExperiment):
+  filename = "demos/exp2.json"
+
+class Exp3(SimpleInterpretedExperiment):
+  filename = "demos/exp3.json"
+
+print Exp2(userid=4, pageid=2, liking_friends=[4,5,6,7,8])
+print Exp3(userid=4)
+
 
 code = json.load(open("demos/exp1.json"))
 i = InterpreterInspector(code)
 print i.validate()
 print i.pretty()
 print Exp1(userid=4)
+
+#Exp1().assign(userid=4)

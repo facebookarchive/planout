@@ -6,10 +6,9 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 from ops.random import *
-from mapper import Mapper
+from UserDict import UserDict
 
-
-class PlanOutKitMapper(Mapper):
+class Assignment(object):
   def __init__(self, experiment_salt):
     self.experiment_salt = experiment_salt
 
@@ -29,6 +28,10 @@ class PlanOutKitMapper(Mapper):
 
   def get(self, name, default=None):
     return self.__dict__.get(name, default)
+
+  def update(self, other):
+    for key, value in other.iteritems():
+      setattr(self, key, value)
 
   def get_params(self):
     d = self.__dict__

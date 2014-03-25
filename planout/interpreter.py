@@ -6,21 +6,21 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 from copy import deepcopy
 from ops.utils import Operators
-from mapper import Mapper
 
 
 Operators.initFactory()
 
-class InterpreterMapper(Mapper):
+class Interpreter(object):
   """PlanOut interpreter"""
 
   def __init__(self, serialization, experiment_salt='global_salt', inputs={}):
     self._serialization = serialization
     self._env = {}
     self._overrides = {}
-    self._experiment_salt = experiment_salt
+    self.experiment_salt = self._experiment_salt = experiment_salt
     self._evaluated = False
-    self._inputs = deepcopy(inputs)
+    self._inputs = inputs.copy()
+
 
   def get_params(self):
     if not self._evaluated:
@@ -56,13 +56,13 @@ class InterpreterMapper(Mapper):
   def get_overrides(self):
     return self._overrides
 
-  def evaluate(self, data):
-    if Operators.isOperator(data):
-      return Operators.operatorInstance(data).execute(self)
-    elif type(data) is list:
-      return [self.evaluate(i) for i in data]
+  def evaluate(self, planout_code):
+    if Operators.isOperator(planout_code):
+      return Operators.operatorInstance(planout_code).execute(self)
+    elif type(planout_code) is list:
+      return [self.evaluate(i) for i in planout_code]
     else:
-      return data  # data is a literal
+      return planout_code  # data is a literal
 
 
 class InterpreterInspector():

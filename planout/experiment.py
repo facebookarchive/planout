@@ -9,6 +9,7 @@ import logging
 import re
 from abc import ABCMeta, abstractmethod
 import json
+from assignment import Assignment
 
 class Experiment(object):
   """Abstract base class for PlanOut experiments"""
@@ -29,7 +30,8 @@ class Experiment(object):
 
     self.set_experiment_properties()          # sets name, salt, etc.
     self.configure_logger()                  # sets up loggers
-    self.mapper = self.assign(**self.inputs)
+    self.mapper = self.get_assignment()
+    self.assign(self.mapper, **self.inputs)
     self.params = self.mapper.get_params()
     self._in_experiment = self.params.get('in_experiment', True)
 
@@ -41,6 +43,9 @@ class Experiment(object):
     """Set experiment properties, e.g., experiment name and salt."""
     # If the experiment name is not specified, just use the class name
     self.name = self.__class__.__name__
+
+  def get_assignment(self):
+    return Assignment(self.salt)
 
   @property
   def salt(self):
