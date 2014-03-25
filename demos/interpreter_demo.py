@@ -1,6 +1,7 @@
 from planout.interpreter import *
 from planout.experiment import SimpleExperiment
 import json
+import hashlib
 
 class SimpleInterpretedExperiment(SimpleExperiment):
   """Simple class for loading a file-based PlanOut interpreter experiment"""
@@ -13,6 +14,11 @@ class SimpleInterpretedExperiment(SimpleExperiment):
       kwargs
       )
     params.update(procedure.get_params())
+
+  def checksum(self):
+    # src doesn't count first line of code, which includes function name
+    src = open(self.filename).read()
+    return hashlib.sha1(src).hexdigest()[:8]
 
 class Exp1(SimpleInterpretedExperiment):
   filename = "sample_scripts/exp1.json"
