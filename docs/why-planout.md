@@ -20,4 +20,4 @@ It is often useful to further seperate the experiment definition from applicatio
 The PlanOut language is a way to concisely describe an experiment using the available operators. This can be compiled into a JSON serialization, which can be executed by the PlanOut interpreter as needed.
 
 ### Exposure logging
-You will often want to keep track of which users (or other units) have been exposed to your experiment. This can make subsequent analysis more precise. PlanOut provides hooks for your logging code to be run whenever a parameter value is checked.
+You will often want to keep track of which users (or other units) have been exposed to your experiment. This can make subsequent analysis more precise. PlanOut calls your logging code whenever a parameter value is checked.
