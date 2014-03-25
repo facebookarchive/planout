@@ -30,9 +30,9 @@ class Experiment(object):
     self.set_experiment_properties()          # sets name, salt, etc.
     self.configure_logger()                  # sets up loggers
 
-    self.assignment = self.get_assignment()
-    self.assign(self.assignment, **self.inputs)
-    self._in_experiment = self.assignment.get('in_experiment', True)
+    self._assignment = self.get_assignment()
+    self.assign(self._assignment, **self.inputs)
+    self._in_experiment = self._assignment.get('in_experiment', True)
 
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
@@ -77,7 +77,7 @@ class Experiment(object):
       'name': self.name,
       'salt': self.salt,
       'inputs': self.inputs,
-      'params': self.assignment,
+      'params': dict(self._assignment),
     }
     for k in extras:
       d[k] = extras[k]
@@ -104,7 +104,7 @@ class Experiment(object):
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
       self.log_exposure()
-    return self.assignment
+    return dict(self._assignment)
 
   def get(self, name, default=None):
     """
@@ -112,7 +112,7 @@ class Experiment(object):
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
       self.log_exposure()
-    return self.assignment.get(name, default)
+    return self._assignment.get(name, default)
 
   def __str__(self):
     """
