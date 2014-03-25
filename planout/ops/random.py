@@ -8,7 +8,7 @@ class PlanOutOpRandom(base.PlanOutOpSimple):
   def options(self):
     return {
      'unit': {'required': 1, 'description': 'unit to hash on'},
-     'salt': {'required': 1,'description':
+     'salt': {'required': 0,'description':
        'salt for hash. should generally be unique for each random variable'}}
 
   def getUnit(self, appended_unit=None):

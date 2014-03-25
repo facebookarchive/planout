@@ -7,6 +7,7 @@ class Operators():
     Operators.operators = {
       "literal": core.Literal,
       "get": core.Get,
+      u'get': core.Get,
       "seq": core.Seq,
       "set": core.Set,
       "index": core.Index,
@@ -14,6 +15,7 @@ class Operators():
       "equals": core.Equals,
       "cond": core.Cond,
       "and": core.And,
+      "or": core.Or,
       ">": core.GreaterThan,
       "<": core.LessThan,
       ">=": core.GreaterThanOrEqualTo,
@@ -22,6 +24,9 @@ class Operators():
       "/": core.Divide,
       "not": core.Not,
       "negative": core.Negative,
+      "min": core.Min,
+      "max": core.Max,
+      "length": core.Length,
       "product": core.Product,
       "sum": core.Sum,
       "randomFloat": random.RandomFloat,
@@ -29,11 +34,12 @@ class Operators():
       "bernoulliTrial": random.BernoulliTrial,
       "bernoulliFilter": random.BernoulliFilter,
       "uniformChoice": random.UniformChoice,
-      "weightedChoice": random.WeightedChoice
+      "weightedChoice": random.WeightedChoice,
+      "sample": random.Sample
     }
 
   @staticmethod
-  def enableOverrides():
+  def enable_overrides():
     import core
     Operators.operators['set'] = core.SetOverride
 

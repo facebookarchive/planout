@@ -1,11 +1,19 @@
 from base import *
 import utils as ops
 
+def indent(s, n=1):
+  l = [("  " * n) + i for i in s.split('\n')]
+  return '\n'.join(l)
+
+
 class Literal(PlanOutOp):
   def options(self):
     return {'value': {'required': 1}}
 
   def execute(self, mapper):
+    return self.args['value']
+
+  def pretty(self):
     return self.args['value']
 
 
@@ -39,8 +47,8 @@ class Seq(PlanOutOp):
     return is_valid
 
   def pretty(self):
-    l = ['  ' + ops.Operators.pretty(v) for v in self.args['seq']]
-    return '{\n%s\n}' % '\n'.join(l)
+    l = [ops.Operators.pretty(v) for v in self.args['seq']]
+    return '\n'.join(l)
 
 
 class Set(PlanOutOp):
@@ -67,8 +75,8 @@ class Set(PlanOutOp):
 class SetOverride(Set):
   def execute(self, mapper):
     var, value = self.args['var'], self.args['value']
-    if not mapper.hasOverride(var):
-      mapper.set(var, mapper.evaluate(value))
+    if not mapper.has_override(var):
+      super(SetOverride, self).execute(mapper)
 
 
 class Array(PlanOutOp):
@@ -131,17 +139,19 @@ class Cond(PlanOutOp):
         is_valid = False
       return is_valid
 
-    def pretty():
-      pretty_str = ""
-      first_if = True
-      for ifthen_clause in self.args['cond']:
-        if ifthen_clause[0] == 'true':
-          pretty_str += 'else\n'
-        else:
-          prefix = 'if(%)\n' if first_if else 'if else(%)\n'
-          pretty_str +=  prefix % Operators.pretty(ifthen_clause[0])
-        pretty_str +=  Operators.pretty(ifthen_clause[1]) + ';'
-      return pretty_str
+  def pretty(self):
+    pretty_str = ""
+    first_if = True
+    for i in self.args['cond']:
+      if_clause, then_clause = i['if'], i['then']
+      if if_clause == 'true':
+        pretty_str += 'else {\n'
+      else:
+        prefix = 'if(%s) {\n' if first_if else 'else if(%s) {\n'
+        pretty_str += prefix % ops.Operators.pretty(if_clause)
+      pretty_str += indent(ops.Operators.pretty(then_clause)) + '\n}'
+    return pretty_str
+
 
 class And(PlanOutOp):
   def options(self):
@@ -165,29 +175,45 @@ class And(PlanOutOp):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
     return '&& '.join(pretty_c)
 
+class Or(PlanOutOp):
+  def options(self):
+    return {
+      'values': {'required': 1, 'description': 'array of truthy values'}}
+
+  def execute(self, mapper):
+    for clause in self.args['values']:
+      if mapper.evaluate(clause):
+        return True
+    return False
+
+  def validate(self):
+    is_valid = True
+    for clause in self.args['values']:
+      if not ops.Operators.validateOperator(clause):
+        is_valid = False
+    return is_valid
+
+  def pretty(self):
+    pretty_c = [Operators.pretty(c) for c in self.args['values']]
+    #pretty_c = Operators.pretty(self.args['values'])
+    return '|| '.join(pretty_c)
 
 class Product(PlanOutOpCommutative):
   def commutativeExecute(self, values):
-    print values
     return reduce(lambda x,y: x*y, values)
 
   def pretty(self):
-    pretty_c = Operators.pretty(self.args['values'])
-    return '* '.join(pretty_c)
+    pretty_c = [Operators.pretty(c) for c in self.args['values']]
+    return ' * '.join(pretty_c)
 
 
-class Sum(PlanOutOp):
-  def options(self):
-    return {
-      'values': {'required': 1, 'description': 'array of values'}}
-
-  def execute(self, mapper):
-    return sum(self.args['values'])
+class Sum(PlanOutOpCommutative):
+  def commutativeExecute(self, values):
+    return sum(values)
 
   def pretty(self):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
     return '+ '.join(pretty_c)
-
 
 
 class Equals(PlanOutOpBinary):
@@ -220,7 +246,7 @@ class Mod(PlanOutOpBinary):
 
 class Divide(PlanOutOpBinary):
   def binaryExecute(self, left, right):
-    return left / right
+    return float(left) / float(right)
 
 class Not(PlanOutOpUnary):
   def unaryExecute(self, value):
@@ -237,9 +263,13 @@ class Negative(PlanOutOpUnary):
     return '-'
 
 class Min(PlanOutOpCommutative):
-  def commutativeExecute(values):
-    return min(*values)
+  def commutativeExecute(self, values):
+    return min(values)
 
 class Max(PlanOutOpCommutative):
-  def commutativeExecute(values):
-    return max(*values)
+  def commutativeExecute(self, values):
+    return max(values)
+
+class Length(PlanOutOpCommutative):
+  def commutativeExecute(self, values):
+    return len(values)

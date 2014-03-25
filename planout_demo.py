@@ -5,24 +5,26 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 
-from planout.interpreter import PlanOutInterpreterMapper
+from planout.interpreter import *
+from planout.experiment import SimpleExperiment
+import json
 
-
-def runPlan(config, init, overrides={}):
+def run_plan(config, init, overrides={}):
   print '\n====== SETTING UP NEW EXPERIMENT ======'
-  experiment = PlanOutInterpreterMapper(config)
+  mapper = Interpreter(config, '', init)
   print 'using %s as input.' % init
-  experiment.setEnv(init)
+  #mapper.setEnv(init)
   if(overrides):
     print 'applying overrides: %s.' % overrides
-    experiment.setOverrides(overrides)
+    mapper.set_overrides(overrides)
   print 'validating experiment...'
-  if experiment.validate():
+  inspector = InterpreterInspector(config)
+  if inspector.validate():
     print 'success!'
     print '=== printing experiment in human ==='
-    print experiment.pretty()
+    print inspector.pretty()
     print '=== experiment results ==='
-    print experiment.getParams()
+    print mapper.get_params()
   else:
     print "experiment is invalid!"
     print "=== dump of broken experiment ==="
@@ -65,7 +67,7 @@ def demoInvalidPlanOut():
     }
   ]}
   print 'demoing invalid PlanOut code...'
-  runPlan(invalid_config, {"userid": 5, "pageid": 9})
+  run_plan(invalid_config, {"userid": 5, "pageid": 9})
 
 if __name__ == "__main__":
   valid_config = {"op":"seq",
@@ -110,7 +112,41 @@ if __name__ == "__main__":
 
   ]}
 
-  demoInvalidPlanOut()
-  runPlan(valid_config, {"userid": 21, "pageid": 9})
-  runPlan(valid_config, {"userid": 21, "pageid": 9}, {'prob_show': 0.8})
-  runPlan(valid_config, {"userid": 4, "pageid": 9}, {'prob_show': 0.8})
+  #demoInvalidPlanOut()
+  #run_plan(valid_config, {"userid": 21, "pageid": 9})
+  #run_plan(valid_config, {"userid": 21, "pageid": 9}, {'prob_show': 0.8})
+  #run_plan(valid_config, {"userid": 4, "pageid": 9}, {'prob_show': 0.8})
+
+
+class SimpleInterpretedExperiment(SimpleExperiment):
+  """Simple class for loading a file-based PlanOut interpreter experiment"""
+  filename = None
+
+  def assign(self, params, **kwargs):
+    procedure = Interpreter(
+      json.load(open(self.filename)),
+      self.salt,
+      kwargs
+      )
+    params.update(procedure.get_params())
+
+class Exp1(SimpleInterpretedExperiment):
+  filename = "demos/exp1.json"
+
+class Exp2(SimpleInterpretedExperiment):
+  filename = "demos/exp2.json"
+
+class Exp3(SimpleInterpretedExperiment):
+  filename = "demos/exp3.json"
+
+print Exp2(userid=4, pageid=2, liking_friends=[4,5,6,7,8])
+print Exp3(userid=4)
+
+
+code = json.load(open("demos/exp1.json"))
+i = InterpreterInspector(code)
+print i.validate()
+print i.pretty()
+print Exp1(userid=4)
+
+#Exp1().assign(userid=4)

@@ -8,6 +8,8 @@
 import logging
 import re
 from abc import ABCMeta, abstractmethod
+import json
+from assignment import Assignment
 
 class Experiment(object):
   """Abstract base class for PlanOut experiments"""
@@ -23,22 +25,27 @@ class Experiment(object):
     self._salt = None          # Experiment-level salt
     self._name = None          # Name of the experiment
     self._in_experiment = True
-
-    self.setExperimentProperties()          # sets name, salt, etc.
-    self.configureLogger()                  # sets up loggers
-    self.__assign()                         # assign inputs to parameters
-
-    # check if inputs+params were previously logged
-    self._logged = self.previouslyLogged()
-
     # auto-exposure logging is enabled by default
     self._auto_exposure_log = True
 
+    self.set_experiment_properties()          # sets name, salt, etc.
+    self.configure_logger()                  # sets up loggers
+    self.mapper = self.get_assignment()
+    self.assign(self.mapper, **self.inputs)
+    self.params = self.mapper.get_params()
+    self._in_experiment = self.params.get('in_experiment', True)
 
-  def setExperimentProperties(self):
+    # check if inputs+params were previously logged
+    self._logged = self.previously_logged()
+
+
+  def set_experiment_properties(self):
     """Set experiment properties, e.g., experiment name and salt."""
     # If the experiment name is not specified, just use the class name
     self.name = self.__class__.__name__
+
+  def get_assignment(self):
+    return Assignment(self.salt)
 
   @property
   def salt(self):
@@ -60,17 +67,8 @@ class Experiment(object):
   def in_experiment(self):
     return self._in_experiment
 
-  def __assign(self):
-    """Execute assignment procedure and set parameters"""
-    # exp must implement basic PlanOut methods
-    self.mapper = \
-        self.execute(**self.inputs)
-    self.params = self.mapper.getParams()
-    self._in_experiment = self.params.get('in_experiment', True)
-    return self
-
   @abstractmethod
-  def execute(**kwargs):
+  def assign(**kwargs):
     """Returns evaluated PlanOut mapper with experiment assignment"""
     pass
 
@@ -95,26 +93,26 @@ class Experiment(object):
   def logged(self, value):
     self._logged = value
 
-  def setAutoExposureLogging(self, value):
+  def set_auto_exposure_logging(self, value):
     """
     Disables / enables auto exposure logging (enabled by default).
     """
     self._auto_exposure_log = value
 
-  def getParams(self):
+  def get_params(self):
     """
     Get all PlanOut parameters. Triggers exposure log.
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
-      self.logExposure()
-    return self.mapper.getParams()
+      self.log_exposure()
+    return self.mapper.get_params()
 
   def get(self, name, default=None):
     """
     Get PlanOut parameter (returns default if undefined). Triggers exposure log.
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
-      self.logExposure()
+      self.log_exposure()
     return self.mapper.get(name, default)
 
   def __str__(self):
@@ -122,10 +120,10 @@ class Experiment(object):
     String representation of exposure log data. Triggers exposure log.
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
-      self.logExposure()
+      self.log_exposure()
     return str(self.__asBlob())
 
-  def logExposure(self, extras={}):
+  def log_exposure(self, extras={}):
     """Manual call to log exposure"""
     self.logged = True
     if extras:
@@ -134,14 +132,14 @@ class Experiment(object):
       extra_payload = extras
     self.log(self.__asBlob(extra_payload))
 
-  def logOutcome(self):
+  def log_outcome(self):
     """Log outcome event"""
     self.logged = True
     exta_payload = dict(extras.items() + ('event', 'outcome'))
     self.log(self.__asBlob(extra_payload))
 
   @abstractmethod
-  def configureLogger(self):
+  def configure_logger(self):
     """Set up files, database connections, sockets, etc for logging."""
     pass
 
@@ -151,7 +149,7 @@ class Experiment(object):
     pass
 
   @abstractmethod
-  def previouslyLogged(self):
+  def previously_logged(self):
     """Check if the input has already been logged.
        Gets called once during in the constructor."""
     # For high-use applications, one might have this method to check if
@@ -161,11 +159,12 @@ class Experiment(object):
 class SimpleExperiment(Experiment):
   """Simple experiment base class which exposure logs to a file"""
 
+  __metaclass__ = ABCMeta
   # We only want to set up the logger once, the first time the object is
   # instantiated. We do this by maintaining this class variable.
   _logger_configured = False
 
-  def configureLogger(self):
+  def configure_logger(self):
     """Sets up logger to log to experiment_name.log"""
     # only want to set logging handler once
     if not self.__class__._logger_configured:
@@ -174,12 +173,11 @@ class SimpleExperiment(Experiment):
       self.__class__.logger.addHandler(logging.FileHandler('%s.log' % self.name))
       self.__class__._logger_configured = True
 
-
   def log(self, data):
     """Logs data to a file"""
     self.__class__.logger.info(data)
 
-  def previouslyLogged(self):
+  def previously_logged(self):
     """Check if the input has already been logged.
        Gets called once during in the constructor."""
     # SimpleExperiment doesn't connect with any services, so we just assume

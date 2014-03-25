@@ -1,0 +1,4 @@
+prob_collapse = randomFloat(min=0.0, max=1.0,
+   unit=sourceid);
+collapse = bernoulliTrial(p=prob_collapse,
+   unit=[storyid, viewerid]);
