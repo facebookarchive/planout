@@ -2,9 +2,12 @@ from planout.interpreter import *
 from planout.experiment import SimpleExperiment
 import json
 import hashlib
+from abc import ABCMeta, abstractmethod
 
 class SimpleInterpretedExperiment(SimpleExperiment):
   """Simple class for loading a file-based PlanOut interpreter experiment"""
+  __metaclass__ = ABCMeta
+
   filename = None
 
   def assign(self, params, **kwargs):

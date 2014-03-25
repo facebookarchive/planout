@@ -3,24 +3,17 @@ from planout.ops.random import *
 from planout.assignment import Assignment
 import inspect
 import hashlib
-
-def a_func(params, userid):
-  params.button_color = UniformChoice(choices=[1,2,3], unit=userid)
-
-def b_func(params, userid):
-  params.button_color = UniformChoice(choices=[1,2,3], unit=userid)
-
-def c_func(params, userid):
-  params.button_color = UniformChoice(choices=[3,4,5], unit=userid)
-  params.text_color = UniformChoice(choices=['a','b'], unit=userid)
-
+from operator import itemgetter
+from abc import ABCMeta, abstractmethod
 
 class SimpleNamespace(SimpleExperiment):
-  experiments = {
-    'exp1': {'func': a_func},
-    'exp2': {'func': a_func},
-    'exp3': {'func': b_func},
-    'exp4': {'func': c_func}}
+  __metaclass__ = ABCMeta
+
+  @abstractmethod
+  def set_experiment_properties(self):
+    self.experiments = {} # list of lists of functions
+    self.primary_key = [None] # must set primary key of namespace
+
 
   @staticmethod
   def checksum_func(func):
@@ -29,11 +22,18 @@ class SimpleNamespace(SimpleExperiment):
     return hashlib.sha1(src).hexdigest()[:8]
 
   def assign(self, params, **kwargs):
+    self.experiment_names = self.experiments.keys()
+    self.experiment_weights = [v['prop'] for k,v in self.experiments.items()]
+    assert(sum(self.experiment_weights) <= 1.0)
+    if sum(self.experiment_weights) < 1.0:
+      self.experiment_names += [None]
+      self.experiment_weights += [1.0 - sum(self.experiment_weights)]
+
     a = Assignment('my_namespace')
     a.experiment_name = WeightedChoice(
-      choices=['exp1', 'exp2', 'exp3', 'exp4', None],
-      weights=[0.1, 0.2, 0.2, 0.2, 0.3],
-      unit=kwargs['userid'])
+      choices=self.experiment_names,
+      weights=self.experiment_weights,
+      unit=itemgetter(*self.primary_keys)(kwargs))
 
     self._checksum = None
     if a.experiment_name is not None:
@@ -51,8 +51,28 @@ class SimpleNamespace(SimpleExperiment):
       # would this work for other kvs?
       params.update(self.default_value_store())
 
+
+def a_func(params, userid):
+  params.button_color = UniformChoice(choices=[1,2,3], unit=userid)
+
+def b_func(params, userid):
+  params.button_color = UniformChoice(choices=[1,2,3], unit=userid)
+
+def c_func(params, userid):
+  params.button_color = UniformChoice(choices=[3,4,5], unit=userid)
+  params.text_color = UniformChoice(choices=['a','b'], unit=userid)
+
+class DemoNamespace(SimpleNamespace):
+  def set_experiment_properties(self):
+    self.experiments = {
+      'exp1': {'func': a_func, 'prop': 0.1},
+      'exp2': {'func': a_func, 'prop': 0.2},
+      'exp3': {'func': b_func, 'prop': 0.2},
+      'exp4': {'func': c_func, 'prop': 0.2}}
+    self.primary_keys = ['userid']
+
   def default_value_store(self):
     return {'button_color': 6, 'text': 'ahoy there!'}
 
 for i in range(10):
-  print SimpleNamespace(userid=i)
+  print DemoNamespace(userid=i)
