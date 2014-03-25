@@ -1,19 +1,44 @@
-from planout.experiment import SimpleExperiment
+from planout.experiment import SimpleExperiment, Experiment
 from planout.ops.random import *
 from planout.assignment import Assignment
 import inspect
 import hashlib
 from operator import itemgetter
 from abc import ABCMeta, abstractmethod
+from assignment_demo import Exp1, Exp3
 
-class SimpleNamespace(SimpleExperiment):
-  __metaclass__ = ABCMeta
+class DefaultExperiment(Experiment):
+  """Dummy experiment which is just a key-value store"""
+  def configure_logger(self):
+    pass  # we don't log anything when there is no experiment
+  def log(self, data):
+    pass
+  def previously_logged(self):
+    return True
 
-  @abstractmethod
-  def set_experiment_properties(self):
-    self.experiments = {} # list of lists of functions
-    self.primary_key = [None] # must set primary key of namespace
+  def assign(self, params, **kwargs):
+    pass
 
+
+class DemoNamespace(object):
+
+  def __init__(self, name, primary_key):
+    self.name = name
+    self.num_segments = 100
+    self.available_segments = set(range(self.num_segments))
+    if type(primary_key) is list:
+      self.primary_keys = primary_key
+    else:
+      self.primary_keys = [primary_key]
+
+    # dictionary mapping segments to experiment names
+    self.segment_allocations = {}
+
+    # stores experiment assignment functions, index by exp name
+    self.current_experiments = {}
+
+    # not quite sure how we can fake non-experiments
+    self._default_params = {}  
 
   @staticmethod
   def checksum_func(func):
@@ -21,60 +46,59 @@ class SimpleNamespace(SimpleExperiment):
     src = ''.join(inspect.getsourcelines(func)[0][1:])
     return hashlib.sha1(src).hexdigest()[:8]
 
-  def assign(self, params, **kwargs):
-    self.experiment_names = self.experiments.keys()
-    self.experiment_weights = [v['prop'] for k,v in self.experiments.items()]
-    assert(sum(self.experiment_weights) <= 1.0)
-    if sum(self.experiment_weights) < 1.0:
-      self.experiment_names += [None]
-      self.experiment_weights += [1.0 - sum(self.experiment_weights)]
+  def add_experiment(self, name, func, segments):
+    num_avail = len(self.available_segments)
+    if num_avail < segments:
+      print 'error: %s segments requested, only %s available.' % \
+        (segments, num_avail)
+      return False
+    if name in self.current_experiments:
+      print 'error: there is already an experiment called %s.' %  name
+      return False
+    self.current_experiments[name] = func
 
-    a = Assignment(self.salt)
-    a.experiment_name = WeightedChoice(
-      choices=self.experiment_names,
-      weights=self.experiment_weights,
-      unit=itemgetter(*self.primary_keys)(kwargs))
+    # randomly assign segments to experiments
+    a = Assignment(self.name)
+    a.allocations = Sample(
+      choices=list(self.available_segments), draws=segments, unit=name)
+    for segment in a.allocations:
+      self.segment_allocations[segment] = name
+      self.available_segments.remove(segment)
 
+  def remove_experiment(self, name):
+    if name not in current_experiments:
+      print 'error: there is no experiment called %s.' %  name
+      return False
+    for segment, name in self.segment_allocations.iteritems():
+      del self.segment_allocations[segment]
+      self.available_segments.add(segment)
+    del current_experiments[name]
+    return True
+
+  def get_experiment(self, **kwargs):
     self._checksum = None
-    if a.experiment_name is not None:
-      self.salt = '%s.%s' % (self.salt, a.experiment_name)
-      self.name = a.experiment_name
-      proc = Assignment(self.salt)
-      my_exp = self.experiments[a.experiment_name]['func']
-      self._checksum = self.checksum_func(my_exp)
 
-      my_exp(proc, kwargs)
-      params.update(proc)
-
+    # randomly assign user to a segment
+    a = Assignment(self.name)
+    a.segment = RandomInteger(min=0, max=self.num_segments,
+      unit=itemgetter(*self.primary_keys)(kwargs))
+    if a.segment in self.segment_allocations:
+      experiment_name = self.segment_allocations[a.segment]
+      experiment = self.current_experiments[experiment_name]
+      experiment.salt = '%s.%s' % (self.name, str(experiment.salt))
+      return experiment(**kwargs)
     else:
-      self.in_experiment = False  # turns off auto-exposure logging
+      return DefaultExperiment(**kwargs)
+      # we would probably want to return a fake-o experiment that
+      # connects with a key-value
+      #self.in_experiment = False  # turns off auto-exposure logging
       # would this work for other kvs?
-      params.update(self.default_value_store())
+      #params.update(self.default_value_store())
 
-
-def a_func(params, userid):
-  params.button_color = UniformChoice(choices=[1,2,3], unit=userid)
-
-def b_func(params, userid):
-  params.button_color = UniformChoice(choices=[1,2,3], unit=userid)
-
-def c_func(params, userid):
-  params.button_color = UniformChoice(choices=[3,4,5], unit=userid)
-  params.text_color = UniformChoice(choices=['a','b'], unit=userid)
-
-class DemoNamespace(SimpleNamespace):
-  def set_experiment_properties(self):
-    self.experiments = {
-      'exp1': {'func': a_func, 'prop': 0.1},
-      'exp2': {'func': a_func, 'prop': 0.2},
-      'exp3': {'func': b_func, 'prop': 0.2},
-      'exp4': {'func': c_func, 'prop': 0.2}}
-    self.primary_keys = ['userid']
-    self.name = 'DemoNamespace'
-    self.salt = 'DemoNamespace'
-
-  def default_value_store(self):
-    return {'button_color': 6, 'text': 'ahoy there!'}
-
-for i in range(10):
-  print DemoNamespace(userid=i)
+if __name__ == '__main__':
+  ns = DemoNamespace(name='my_demo', primary_key='userid')
+  ns.add_experiment('experiment 1', Exp1, 10)
+  ns.add_experiment('experiment 2', Exp1, 30)
+  ns.add_experiment('experiment 3', Exp3, 30)
+  for i in xrange(10):
+    print ns.get_experiment(userid=i)
