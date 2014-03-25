@@ -13,7 +13,7 @@ All variables set by PlanOut code are passed back via `Interpreter.get_params()`
 * You can use the `PlanOutLanguageInspector` class to validate whether all PlanOut operators use the required and optional methods.
 
 ## Compiling PlanOut code
-PlanOut code can be compiled via the PlanOut Web-based UI (link to github.io page) or using  the node.js script in the `compiler/` directory:
+PlanOut code can be compiled via the [Web-based compiler interface](http://facebook.github.io/planout/demo/planout-compiler.html) or using  the node.js script in the `compiler/` directory of the PlanOut github repository:
 
 ```
 node compiler/planout.js planoutscriptname
