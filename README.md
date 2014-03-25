@@ -20,13 +20,11 @@ Here is an example of how to use PlanOutKit. To create a PlanOutKit experiment, 
 from planoutkit import *
 
 class FirstExperiment(SimpleExperiment):
-  def assign(self, userid):
-    e = PlanOutKitMapper(self.salt)
-    e.button_color = UniformChoice(choices=['#ff0000', '#00ff00'], unit=userid)
-    e.button_text = WeightedChoice(
+  def assign(self, params, userid):
+    params.button_color = UniformChoice(choices=['#ff0000', '#00ff00'], unit=userid)
+    params.button_text = WeightedChoice(
         choices=['Join now!', 'Sign up.'],
         weights=[0.3, 0.7], unit=userid)
-    return e
 
 my_exp = FirstExperiment(userid=12)
 # parameters may be accessed via the . operator
