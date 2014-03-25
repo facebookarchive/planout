@@ -3,7 +3,8 @@ import json
 class Operators():
   @staticmethod
   def initFactory():
-    import core, random
+    import planout.ops.core as core
+    import planout.ops.random as random
     Operators.operators = {
       "literal": core.Literal,
       "get": core.Get,

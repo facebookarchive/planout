@@ -5,37 +5,50 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 
-from ops.random import *
-from UserDict import UserDict
+from .ops.random import *
+from collections import MutableMapping
 
-class Assignment(object):
+class Assignment(MutableMapping):
+  """
+  A mutable mapping that contains the result of an assign call.
+  """
   def __init__(self, experiment_salt):
     self.experiment_salt = experiment_salt
+    self._data = {}
 
   def evaluate(self, value):
     return value
 
-  def __setattr__(self, name, value):
+  def __setitem__(self, name, value):
+    if name in ('_data', 'experiment_salt'):
+      self.__dict__[name] = value
+      return
+
     if isinstance(value, PlanOutOpRandom):
       if 'salt' not in value.args:
         value.args['salt'] = name
-      self.__dict__[name] = value.execute(self)
+      self._data[name] = value.execute(self)
     else:
-      self.__dict__[name] = value
+      self._data[name] = value
 
-  def __getattr__(self, name):
-    return self.get(name, None)
+  __setattr__ = __setitem__
 
-  def get(self, name, default=None):
-    return self.__dict__.get(name, default)
+  def __getitem__(self, name):
+    if name in ('_data', 'experiment_salt'):
+      return self.__dict__[name]
+    else:
+      return self._data[name]
 
-  def update(self, other):
-    for key, value in other.iteritems():
-      setattr(self, key, value)
+  __getattr__ = __getitem__
 
-  def get_params(self):
-    d = self.__dict__
-    return dict([(i, d[i]) for i in d if i != 'experiment_salt'])
+  def __delitem__(self, name):
+    del self._data[name]
+
+  def __iter__(self):
+    return iter(self._data)
+
+  def __len__(self):
+    return len(self._data)
 
   def __str__(self):
-    return str(self.get_params())
+    return str(self._data)

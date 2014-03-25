@@ -4,8 +4,9 @@
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
+
 from copy import deepcopy
-from ops.utils import Operators
+from .ops.utils import Operators
 
 
 Operators.initFactory()
@@ -65,8 +66,10 @@ class Interpreter(object):
       return planout_code  # data is a literal
 
 
-class InterpreterInspector():
-  """Class for inspecting serialized PlanOut experiment definitions"""
+class Validator():
+  """
+  Inspects and validates serialized PlanOut experiment definitions.
+  """
   def __init__(self, serialization):
     self._serialization = serialization
 

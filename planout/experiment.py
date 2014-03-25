@@ -9,7 +9,8 @@ import logging
 import re
 from abc import ABCMeta, abstractmethod
 import json
-from assignment import Assignment
+
+from .assignment import Assignment
 
 class Experiment(object):
   """Abstract base class for PlanOut experiments"""
@@ -19,8 +20,6 @@ class Experiment(object):
 
   def __init__(self, **inputs):
     self.inputs = inputs       # input data
-    self.params = None         # stores parameter assignment results
-    self.mapper = None    # stores instance of the PlanOut mapper
     self._logged = False       # True when assignments have been exposure logged
     self._salt = None          # Experiment-level salt
     self._name = None          # Name of the experiment
@@ -30,10 +29,10 @@ class Experiment(object):
 
     self.set_experiment_properties()          # sets name, salt, etc.
     self.configure_logger()                  # sets up loggers
-    self.mapper = self.get_assignment()
-    self.assign(self.mapper, **self.inputs)
-    self.params = self.mapper.get_params()
-    self._in_experiment = self.params.get('in_experiment', True)
+
+    self.assignment = self.get_assignment()
+    self.assign(self.assignment, **self.inputs)
+    self._in_experiment = self.assignment.get('in_experiment', True)
 
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
@@ -78,7 +77,7 @@ class Experiment(object):
       'name': self.name,
       'salt': self.salt,
       'inputs': self.inputs,
-      'params': self.params
+      'params': self.assignment,
     }
     for k in extras:
       d[k] = extras[k]
@@ -105,7 +104,7 @@ class Experiment(object):
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
       self.log_exposure()
-    return self.mapper.get_params()
+    return self.assignment
 
   def get(self, name, default=None):
     """
@@ -113,7 +112,7 @@ class Experiment(object):
     """
     if self._auto_exposure_log and self.in_experiment() and not self.logged:
       self.log_exposure()
-    return self.mapper.get(name, default)
+    return self.assignment.get(name, default)
 
   def __str__(self):
     """

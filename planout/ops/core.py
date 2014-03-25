@@ -1,5 +1,12 @@
-from base import *
-import utils as ops
+from .base import (
+  PlanOutOp,
+  PlanOutOpSimple,
+  PlanOutOpBinary,
+  PlanOutOpUnary,
+  PlanOutOpCommutative,
+  )
+
+import planout.ops.utils as ops
 
 def indent(s, n=1):
   l = [("  " * n) + i for i in s.split('\n')]

@@ -1,21 +1,29 @@
+# Copyright (c) 2014, Facebook, Inc.
+# All rights reserved.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+
 from collections import Counter
 import unittest
 from math import sqrt
-from planoutkit import *
+
+from planout.ops.random import *
+from planout.assignment import Assignment
 
 # decorator for quickly constructing PlanOutKit experiments
 def experiment_decorator(name):
   def wrap(f):
     def wrapped_f(**kwargs):
-      e = PlanOutKitMapper(name)
-      e.input = kwargs
-      return f(e, **kwargs)
+      params = Assignment(name)
+      return f(params, **kwargs)
     return wrapped_f
   return wrap
 
 
 class TestRandomOperators(unittest.TestCase):
-  z=3.29  # z_{\alpha/2} for \alpha=0.001, e.g., 99.9% CI: qnorm(1-(0.001/2))
+  z = 3.29  # z_{\alpha/2} for \alpha=0.001, e.g., 99.9% CI: qnorm(1-(0.001/2))
 
   @staticmethod
   def valueMassToDensity(value_mass):
