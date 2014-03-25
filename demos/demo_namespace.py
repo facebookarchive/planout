@@ -29,7 +29,7 @@ class SimpleNamespace(SimpleExperiment):
       self.experiment_names += [None]
       self.experiment_weights += [1.0 - sum(self.experiment_weights)]
 
-    a = Assignment('my_namespace')
+    a = Assignment(self.salt)
     a.experiment_name = WeightedChoice(
       choices=self.experiment_names,
       weights=self.experiment_weights,
@@ -70,6 +70,8 @@ class DemoNamespace(SimpleNamespace):
       'exp3': {'func': b_func, 'prop': 0.2},
       'exp4': {'func': c_func, 'prop': 0.2}}
     self.primary_keys = ['userid']
+    self.name = 'DemoNamespace'
+    self.salt = 'DemoNamespace'
 
   def default_value_store(self):
     return {'button_color': 6, 'text': 'ahoy there!'}
