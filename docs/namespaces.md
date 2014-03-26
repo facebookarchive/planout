@@ -2,7 +2,7 @@
 
 Experiments often involve manipulating persistent parameters,
 such that multiple experiments, whether conducted serially or in parallel,
-manipulate the same parameters.
+manipulate the same parameters. When conducted in parallel, these experiments need to be "exclusive" or "non-overlapping".
 
 You can use a namespace model of parameters to support these practices. Similar models are also called "layers" (at Google) and "universes" (at Facebook).
 Each namespace is centered around a primary unit (e.g., user) such that, at any given time,
