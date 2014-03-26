@@ -1,10 +1,10 @@
 # Best practices
 
-PlanOut makes it easy to implement bug-free code that randomizes users into parameters. The `Assignment` and `Interpreter` object makes your assignment procedure reliable, and by using the `Experiment` class, you are more likely to notice if you did something bad in your experiment. There are a number of other considerations:
+PlanOut makes it easy to implement bug-free code that randomly assigns users (or other units) to parameters. The `Assignment` and `Interpreter` object makes your assignment procedure reliable, and by using the `Experiment` class, you are more likely to notice if you did something bad in your experiment. There are a number of other considerations:
 
 * Use the auto-exposure logging (link) functionality provided by the `Experiment` class.  Auto-exposure logging makes it easy to verify that your assignment procedure is working correctly, and makes it easier to track changes to units' assignments to parameters over time.
-* Avoid changing an experiment while it is running. Instead, if you have a new idea you would like to test,  you should iterate on your experiment (link).
 * Use a namespace (link) if you are planning on running concurrent experiments.
+* Avoid changing an experiment while it is running. Instead, either run a second experiment with different units using a namespace, or rename your experiment and rerandomize the units.
 * If you suspect your experiment might have changed, check the `salt` and `checksum` fields of your log. If either of these items change, it is likely that your assignments have also changed mid-way through the experiment. (this is kind of redundant with the first point and might be moved into the exposure logging section).
 * Automate the analysis of your experiment. If you are running multiple related experiments, create a pipeline to automatically do the analysis.
 
