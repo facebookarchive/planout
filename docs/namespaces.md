@@ -4,7 +4,7 @@ Experiments often involve manipulating persistent parameters,
 such that multiple experiments, whether conducted serially or in parallel,
 manipulate the same parameters.
 
-You can use a namespace model of parameters to support these practices. Similar models are also called `layers` (at Google) and `universes`.
+You can use a namespace model of parameters to support these practices. Similar models are also called "layers" (at Google) and "universes" (at Facebook).
 Each namespace is centered around a primary unit (e.g., user) such that, at any given time,
 each primary unit is only in one experiment that manipulates parameters in that namespace.
 These units are assigned to one of a large number (e.g., 10,000) of segments.
