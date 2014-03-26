@@ -32,7 +32,7 @@ TODO: exposure-log logs should have a field that specifies its an exposure. This
 ## Types of logs
 
 ### Auto-exposure logging
-By default, exposures are logged once per instance of an experiment object when you get a parameter. This is auto-exposure logging.
+By default, exposures are logged once per instance of an experiment object when you get a parameter. This is auto-exposure logging. It is recommended for most situations, since you will want to track whenever a unit is exposed to your experiment. Generally, any unit for which a parameter has been retrieved should be counted as exposed, unless you wish to make further assumptions.
 
 ### Manual exposure logging
 In some cases, you might want to choose exactly when exposures are logged. You can disable auto-exposure logging  with the `set_auto_exposure_logging` method and instead choose to directly call `log_exposure` to keep track of exposures.
