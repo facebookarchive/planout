@@ -15,18 +15,20 @@ There are no hard and fast rules for what kinds of changes are actually a proble
 ### Non-equivalent groups
 Experiments are used to test the change of one or more parameters on some average outcome (e.g., messages sent, or clicks on a button). Differences can be attributed to the experimental treatment (a change in parameter assignments) if the difference between two groups is completely random.
 
-In practice, there are a number of common ways for two groups to not be equivalent:
- - Some users from one group were previously in a different group, while users from the other group were not.
- - Some users in one group were recently added to the experiment.
+In practice, there are a number of common ways for two groups to not be equivalent (beyond random imbalance):
+ - Some units from one group were previously in a different group, while users from the other group were not.
+ - Some units in one group were recently added to the experiment.
  - There was a bug in the code for one group but not the other, and things recently got fixed.
 
-In this cases, it is often best to run a new experiment. This can be as easy as just changing the name or salt of your experiment, e.g., by setting:
+In this cases, it is often best to run a new experiment. If you do not mind reassigning some units, this can be as easy as just changing the name or salt of your experiment, e.g., by setting:
 
 ```python
 class MyNewExperiment(MyOldExperiment):
   def set_experiment_properties(self):
     self.name = 'new_experiment_name'
 ```
+
+Alternatively, you can use a namespace to manage running multiple experiments that manipulate the same parameters, either concurrently or over time.
 
 ### Unanticipated consequences from changing experiments
 Changes to experiments can dramatically alter which parameters users are assigned to. For example, consider
