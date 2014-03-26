@@ -18,11 +18,15 @@ Rather than requesting a parameter from an experiment, you simply request a para
 API example
 ```
 
-In sophisticated experimentation environments or large organizations, your namespace implementation will likely involve a database managing allocation of these primary units to experiments -- and other aspects of experiment managements. You can do this by extending the `Namespace` class.
+In sophisticated experimentation environments or large organizations, your namespace implementation will likely involve a database managing allocation of segements of primary units to experiments -- and other aspects of experiment management. You can do this by implementing the abstract `Namespace` class or extending the `SimpleNamespace` class.
 
-For simpler settings and as a starting point, PlanOut provides a basic implementation of namespaces in `DemoNamespace`.
+For simpler settings and as a starting point, PlanOut provides a basic implementation of namespaces in `SimpleNamespace`.
 
-## DemoNamespace
+## SimpleNamespace
+
+`SimpleNamespace` provides namespace functionality without being backed by a database or involving a larger experimentation management system. For both organizational and performance reasons, it is not recommended for namespaces that would be used to run many (e.g., thousands) experiments, but it more than sufficient for running several experiments manpulating the same parameters.
+
+
 
 
 
