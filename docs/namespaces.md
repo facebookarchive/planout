@@ -27,6 +27,37 @@ For simpler settings and as a starting point, PlanOut provides a basic implement
 `SimpleNamespace` provides namespace functionality without being backed by a database or involving a larger experimentation management system. For both organizational and performance reasons, it is not recommended for namespaces that would be used to run many (e.g., thousands) experiments, but it more than sufficient for running several experiments manpulating the same parameters.
 
 
+### Allocating and deallocating segments to experiments
+When you extend `SimpleExperiment`, implement the `setup_experiments` method. This specifies a series of allocations and deallocations of segments to experiments.
+
+When creating your first experiment in a new namespace, this method would be
+```python
+def setup_experiments():
+  self.add_experiment('first experiment', MyFirstExperiment, 10)
+```
+where 'first experiment' is the name of your experiment, `MyFirstExperiment` is your experiment class, and 10 is the number of segements you are allocating to that experiment.
+
+Adding additional experiments would just involve adding additional lines to the method. For example, you might run a larger follow-up experiment with the same design:
+```python
+def setup_experiments():
+  self.add_experiment('first experiment', MyFirstExperiment, 10)
+  self.add_experiment('first experiment, replication 1', MyFirstExperiment, 40)
+```
+Or you might run a new experiment with a different design:
+```python
+def setup_experiments():
+  self.add_experiment('first experiment', MyFirstExperiment, 10)
+  self.add_experiment('second experiment', MySecondExperiment, 20)
+```
+When an experiment is complete and you wish to make its segments available to new experiments, add a call to `remove_experiment`:
+```python
+def setup_experiments():
+  self.add_experiment('first experiment', MyFirstExperiment, 10)
+  self.add_experiment('second experiment', MySecondExperiment, 20)
+  self.remove('first experiment')
+```
+In modifying this method, you should only add lines after all previous lines, since there is no database to store the state of allocation and allocation is dependent on past history.
+
 
 
 
