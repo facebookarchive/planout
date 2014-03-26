@@ -4,7 +4,7 @@ Experiments often involve manipulating persistent parameters,
 such that multiple experiments, whether conducted serially or in parallel,
 manipulate the same parameters.
 
-You can use a namespace model of parameters to support these practices.
+You can use a namespace model of parameters to support these practices. Similar models are also called `layers` (at Google) and `universes`.
 Each namespace is centered around a primary unit (e.g., user) such that, at any given time,
 each primary unit is only in one experiment that manipulates parameters in that namespace.
 These units are assigned to one of a large number (e.g., 10,000) of segments.
@@ -37,7 +37,7 @@ def setup_experiments():
 ```
 where 'first experiment' is the name of your experiment, `MyFirstExperiment` is your experiment class, and 10 is the number of segements you are allocating to that experiment.
 
-Adding additional experiments would just involve adding additional lines to the method. For example, you might run a larger follow-up experiment with the same design:
+Adding additional experiments would just involve appending additional lines to the method. For example, you might run a larger follow-up experiment with the same design:
 ```python
 def setup_experiments():
   self.add_experiment('first experiment', MyFirstExperiment, 10)
@@ -49,14 +49,15 @@ def setup_experiments():
   self.add_experiment('first experiment', MyFirstExperiment, 10)
   self.add_experiment('second experiment', MySecondExperiment, 20)
 ```
-When an experiment is complete and you wish to make its segments available to new experiments, add a call to `remove_experiment`:
+When an experiment is complete and you wish to make its segments available to new experiments, append a call to `remove_experiment`:
 ```python
 def setup_experiments():
   self.add_experiment('first experiment', MyFirstExperiment, 10)
   self.add_experiment('second experiment', MySecondExperiment, 20)
   self.remove('first experiment')
+  self.add_experiment('third experiment', MyThirdExperiment, 50)
 ```
-In modifying this method, you should only add lines after all previous lines, since there is no database to store the state of allocation and allocation is dependent on past history.
+Note: In modifying this method, you should only add lines after all previous lines. Inserting calls to `add_experiment` or `remove_experiment` will likely move segments from one experiment to another -- not what you want! This is because there is no stored allocation state (e.g., in a database), so the current allocation is dependent on the full history.
 
 
 
