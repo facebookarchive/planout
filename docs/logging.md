@@ -40,4 +40,6 @@ In some cases, you might want to choose exactly when exposures are logged. You c
 Why might you want to do this? You might be adding experimental assignment information to other existing logs of outcome data, but many of the users who have outcome observations may not actually have been exposed. Other cases occur when some advance preparation of some components (e.g., UI) or data are required, but you can assume that parameter values set at this stage do not yet affect the user.
 
 ### Conversion logging
-You want to see how the parameters you are manipulating affect outcomes or conversion events. You may have existing logs for many of these events. It can also be convenient to log these events along with exposures. You can do this by calling the `log_outcome` method.
+You want to see how the parameters you are manipulating affect outcomes or conversion events. It can also be convenient to log these events along with exposures. You can do this by calling the `log_outcome` method.
+
+You may have existing logs for many of these events. In this case, you could add experimental assignment information to these logs by instantiating an experiment, turning off auto-exposure logging for that instance, and adding parameter information to your logs. Alternatively, you can later join exposure and outcome data on unit identifiers (e.g., user IDs).
