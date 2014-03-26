@@ -7,7 +7,6 @@ To log exposures using your existing logging system, just override the `log` met
 
   def log(self, data):
     MyLogger.log(data)
-    TODO
 
 ```
 
