@@ -12,7 +12,7 @@ These segments are allocated to experiments.
 
 TODO: add API - segment - parameter diagram
 
-Rather than requesting a parameter from an experiment, you simply request a parameter from a namespace, which then handles identifying the experiment (if any) that that unit is part of.
+Rather than requesting a parameter from an experiment, you simply request a parameter from a namespace, which then handles identifying the experiment (if there is one) that that unit is part of.
 
 ``` python
 API example
