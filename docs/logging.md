@@ -31,25 +31,13 @@ TODO: exposure-log logs should have a field that specifies its an exposure. This
 
 ## Types of logs
 
-### Auto exposure logging
+### Auto-exposure logging
+By default, exposures are logged once per instance of an experiment object when you get a parameter. This is auto-exposure logging.
 
 ### Manual exposure logging
+In some cases, you might want to choose exactly when exposures are logged. You can disable auto-exposure logging  with the `set_auto_exposure_logging` method and instead choose to directly call `log_exposure` to keep track of exposures.
 
-### Conversion logging.
+Why might you want to do this? You might be adding experimental assignment information to other existing logs of outcome data, but many of the users who have outcome observations may not actually have been exposed. Other cases occur when some advance preparation of some components (e.g., UI) or data are required, but you can assume that parameter values set at this stage do not yet affect the user.
 
-## Extending logging functionality
-this belongs in a separate md file
-### Overloading the log configuration method
-
-### Overriding the `log` method
-To log exposures using your existing logging system, just override the `log` method when extending the `Experiment` abstract class. For example, if you write to your logs with `XXX`, then you might create a class as follows.
-```python
-
-  def log(self, data):
-    MyLogger.log(data)
-    TODO
-
-```
-
-### Adding caching
-By default, each instance of an Experiment class will only write to your logs once. But this can still result in a lot of writing when there are many instances created in a single request. So you may want to add some caching to prevent lots of unnecessary logging. Perhaps your logging system already handles this. Otherwise, you can add a key to a cache in the `log` method and check it before actually logging.
+### Conversion logging
+You want to see how the parameters you are manipulating affect outcomes or conversion events. You may have existing logs for many of these events. It can also be convenient to log these events along with exposures. You can do this by calling the `log_outcome` method.
