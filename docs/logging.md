@@ -4,7 +4,7 @@ You will usually want to log which units (e.g., users) are exposed to your exper
 
 Logging this information enables monitoring your experiment and improving your analysis of the results. In particular, many experiments only change your service for the small portion of users that use a particular part of the service; keeping track of these users will make your analysis more precise.
 
-PlanOut provides hooks for your logging code so that you can log whenever a unit is exposed to an experiment.
+The `SimpleExperiment` class providing functionality for logging data to a file using Python's `logger` module. Additionally, you can extend `Experiment` to call your logging code instead (link to extending-logging).
 
 ## Anatomy of a log
 Consider Experiment 1 from the PlanOut paper (link):
