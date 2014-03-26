@@ -14,6 +14,22 @@ import hashlib
 
 from .assignment import Assignment
 
+
+# decorator for quickly constructing PlanOutKit experiments
+def requires_assignment(f):
+  def wrapped_f(self, *args, **kwargs):
+    if not self._assigned:
+      self._assign()
+    return f(self, *args, **kwargs)
+  return wrapped_f
+
+def exposure_logged(f):
+  def wrapped_f(self, *args, **kwargs):
+    if self._auto_exposure_log and self.in_experiment and not self.logged:
+      self.log_exposure()
+    return f(self, *args, **kwargs)
+  return wrapped_f
+
 class Experiment(object):
   """Abstract base class for PlanOut experiments"""
   __metaclass__ = ABCMeta
@@ -30,17 +46,19 @@ class Experiment(object):
     self._auto_exposure_log = True
 
     self.set_experiment_properties()          # sets name, salt, etc.
-    self.configure_logger()                  # sets up loggers
 
     self._assignment = self.get_assignment()
     self._checksum = self.checksum()
+    self._assigned = False
+
+  def _assign(self):
+    """Assignment and setup that only happens when we need to log data"""
+    self.configure_logger() # sets up loggers
     self.assign(self._assignment, **self.inputs)
     self.in_experiment = \
       self._assignment.get('in_experiment', self.in_experiment)
-
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
-
 
   def set_experiment_properties(self):
     """Set experiment properties, e.g., experiment name and salt."""
@@ -72,6 +90,7 @@ class Experiment(object):
     """Returns evaluated PlanOut mapper with experiment assignment"""
     pass
 
+  @requires_assignment
   def __asBlob(self, extras={}):
     """Dictionary representation of experiment data"""
     d = {
@@ -106,28 +125,28 @@ class Experiment(object):
     """
     self._auto_exposure_log = value
 
+  @requires_assignment
+  @exposure_logged
   def get_params(self):
     """
     Get all PlanOut parameters. Triggers exposure log.
     """
-    if self._auto_exposure_log and self.in_experiment and not self.logged:
-      self.log_exposure()
     return dict(self._assignment)
 
+  @requires_assignment
+  @exposure_logged
   def get(self, name, default=None):
     """
     Get PlanOut parameter (returns default if undefined). Triggers exposure log.
     """
-    if self._auto_exposure_log and self.in_experiment and not self.logged:
-      self.log_exposure()
     return self._assignment.get(name, default)
 
+  @requires_assignment
+  @exposure_logged
   def __str__(self):
     """
     String representation of exposure log data. Triggers exposure log.
     """
-    if self._auto_exposure_log and self.in_experiment and not self.logged:
-      self.log_exposure()
     return str(self.__asBlob())
 
   def log_exposure(self, extras={}):
