@@ -41,12 +41,15 @@ class Experiment(object):
     self.inputs = inputs       # input data
     self._logged = False       # True when assignments have been exposure logged
     self._salt = None          # Experiment-level salt
-    self._name = None          # Name of the experiment
     self.in_experiment = True
+
+    # use the name of the class as the default name
+    self._name = self.__class__.__name__
+
     # auto-exposure logging is enabled by default
     self._auto_exposure_log = True
 
-    self.set_experiment_properties()          # sets name, salt, etc.
+    self.setup()          # sets name, salt, etc.
 
     self._assignment = self.get_assignment()
     self._checksum = self.checksum()
@@ -61,10 +64,10 @@ class Experiment(object):
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
 
-  def set_experiment_properties(self):
-    """Set experiment properties, e.g., experiment name and salt."""
+  def setup_attributes(self):
+    """Set experiment attributes, e.g., experiment name and salt."""
     # If the experiment name is not specified, just use the class name
-    self.name = self.__class__.__name__
+    pass
 
   def get_assignment(self):
     return Assignment(self.salt)
@@ -132,6 +135,7 @@ class Experiment(object):
     """
     Get all PlanOut parameters. Triggers exposure log.
     """
+    # In general, this should only be used by custom loggers.
     return dict(self._assignment)
 
   @requires_assignment
@@ -183,26 +187,51 @@ class Experiment(object):
     # there is a memcache key associated with the checksum of the inputs+params
     pass
 
+
+class DefaultExperiment(Experiment):
+  """
+  Dummy experiment which has no logging. Default experiments used by namespaces
+  should inherent from this class.
+  """
+  def configure_logger(self):
+    pass  # we don't log anything when there is no experiment
+
+  def log(self, data):
+    pass
+
+  def previously_logged(self):
+    return True
+
+  def assign(self, params, **kwargs):
+    # more complex default experiments can override this method
+    params.update(self.get_default_params())
+
+  def get_default_params(self):
+    """
+    Default experiments that are just key-value stores should
+    override this method."""
+    return {}
+
 class SimpleExperiment(Experiment):
   """Simple experiment base class which exposure logs to a file"""
 
   __metaclass__ = ABCMeta
   # We only want to set up the logger once, the first time the object is
   # instantiated. We do this by maintaining this class variable.
-  _logger_configured = False
+  logger = {}
 
   def configure_logger(self):
     """Sets up logger to log to experiment_name.log"""
-    # only want to set logging handler once
-    if not self.__class__._logger_configured:
-      self.__class__.logger = logging.getLogger(self.name)
-      self.__class__.logger.setLevel(logging.INFO)
-      self.__class__.logger.addHandler(logging.FileHandler('%s.log' % self.name))
-      self.__class__._logger_configured = True
+    # only want to set logging handler once for each experiment (name)
+    if self.name not in self.__class__.logger:
+      my_logger = self.__class__.logger
+      my_logger[self.name] = logging.getLogger(self.name)
+      my_logger[self.name].setLevel(logging.INFO)
+      my_logger[self.name].addHandler(logging.FileHandler('%s.log' % self.name))
 
   def log(self, data):
     """Logs data to a file"""
-    self.__class__.logger.info(data)
+    self.__class__.logger[self.name].info(data)
 
   def previously_logged(self):
     """Check if the input has already been logged.
