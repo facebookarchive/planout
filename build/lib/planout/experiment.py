@@ -49,7 +49,7 @@ class Experiment(object):
     # auto-exposure logging is enabled by default
     self._auto_exposure_log = True
 
-    self.setup()          # sets name, salt, etc.
+    self.setup_attributes()          # sets name, salt, etc.
 
     self._assignment = self.get_assignment()
     self._checksum = self.checksum()
@@ -64,8 +64,8 @@ class Experiment(object):
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
 
-  def setup(self):
-    """Set experiment properties, e.g., experiment name and salt."""
+  def setup_attributes(self):
+    """Set experiment attributes, e.g., experiment name and salt."""
     # If the experiment name is not specified, just use the class name
     pass
 

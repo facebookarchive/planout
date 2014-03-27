@@ -49,7 +49,7 @@ class Experiment(object):
     # auto-exposure logging is enabled by default
     self._auto_exposure_log = True
 
-    self.setup()          # sets name, salt, etc.
+    self.setup_attributes()          # sets name, salt, etc.
 
     self._assignment = self.get_assignment()
     self._checksum = self.checksum()
