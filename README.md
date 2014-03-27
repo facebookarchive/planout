@@ -28,7 +28,7 @@ This release currently includes:
 The package can be used as a turn-key solution for students and researchers running or learning how to run experiments. The software is also designed to be extensible for use in production environments for larger services, such as those run by startups.
 
 
-### Example
+### Full Example
 
 To create a basic PlanOut experiment, you subclass ``SimpleExperiment`` object, and implement an assignment method. You can use PlanOut's random assignment operators by setting ``e.varname``, where ``params`` is the first argument passed to the ``assign()`` method, and ``varname`` is the name of the variable you are setting.
 ```python
