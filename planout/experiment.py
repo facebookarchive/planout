@@ -11,6 +11,7 @@ from abc import ABCMeta, abstractmethod
 import json
 import inspect
 import hashlib
+import __main__ as main
 
 from .assignment import Assignment
 
@@ -110,9 +111,14 @@ class Experiment(object):
     return d
 
   def checksum(self):
-    # src doesn't count first line of code, which includes function name
-    src = ''.join(inspect.getsourcelines(self.assign)[0][1:])
-    return hashlib.sha1(src).hexdigest()[:8]
+    # if we're running from a file and want to detect if the experiment file has changed
+    if hasattr(main, '__file__'):
+      # src doesn't count first line of code, which includes function name
+      src = ''.join(inspect.getsourcelines(self.assign)[0][1:])
+      return hashlib.sha1(src).hexdigest()[:8]
+    # if we're running in an interpreter, don't worry about it
+    else:
+      return None
 
   # the logged setter / getter may be unnecessary
   @property
