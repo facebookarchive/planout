@@ -31,7 +31,8 @@ class DefaultButtonExperiment(DefaultExperiment):
 class ButtonNamespace(SimpleNamespace):
   def setup_attributes(self):
     self.name = 'my_demo'
-    self.primary_key = 'userid'
+    self.primary_unit = 'userid'
+    self.num_segments = 100
     self.default_experiment_class = DefaultButtonExperiment
 
   def setup_experiments(self):

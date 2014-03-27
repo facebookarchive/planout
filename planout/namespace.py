@@ -52,7 +52,7 @@ class SimpleNamespace(Namespace):
   def __init__(self, **kwargs):
     self.name = self.__class__  # default name is the class name
     self.inputs = kwargs
-    self.num_segments = 100     # default is 100
+    self.num_segments = None
 
     # dictionary mapping segments to experiment names
     self.segment_allocations = {}
@@ -77,26 +77,28 @@ class SimpleNamespace(Namespace):
     """Sets up experiment"""
     # Developers extending this class should set the following variables
     # self.name = 'sample namespace'
-    # self.primary_key = 'userid'
+    # self.primary_unit = 'userid'
     # self.num_segments = 10000
     pass
 
   @abstractmethod
   def setup_experiments():
+    # e.g.,
+    # self.add_experiment('first experiment', Exp1, 100)
     pass
 
   @property
-  def primary_key(self):
-    return self._primary_key
+  def primary_unit(self):
+    return self._primary_unit
 
-  @primary_key.setter
-  def primary_key(self, value):
+  @primary_unit.setter
+  def primary_unit(self, value):
     # later on we require that the primary key is a list, so we use
     # a setter to convert strings to a single element list
     if type(value) is list:
-      self._primary_key = value
+      self._primary_unit = value
     else:
-      self._primary_key = [value]
+      self._primary_unit = [value]
 
 
   def add_experiment(self, name, exp_object, segments):
@@ -143,13 +145,13 @@ class SimpleNamespace(Namespace):
     # randomly assign user to a segment
     a = Assignment(self.name)
     a.segment = RandomInteger(min=0, max=self.num_segments,
-      unit=itemgetter(*self.primary_key)(self.inputs))
+      unit=itemgetter(*self.primary_unit)(self.inputs))
 
     # is the unit allocated to an experiment?
     if a.segment in self.segment_allocations:
       experiment_name = self.segment_allocations[a.segment]
       experiment = self.current_experiments[experiment_name](**self.inputs)
-      experiment.name = experiment_name
+      experiment.name = '%s-%s' % (self.name, experiment.name)
       experiment.salt = '%s.%s' % (self.name, experiment.name)
       self._experiment = experiment
       self._in_experiment = True
