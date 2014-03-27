@@ -2,7 +2,7 @@
 
 PlanOut is a Python-based toolkit and language for online field experimentation. PlanOut was created to make it easy to run more sophisticated experiments and to quickly iterate on these experiments, while satisfying the constraints of deployed Internet services with many users. 
 
-Developers integrate PlanOut by defining experiments that detail how _units_ (e.g., users, cookie IDs) should get mapped onto conditions. For example:
+Developers integrate PlanOut by defining experiments that detail how _units_ (e.g., users, cookie IDs) should get mapped onto conditions. For example, to create a 2x2 experiment randomizing both the color and the text on a button:
 ```python
 class MyExperiment(SimpleExperiment):
   def assign(self, params, userid):
@@ -10,14 +10,14 @@ class MyExperiment(SimpleExperiment):
     params.button_text = UniformChoice(choices=['I voted', 'I am a voter'], unit=userid)
 ```
 
-Then, in the application code, just ask what value your current user should receive:
+Then, in the application code, you query the Experiment object to find out what values the current user should be mapped onto:
 ```python
 my_exp = FirstExperiment(userid=101)
 color = my_exp.get('button_color')
 text = my_exp.get('button_text')
 ```
 
-PlanOut takes care of randomizing each ``userid`` into the right bucket. It does so by hashing the input, so each ``userid`` will always map onto the same decisions.
+PlanOut takes care of randomizing each ``userid`` into the right bucket. It does so by hashing the input, so each ``userid`` will always map onto the same values for that experiment.
 
 This release currently includes:
   * An extensible Python class for defining experiments. This class comes with objects that make it easy to implement randomized assignments, and automatically logs key data.
@@ -52,20 +52,18 @@ for i in xrange(6):
   print FirstExperiment(userid=i)
 ```
 
-which outputs (update this):
-
+which outputs:
 ```
-Sign up. #ff0000
-{'inputs': {'userid': 0}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#00ff00', 'button_text': 'Sign up.'}}
-{'inputs': {'userid': 1}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#ff0000', 'button_text': 'Join now!'}}
-{'inputs': {'userid': 2}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#00ff00', 'button_text': 'Sign up.'}}
-{'inputs': {'userid': 3}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#ff0000', 'button_text': 'Sign up.'}}
-{'inputs': {'userid': 4}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#ff0000', 'button_text': 'Sign up.'}}
-{'inputs': {'userid': 5}, 'salt': 'firstexperiment', 'name': 'firstexperiment', 'params': {'button_color': '#00ff00', 'button_text': 'Join now!'}}
+Join now! #ff0000
+{'inputs': {'userid': 0}, 'checksum': '22c13b16', 'salt': 'FirstExperiment', 'name': 'FirstExperiment', 'params': {'button_color': '#ff0000', 'button_text': 'Sign up.'}}
+{'inputs': {'userid': 1}, 'checksum': '22c13b16', 'salt': 'FirstExperiment', 'name': 'FirstExperiment', 'params': {'button_color': '#ff0000', 'button_text': 'Sign up.'}}
+{'inputs': {'userid': 2}, 'checksum': '22c13b16', 'salt': 'FirstExperiment', 'name': 'FirstExperiment', 'params': {'button_color': '#00ff00', 'button_text': 'Sign up.'}}
+{'inputs': {'userid': 3}, 'checksum': '22c13b16', 'salt': 'FirstExperiment', 'name': 'FirstExperiment', 'params': {'button_color': '#ff0000', 'button_text': 'Sign up.'}}
+{'inputs': {'userid': 4}, 'checksum': '22c13b16', 'salt': 'FirstExperiment', 'name': 'FirstExperiment', 'params': {'button_color': '#00ff00', 'button_text': 'Join now!'}}
+{'inputs': {'userid': 5}, 'checksum': '22c13b16', 'salt': 'FirstExperiment', 'name': 'FirstExperiment', 'params': {'button_color': '#00ff00', 'button_text': 'Sign up.'}}
 ```
 
-The ``SimpleExperiment`` class will automatically the name of the experiment, ``FirstExperiment``, variable name, and the input data (``userid``) are used to perform the random assignment.  Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
-
+The ``SimpleExperiment`` class will automatically concatenate the name of the experiment, ``FirstExperiment``, the variable name, and the input data (``userid``) and hash that string to perform the random assignment. Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
 
 ### Learn more
 Learn more about PlanOut by [reading the PlanOut paper](http://www-personal.umich.edu/~ebakshy/planout.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:
