@@ -14,7 +14,6 @@ If the primary unit is not mapped to an experiment, or a parameter is requested 
  This allows experimenters to configure default values for parameters on the fly in a way that does not interfere with currently running experiments.
 
 
-
 Rather than requesting a parameter from an experiment, you simply request a parameter from a namespace, which then handles identifying the experiment (if there is one) that that unit is part of.
 
 ### When do I need to use a namespace?

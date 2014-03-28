@@ -1,8 +1,10 @@
 # Iterating on experiments with `SimpleNamespace`
 
-`SimpleNamespace` provides namespace functionality without being backed by a database or involving a larger experimentation management system. For both organizational and performance reasons, it is not recommended for namespaces that would be used to run many (e.g., thousands) experiments, but it should be sufficient for smaller-scale experiments.
+`SimpleNamespace` provides namespace functionality without being backed by a database or involving a larger experimentation management system. For both organizational and performance reasons, it is not recommended for namespaces that would be used to run many (e.g., thousands) experiments, but it should be sufficient for iterating on smaller-scale experiments.
 
-Similar to the `SimpleExperiment` class, one defines new namespaces through subclassing. The two required methods are `setup_attributes()`, which sets the namespace's name, and the primary unit. The primary unit is the input unit that gets mapped to segments, which are allocated to experiments.  The `setup_experiments()` method allocates and deallocates experiments.
+Similar to how you create experiments with the `SimpleExperiment` class, new namespaces are created through subclassing.  `SimpleNamespace` two requires that developers implement two methods:
+ - `setup_attributes()`: this method sets the namespace's name, the primary unit, and number of segments. The primary unit is the input unit that gets mapped to segments, which are allocated to experiments.
+ - `setup_experiments()`: this method allocates and deallocates experiments. When used in production, lines of code should only be added to this method.
 
 ```python
 class ButtonNamespace(SimpleNamespace):
@@ -14,7 +16,8 @@ class ButtonNamespace(SimpleNamespace):
   def setup_experiments():
     # create and remove experiments here
 ```
-In the example above
+
+In the example above, the name of the namespace is `my_demo`. This gets used, in addition to the experiment name and variable names, to hash units to experimental conditions. The number of segments is the granularity of the experimental groups.
 
 ### Allocating and deallocating segments to experiments
 When you extend `SimpleNamespace` class, you implement the `setup_experiments` method. This specifies a series of allocations and deallocations of segments to experiments.
