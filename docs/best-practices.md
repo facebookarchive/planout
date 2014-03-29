@@ -2,11 +2,11 @@
 
 PlanOut makes it easy to implement bug-free code that randomly assigns users (or other units) to parameters. The `Assignment` and `Interpreter` object makes your assignment procedure reliable, and by using the `Experiment` class, you are more likely to notice if you did something bad in your experiment. There are a number of other considerations:
 
-* Use the auto-exposure logging (link) functionality provided by the `Experiment` class.  Auto-exposure logging makes it easy to verify that your assignment procedure is working correctly, and makes it easier to track changes to units' assignments to parameters over time.
-* Use a namespace (link) if you are planning on running concurrent experiments.
+* Use the auto-exposure logging (link) functionality provided by the `Experiment` class.  Auto-exposure logging makes it easy to verify that your assignment procedure is working correctly, and helps you keep track changes to units' assignments to parameters over time.
 * Avoid changing an experiment while it is running. Instead, either run a second experiment with different units using a namespace, or rename your experiment and rerandomize the units.
-* If you suspect your experiment might have changed, check the `salt` and `checksum` fields of your log. If either of these items change, it is likely that your assignments have also changed mid-way through the experiment. (this is kind of redundant with the first point and might be moved into the exposure logging section).
+* Use a namespace (link) if you are planning on running concurrent experiments.
 * Automate the analysis of your experiment. If you are running multiple related experiments, create a pipeline to automatically do the analysis.
+
 
 There are no hard and fast rules for what kinds of changes are actually a problem, but if you follow the best practices above, you should be in reasonable shape.
 
@@ -31,10 +31,11 @@ class MyNewExperiment(MyOldExperiment):
 Alternatively, you can use a namespace to manage running multiple experiments that manipulate the same parameters, either concurrently or over time.
 
 ### Unanticipated consequences from changing experiments
-Changes to experiments can dramatically alter which parameters users are assigned to. For example, consider
+Changes to experiment definitions will generally alter which parameters users are assigned to. For example, consider an experiment that manipulates the label of a button for sharing a link. The main outcome of interest is the effect of this text on how many links users share per day.
+
 
 ```python
-class MyExperiment(SimpleExperiment):
+class SharingExperiment(SimpleExperiment):
   def assign(self, params, userid):
     params.button_text = UniformChoice(
       choices=['OK', 'Share', 'Share with friends'],
@@ -43,9 +44,14 @@ class MyExperiment(SimpleExperiment):
 ```
 Changing the variable name `button_text` changes the assignment, since it is used to salt (link) to assignment procedure (see `Experiment` intro document).
 
-Changing the number of choices for the `button_text` also affects users previously randomized into other conditions.  For example, removing the "Share" item from the `choices` list, will allocate some users who were previosuly in the "Share" condition to the "OK" and "Share with friends group". Their outcomes will now be a weighted average of the two, which may decrease the estimated difference between "OK" and "Share with friends".
+Changing the number of choices for the `button_text` also affects users previously randomized into other conditions.  For example, removing the 'Share' item from the `choices` list, will allocate some users who were previosuly in the 'Share' condition to the 'OK' and 'Share with friends group'. Their outcomes will now be a weighted average of the two, which may decrease the observed difference between 'OK' and 'Share with friends'.
 
-If an additional choice were added, on the other hand, some percentage of each prior choice would be allocated to the new choice, whose outcome represents an average of all groups. Since those prior groups may have been around a lot longer, the newly added parameters may be subject to greater novelty effects.
+If an additional choice were added to `choices`, some percentage of each prior choice would be allocated to the new choice, whose outcome represents an average of all groups. Comparisons between users still in the old groups (the newly added parameters may be subject to greater novelty effects.
+
+## Detecting problems
+If you suspect your experiment might have changed, check the `salt` and `checksum` fields of your log. If either of these items change, it is likely that your assignments have also changed mid-way through the experiment.
 
 ## Learn more
-Learn more by reading the PlanOut paper or Kohavi's excellent work on experimentation, including...
+[Seven Pitfalls to Avoid when Running Controlled Experiments on the Web.](http://www.exp-platform.com/Documents/2009-ExPpitfalls.pdf) KDD 2009. Thomas Crook, Brian Frasca, Ron Kohavi, and Roger Longbotham.
+
+[Designing and Deploying Online Field Experiments](http://www-personal.umich.edu/~ebakshy/planout.pdf). WWW 2014. Eytan Bakshy, Dean Eckles, Michael S. Bernstein.
