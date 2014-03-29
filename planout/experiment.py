@@ -6,11 +6,12 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 import logging
+import time
 import re
-from abc import ABCMeta, abstractmethod
 import json
 import inspect
 import hashlib
+from abc import ABCMeta, abstractmethod
 import __main__ as main
 
 from .assignment import Assignment
@@ -100,6 +101,7 @@ class Experiment(object):
     """Dictionary representation of experiment data"""
     d = {
       'name': self.name,
+      'time': int(time.time()),
       'salt': self.salt,
       'inputs': self.inputs,
       'params': dict(self._assignment),
@@ -163,13 +165,14 @@ class Experiment(object):
   def log_exposure(self, extras={}):
     """Manual call to log exposure"""
     self.logged = True
+    payload = extras.copy()
     if extras:
       exta_payload = dict(extras.items() + ('event', 'exposure'))
     else:
       extra_payload = extras
     self.log(self.__asBlob(extra_payload))
 
-  def log_outcome(self):
+  def log_conversion(self):
     """Log outcome event"""
     self.logged = True
     exta_payload = dict(extras.items() + ('event', 'outcome'))
@@ -225,19 +228,26 @@ class SimpleExperiment(Experiment):
   # We only want to set up the logger once, the first time the object is
   # instantiated. We do this by maintaining this class variable.
   logger = {}
+  log_file = {}
 
   def configure_logger(self):
-    """Sets up logger to log to experiment_name.log"""
+    """Sets up logger to log to a file"""
+    my_logger = self.__class__.logger
     # only want to set logging handler once for each experiment (name)
     if self.name not in self.__class__.logger:
-      my_logger = self.__class__.logger
+      if self.name not in self.__class__.log_file:
+        self.__class__.log_file[self.name] = '%s.log' % self.name
+      file_name = self.__class__.log_file[self.name]
       my_logger[self.name] = logging.getLogger(self.name)
       my_logger[self.name].setLevel(logging.INFO)
-      my_logger[self.name].addHandler(logging.FileHandler('%s.log' % self.name))
+      my_logger[self.name].addHandler(logging.FileHandler(file_name))
 
   def log(self, data):
     """Logs data to a file"""
     self.__class__.logger[self.name].info(data)
+
+  def set_log_file(self, path):
+    self.__class__.logger_file[self.name] = path
 
   def previously_logged(self):
     """Check if the input has already been logged.
