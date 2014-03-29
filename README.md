@@ -65,6 +65,13 @@ Join now! #ff0000
 
 The ``SimpleExperiment`` class will automatically concatenate the name of the experiment, ``FirstExperiment``, the variable name, and the input data (``userid``) and hash that string to perform the random assignment. Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
 
+### Installation
+Check out the github and type:
+
+```
+sudo python setup.py install
+```
+
 ### Learn more
 Learn more about PlanOut by [reading the PlanOut paper](http://www-personal.umich.edu/~ebakshy/planout.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:
 ``` bibtex
