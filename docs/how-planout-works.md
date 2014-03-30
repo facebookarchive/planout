@@ -2,6 +2,7 @@
 
 PlanOut works by hashing input data into numbers, and using these numbers to generate what are effectively pseudo-random values to pick numbers. All PlanOut operators include basic unit tests (link) to verify that they generate assignments with the expected distribution.
 
+Good randomization procedures produce assignments that are independent of one another. Below, we show how PlanOut uses experiment-level and variable-level "salts" (strings that get appended to the data thats being hashed) to make sure that variables within and across experiments remain independent.
 
 ## Pseudo-random assignment through hashing
 Consider the following experiment:
@@ -48,7 +49,7 @@ Note that because PlanOut simply concatenates the units, the order in which you 
 ## Salts
 
 ### Experiment-level salts
-We set the experiment-level salts manually in the example above using the `set_attributes()` method. If the salt is not specified, then the experiment name is used as the salt. With SimpleExperiment, if the name is not set in `set_attributes()`, then the name of the class is used as the experiment name.
+Experiment-level salts can be manually in the  `set_attributes()` method (as we have above). If the salt is not specified, then the experiment name is used as the salt. With SimpleExperiment, if the name is not set in `set_attributes()`, then the name of the class is used as the experiment name.
 
 ### Parameter-level salts
 The parameter name is automatically used to salt random assignment operations, but parameter level salts can be specified manually. For example, in the following code
@@ -58,7 +59,7 @@ params.x = UniformChoice(choices=['a','b'], unit=userid)
 params.y = UniformChoice(choices=['a','b'], unit=userid, salt='x')
 ```
 
-both `x` and `y` would be assigned to the same value.
+both `x` and `y` will always be assigned to the same exact same value.
 
 This lets you change the name of the variable you are logging without changing the assignment. Use variable level salts with caution, since they might lead to failures in randomization (link).
 

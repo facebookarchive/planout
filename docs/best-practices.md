@@ -1,10 +1,9 @@
 # Best practices
 
-PlanOut makes it easy to implement bug-free code that randomly assigns users (or other units) to parameters. The `Assignment` and `Interpreter` object makes your assignment procedure reliable, and by using the `Experiment` class, you are more likely to notice if you did something bad in your experiment. There are a number of other considerations:
+PlanOut makes it easy to implement bug-free code that randomly assigns users (or other units) to parameters. The Experiment and Namespace classes are designed to reduce common errors in deploying and logging experiments. Here are a few tips for running experiments:
 
-* Use the auto-exposure logging (link) functionality provided by the `Experiment` class.  Auto-exposure logging makes it easy to verify that your assignment procedure is working correctly, and helps you keep track changes to units' assignments to parameters over time.
-* Avoid changing an experiment while it is running. Instead, either run a second experiment with different units using a namespace, or rename your experiment and rerandomize the units.
-* Use a namespace (link) if you are planning on running concurrent experiments.
+* Use auto-exposure logging (link), which is enabled by default.  Auto-exposure logging makes it easier to check that your assignment procedure is working correctly, increases the precision of your experiment, and reduces errors in downstream analysis.
+* Avoid changing an experiment while it is running. Instead, either run a follow-up experiment using a namespace (link), or create a new experiment with a different salt to re-randomize the units. These experiments should be analyzed separately from the original experiment.
 * Automate the analysis of your experiment. If you are running multiple related experiments, create a pipeline to automatically do the analysis.
 
 
@@ -12,23 +11,22 @@ There are no hard and fast rules for what kinds of changes are actually a proble
 
 
 ## Randomization failures
-### Non-equivalent groups
-Experiments are used to test the change of one or more parameters on some average outcome (e.g., messages sent, or clicks on a button). Differences can be attributed to the experimental treatment (a change in parameter assignments) if the difference between two groups is completely random.
+Experiments are used to test the change of one or more parameters on some average outcome (e.g., messages sent, or clicks on a button). Differences can be safely attributed to a change in parameters if treatments are assigned to users completely at random.
 
 In practice, there are a number of common ways for two groups to not be equivalent (beyond random imbalance):
  - Some units from one group were previously in a different group, while users from the other group were not.
  - Some units in one group were recently added to the experiment.
- - There was a bug in the code for one group but not the other, and things recently got fixed.
+ - There was a bug in the code for one group but not the other, and that bug recently got fixed.
 
-In this cases, it is often best to run a new experiment. If you do not mind reassigning some units, this can be as easy as just changing the name or salt of your experiment, e.g., by setting:
+In these cases, we suggest that you launch a new experiment, either through the use of namespaces (links), or by re-assigning all of the units in your experiment.  This can be done by simply changing the salt of your experiment:
 
 ```python
 class MyNewExperiment(MyOldExperiment):
   def set_experiment_properties(self):
     self.name = 'new_experiment_name'
+    self.salt = 'new_experiment_salt'
 ```
 
-Alternatively, you can use a namespace to manage running multiple experiments that manipulate the same parameters, either concurrently or over time.
 
 ### Unanticipated consequences from changing experiments
 Changes to experiment definitions will generally alter which parameters users are assigned to. For example, consider an experiment that manipulates the label of a button for sharing a link. The main outcome of interest is the effect of this text on how many links users share per day.
@@ -52,6 +50,5 @@ If an additional choice were added to `choices`, some percentage of each prior c
 If you suspect your experiment might have changed, check the `salt` and `checksum` fields of your log. If either of these items change, it is likely that your assignments have also changed mid-way through the experiment.
 
 ## Learn more
+[Designing and Deploying Online Field Experiments](http://www-personal.umich.edu/~ebakshy/planout.pdf).  WWW 2014. Eytan Bakshy, Dean Eckles, Michael S. Bernstein.
 [Seven Pitfalls to Avoid when Running Controlled Experiments on the Web.](http://www.exp-platform.com/Documents/2009-ExPpitfalls.pdf) KDD 2009. Thomas Crook, Brian Frasca, Ron Kohavi, and Roger Longbotham.
-
-[Designing and Deploying Online Field Experiments](http://www-personal.umich.edu/~ebakshy/planout.pdf). WWW 2014. Eytan Bakshy, Dean Eckles, Michael S. Bernstein.
