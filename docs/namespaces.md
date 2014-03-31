@@ -19,5 +19,4 @@ If the primary unit is not mapped to an experiment, or a parameter is requested 
 ### When do I need to use a namespace?
 Namespaces are useful whenever there is at least one variable in your code base that you would like to experiment with, either over time or simultaneously.
 
-
 As a starting point, PlanOut provides a basic implementation of namespaces with the `SimpleNamespace` class.

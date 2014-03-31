@@ -1,2 +1,0 @@
-### Implementing namespaces for your site
-In sophisticated experimentation environments or large organizations, your namespace implementation will likely involve a database managing allocation of segments of primary units to experiments. These experiments might have meta-data associated with them, including which data are to be to log, when the experiment is scheduled to start or end, who created the experiment, etc.  You can do this by implementing the abstract class `Namespace` or extending the `SimpleNamespace` class.
