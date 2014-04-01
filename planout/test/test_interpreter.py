@@ -19,6 +19,7 @@ class InterpreterTest(unittest.TestCase):
     v = Validator(self.compiled)
     self.assertTrue(v.validate())
 
+    # these should print errors and return fail.
     incomplete_op = Validator({'op': 'uniformChoice', 'value': 42})
     self.assertFalse(incomplete_op.validate())
 

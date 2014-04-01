@@ -1,5 +1,3 @@
-# Why PlanOut?
-
 A/B tests and other randomized experiments are widely used as part of continually improving Web and mobile apps and services. PlanOut makes it easy to run both simple and complex experiments.
 
 ## Focus on parameters

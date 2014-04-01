@@ -1,4 +1,3 @@
-
 import random
 from uuid import uuid4
 from flask import (
@@ -16,34 +15,37 @@ app.config.update(dict(
     SECRET_KEY='3.14159', # shhhhh
 ))
 
-from planout import SimpleExperiment, UniformChoice
+from planout.experiment import SimpleExperiment
+from planout.ops.random import *
 
-class HeaderCopy(SimpleExperiment):
+class HeaderExperiment(SimpleExperiment):
     def assign(self, params, userid):
-        params.header = UniformChoice(choices=['Hi', 'Hello'], unit=userid)
+        params.header_text= UniformChoice(choices=['Hi', 'Hello'], unit=userid)
+        params.header_color = UniformChoice(choices=['#aa332a', '#4422e5'],
+            unit=userid)
 
 @app.route('/')
 def main():
+    # if no userid is defined make one up
     if 'userid' not in session:
         session['userid'] = str(uuid4())
 
-    #random.seed(hash(session['userid']))
-    #header = random.choice(['Hello', 'Hi'])
-
-    header = HeaderCopy(userid=session['userid']).get('header')
+    header_exp = HeaderExperiment(userid=session['userid'])
+    header = header_exp.get('header_text')
+    color = header_exp.get('header_color')
     
     return render_template_string("""
-<html>
-  <head>
-    <title>Welcome to Planout!</title>
-  </head>
-  <body>
-    <h1>{{ header }}</h1>
-  <form method="POST" action="/reset">
-  <input type="submit" value="Reset UserId">
-  </body>
-</html>
-    """, header=header)
+    <html>
+      <head>
+        <title>Welcome to Planout!</title>
+      </head>
+      <body>
+        <h1><font color="{{color}}">{{ header }}</font></h1>
+      <form method="POST" action="/reset">
+      <input type="submit" value="Reset UserId">
+      </body>
+    </html>
+    """, header=header, color=color)
 
 @app.route('/reset', methods=['POST'])
 def reset():

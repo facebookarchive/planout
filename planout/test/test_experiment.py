@@ -42,10 +42,7 @@ class ExperimentTest(unittest.TestCase):
     {"op":"set",
      "var":"foo",
      "value":{
-       "choices":{
-         "op":"array",
-         "values":["a","b"]
-        },
+       "choices":["a","b"],
        "op":"uniformChoice"
        }
     }
