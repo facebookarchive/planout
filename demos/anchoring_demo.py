@@ -36,9 +36,6 @@ def main():
 
     anchoring_exp = AnchoringExperiment(userid=session['userid'])
     price = anchoring_exp.get('price')
-    anchoring_exp.log_exposure({'foo':'bar'})
-    anchoring_exp.log_conversion()
-    anchoring_exp.log_conversion({'baz':52})
     
     # need to add a text box and button to submit a bid.
     return render_template_string("""
@@ -69,21 +66,36 @@ def reset():
 
 @app.route('/bid')
 def bid():
-  bid_amount = request.args.get('bid')
-  anchoring_exp = AnchoringExperiment(userid=session['userid'])
-  anchoring_exp.log_conversion(bid_amount)
-  # do something
-  return render_template_string("""
-    <html>
-      <head>
-        <title>Nice bid!</title>
-      </head>
-      <body>
-        <p>You bid ${{ bid }}. We'll be in touch!</p>
-        <p><a href="/">Back</a></p>
-      </body>
-    </html>
-    """, bid=bid_amount)
+  bid_string = request.args.get('bid')
+  try:
+    bid_amount = int(bid_string)
+
+    anchoring_exp = AnchoringExperiment(userid=session['userid'])
+    anchoring_exp.log_conversion({'bid': bid_amount})
+
+    return render_template_string("""
+      <html>
+        <head>
+          <title>Nice bid!</title>
+        </head>
+        <body>
+          <p>You bid ${{ bid }}. We'll be in touch if they accept your offer!</p>
+          <p><a href="/">Back</a></p>
+        </body>
+      </html>
+      """, bid=bid_amount)    
+  except ValueError:
+    return render_template_string("""
+      <html>
+        <head>
+          <title>Bad bid!</title>
+        </head>
+        <body>
+          <p>You bid ${{ bid }}. That's not a number, so we probably won't be accepting your bid.</p>
+          <p><a href="/">Back</a></p>
+        </body>
+      </html>
+      """, bid=bid_string)
 
 
 if __name__ == '__main__':
