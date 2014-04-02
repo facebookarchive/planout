@@ -26,7 +26,9 @@ class AnchoringExperiment(SimpleExperiment):
         unit=userid)
     else:
       params.price = RandomInteger(min=100000, max=120000, unit=userid)
-    print params
+
+def money_format(number):
+  return "${:,.2f}".format(number)
 
 @app.route('/')
 def main():
@@ -45,7 +47,7 @@ def main():
       </head>
       <body>
         <p>
-          A lovely new home is going on the market for ${{ price }}. <br>
+          A lovely new home is going on the market for {{ price }}. <br>
           What will be your first offer?
         </p>
         <form action="/bid" method="GET">
@@ -57,7 +59,7 @@ def main():
       <div><a href="/reset">Reset my session ID so I get re-randomized into a new group.</a></div>
       </body>
     </html>
-    """, price=price)
+    """, price=money_format(price))
 
 @app.route('/reset')
 def reset():
@@ -67,6 +69,7 @@ def reset():
 @app.route('/bid')
 def bid():
   bid_string = request.args.get('bid')
+  bid_string = bid_string.replace(',', '') # get rid of commas
   try:
     bid_amount = int(bid_string)
 
@@ -79,11 +82,11 @@ def bid():
           <title>Nice bid!</title>
         </head>
         <body>
-          <p>You bid ${{ bid }}. We'll be in touch if they accept your offer!</p>
+          <p>You bid {{ bid }}. We'll be in touch if they accept your offer!</p>
           <p><a href="/">Back</a></p>
         </body>
       </html>
-      """, bid=bid_amount)    
+      """, bid=money_format(bid_amount))    
   except ValueError:
     return render_template_string("""
       <html>
@@ -91,7 +94,7 @@ def bid():
           <title>Bad bid!</title>
         </head>
         <body>
-          <p>You bid ${{ bid }}. That's not a number, so we probably won't be accepting your bid.</p>
+          <p>You bid {{ bid }}. That's not a number, so we probably won't be accepting your bid.</p>
           <p><a href="/">Back</a></p>
         </body>
       </html>
