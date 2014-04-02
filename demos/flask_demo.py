@@ -47,6 +47,12 @@ def main():
     </html>
     """, header=header, color=color)
 
+@app.route('/signup', methods=['POST'])
+def reset():
+    session.clear()
+    return redirect(url_for('main'))
+
+
 @app.route('/reset', methods=['POST'])
 def reset():
     session.clear()

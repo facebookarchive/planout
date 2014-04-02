@@ -162,20 +162,22 @@ class Experiment(object):
     """
     return str(self.__asBlob())
 
-  def log_exposure(self, extras={}):
+  def log_exposure(self, extras=None):
     """Manual call to log exposure"""
     self.logged = True
-    payload = extras.copy()
     if extras:
       exta_payload = dict(extras.items() + ('event', 'exposure'))
     else:
-      extra_payload = extras
+      extra_payload = {'event': 'exposure'}
     self.log(self.__asBlob(extra_payload))
 
-  def log_conversion(self):
-    """Log outcome event"""
+  def log_conversion(self, extras=None):
+    """Log conversion event"""
     self.logged = True
-    exta_payload = dict(extras.items() + ('event', 'outcome'))
+    if extras:
+      exta_payload = dict(extras.items() + ('event', 'conversion'))
+    else:
+      extra_payload = {'event': 'conversion'}
     self.log(self.__asBlob(extra_payload))
 
   @abstractmethod
