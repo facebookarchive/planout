@@ -45,26 +45,42 @@ def main():
       </head>
       <body>
         <p>
-        A lovely new home is going on the market for ${{ price }}. <br>
-        What will be your first offer?
+          A lovely new home is going on the market for ${{ price }}. <br>
+          What will be your first offer?
         </p>
-      <form method="POST" action="/reset">
-      <input type="submit" value="Reset my ID">
+        <form action="/bid" method="GET">
+          $<input type="text" length="10" name="bid"></input>
+          <input type="submit"></input>
+        </form>
+
+      <div><a href="/">Reload without resetting my session ID. I'll get the same offer when I come back.</a></div>
+      <div><a href="/reset">Reset my session ID so I get re-randomized into a new group.</a></div>
       </body>
     </html>
     """, price=price)
 
-@app.route('/reset', methods=['POST'])
+@app.route('/reset')
 def reset():
   session.clear()
   return redirect(url_for('main'))
 
-@app.route('/bid', methods=['POST'])
+@app.route('/bid')
 def bid():
+  bid_amount = request.args.get('bid')
   anchoring_exp = AnchoringExperiment(userid=session['userid'])
-  anchoring_exp.log_conversion('whatevertheysubmitted')
+  anchoring_exp.log_conversion(bid_amount)
   # do something
-  return ""
+  return render_template_string("""
+    <html>
+      <head>
+        <title>Nice bid!</title>
+      </head>
+      <body>
+        <p>You bid ${{ bid }}. We'll be in touch!</p>
+        <p><a href="/">Back</a></p>
+      </body>
+    </html>
+    """, bid=bid_amount)
 
 
 if __name__ == '__main__':
