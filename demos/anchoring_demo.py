@@ -1,11 +1,11 @@
 import random
 from uuid import uuid4
 from flask import (
-  Flask, 
+  Flask,
   session,
-  request, 
+  request,
   redirect,
-  url_for, 
+  url_for,
   render_template_string
 )
 app = Flask(__name__)
@@ -38,7 +38,7 @@ def main():
 
     anchoring_exp = AnchoringExperiment(userid=session['userid'])
     price = anchoring_exp.get('price')
-    
+
     # need to add a text box and button to submit a bid.
     return render_template_string("""
     <html>
@@ -56,7 +56,7 @@ def main():
         </form>
 
       <div><a href="/">Reload without resetting my session ID. I'll get the same offer when I come back.</a></div>
-      <div><a href="/reset">Reset my session ID so I get re-randomized into a new group.</a></div>
+      <div><a href="/reset">Reset my session ID so I get re-randomized into a new treatment.</a></div>
       </body>
     </html>
     """, price=money_format(price))
@@ -86,7 +86,7 @@ def bid():
           <p><a href="/">Back</a></p>
         </body>
       </html>
-      """, bid=money_format(bid_amount))    
+      """, bid=money_format(bid_amount))
   except ValueError:
     return render_template_string("""
       <html>
