@@ -166,7 +166,7 @@ class Experiment(object):
     """Manual call to log exposure"""
     self.logged = True
     if extras:
-      exta_payload = dict(extras.items() + ('event', 'exposure'))
+      extra_payload = {'event': 'exposure', 'extra_data': extras.copy()}
     else:
       extra_payload = {'event': 'exposure'}
     self.log(self.__asBlob(extra_payload))
@@ -175,7 +175,7 @@ class Experiment(object):
     """Log conversion event"""
     self.logged = True
     if extras:
-      exta_payload = dict(extras.items() + ('event', 'conversion'))
+      extra_payload = {'event': 'conversion', 'extra_data': extras.copy()}
     else:
       extra_payload = {'event': 'conversion'}
     self.log(self.__asBlob(extra_payload))
