@@ -242,7 +242,7 @@ class SimpleExperiment(Experiment):
 
   def log(self, data):
     """Logs data to a file"""
-    self.__class__.logger[self.name].info(data)
+    self.__class__.logger[self.name].info(json.dumps(data))
 
   def set_log_file(self, path):
     self.__class__.logger_file[self.name] = path
