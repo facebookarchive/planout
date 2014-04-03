@@ -8,7 +8,7 @@ prev: planout-language.html
 
 PlanOut makes it easy to implement bug-free code that randomly assigns users (or other units) to parameters. The Experiment and Namespace classes are designed to reduce common errors in deploying and logging experiments. Here are a few tips for running experiments:
 
-* Use auto-exposure logging (link), which is enabled by default.  Auto-exposure logging makes it easier to check that your assignment procedure is working correctly, increases the precision of your experiment, and reduces errors in downstream analysis.
+* Use [auto-exposure logging](logging.html), which is enabled by default.  Auto-exposure logging makes it easier to check that your assignment procedure is working correctly, increases the precision of your experiment, and reduces errors in downstream analysis.
 * Avoid changing an experiment while it is running. Instead, either run a follow-up experiment using a [namespace](namespaces.html), or create a new experiment with a different salt to re-randomize the units. These experiments should be analyzed separately from the original experiment.
 * Automate the analysis of your experiment. If you are running multiple related experiments, create a pipeline to automatically do the analysis.
 
