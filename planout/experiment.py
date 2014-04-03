@@ -244,7 +244,7 @@ class SimpleExperiment(Experiment):
     self.__class__.logger[self.name].info(json.dumps(data))
 
   def set_log_file(self, path):
-    self.__class__.logger_file[self.name] = path
+    self.__class__.log_file[self.name] = path
 
   def previously_logged(self):
     """Check if the input has already been logged.

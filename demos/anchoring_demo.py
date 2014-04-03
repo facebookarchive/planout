@@ -19,6 +19,9 @@ from planout.experiment import SimpleExperiment
 from planout.ops.random import *
 
 class AnchoringExperiment(SimpleExperiment):
+  def setup(self):
+    self.set_log_file('anchoring_webapp.log')
+
   def assign(self, params, userid):
     params.use_round_number = BernoulliTrial(p=0.5, unit=userid)
     if params.use_round_number:
