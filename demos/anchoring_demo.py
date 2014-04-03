@@ -22,10 +22,10 @@ class AnchoringExperiment(SimpleExperiment):
   def assign(self, params, userid):
     params.use_round_number = BernoulliTrial(p=0.5, unit=userid)
     if params.use_round_number:
-      params.price = UniformChoice(choices=[100000, 110000, 120000],
+      params.price = UniformChoice(choices=[240000, 250000, 260000],
         unit=userid)
     else:
-      params.price = RandomInteger(min=100000, max=120000, unit=userid)
+      params.price = RandomInteger(min=240000, max=260000, unit=userid)
 
 def money_format(number):
   return "${:,.2f}".format(number)
@@ -46,17 +46,19 @@ def main():
         <title>Let's buy a house!</title>
       </head>
       <body>
-        <p>
+        <h3>
           A lovely new home is going on the market for {{ price }}. <br>
+        </h3>
+        <p>
           What will be your first offer?
         </p>
         <form action="/bid" method="GET">
           $<input type="text" length="10" name="bid"></input>
           <input type="submit"></input>
         </form>
-
-      <div><a href="/">Reload without resetting my session ID. I'll get the same offer when I come back.</a></div>
-      <div><a href="/reset">Reset my session ID so I get re-randomized into a new treatment.</a></div>
+      <br>
+      <p><a href="/">Reload without resetting my session ID. I'll get the same offer when I come back.</a></p>
+      <p><a href="/reset">Reset my session ID so I get re-randomized into a new treatment.</a></p>
       </body>
     </html>
     """, price=money_format(price))
@@ -74,7 +76,7 @@ def bid():
     bid_amount = int(bid_string)
 
     anchoring_exp = AnchoringExperiment(userid=session['userid'])
-    anchoring_exp.log_conversion({'bid': bid_amount})
+    anchoring_exp.log_event('bid', {'bid_amount': bid_amount})
 
     return render_template_string("""
       <html>

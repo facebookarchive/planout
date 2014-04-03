@@ -14,7 +14,7 @@ from planout.ops.random import UniformChoice
 
 class ExperimentTest(unittest.TestCase):
 
-  def test_simple_experiment(self):
+  def test_experiment(self):
 
     my_log = []
 
@@ -25,25 +25,26 @@ class ExperimentTest(unittest.TestCase):
       def log(self, stuff): my_log.append(stuff)
       def previously_logged(self): pass
 
-      def assign(self, params):
-        params.foo = UniformChoice(choices=['a', 'b'])
+      def assign(self, params, i):
+        params.foo = UniformChoice(choices=['a', 'b'], unit=i)
     
-    e = TestExperiment()
+    e = TestExperiment(i=42)
     val = e.get_params()
 
     self.assertTrue('foo' in val)
-    self.assertEqual(val['foo'], 'b')
+    self.assertEqual(val['foo'], 'a')
 
     self.assertEqual(len(my_log), 1)
 
-  def test_simple_planout_experiment(self):
+  def test_interpreted_planout_experiment(self):
 
     compiled = json.loads("""
     {"op":"set",
      "var":"foo",
      "value":{
        "choices":["a","b"],
-       "op":"uniformChoice"
+       "op":"uniformChoice",
+       "unit": {"op": "get", "var": "i"}
        }
     }
 """)
@@ -56,15 +57,15 @@ class ExperimentTest(unittest.TestCase):
       def log(self, stuff): my_log.append(stuff)
       def previously_logged(self): pass
 
-      def assign(self, params):
-        proc = Interpreter(compiled, self.salt, {})
+      def assign(self, params, **kwargs):
+        proc = Interpreter(compiled, self.salt, kwargs)
         params.update(proc.get_params())
     
-    e = TestExperiment()
+    e = TestExperiment(i=42)
     val = e.get_params()
 
     self.assertTrue('foo' in val)
-    self.assertEqual(val['foo'], 'b')
+    self.assertEqual(val['foo'], 'a')
 
     self.assertEqual(len(my_log), 1)
 
