@@ -31,7 +31,7 @@ For any given unit, a namespace manager looks up that unit's segment.
 If the segment is allocated to an experiment, the input data is passed to the experiment,
 and random assignment occurs using the regular logic of the corresponding `Experiment` object.
 
-![Namespaces diagram](static/namespace_diagram.png "Segments are allocated to experiments, which assign units to parameters in a way that is independent of the segmentation.")
+![Namespaces diagram](../static/namespace_diagram.png "Segments are allocated to experiments, which assign units to parameters in a way that is independent of the segmentation.")
 
 If the primary unit is not mapped to an experiment, or a parameter is requested that is not defined by the experiment, a default experiment or value may be used.
  This allows experimenters to configure default values for parameters on the fly in a way that does not interfere with currently running experiments.
