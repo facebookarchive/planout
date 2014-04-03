@@ -3,7 +3,7 @@ id: logging
 title: Logging
 layout: docs
 permalink: /docs/logging.html
-prev: how-planout-works.html
+prev: random-operators.html
 next: namespaces.html
 ---
 
