@@ -65,7 +65,7 @@ class SimpleNamespace(Namespace):
     self.default_experiment_class = DefaultExperiment
 
     # setup name, primary key, number of segments, etc
-    self.setup_attributes()
+    self.setup()
     self.available_segments = set(range(self.num_segments))
 
     # load namespace with experiments
@@ -73,7 +73,7 @@ class SimpleNamespace(Namespace):
 
 
   @abstractmethod
-  def setup_attributes(self):
+  def setup(self):
     """Sets up experiment"""
     # Developers extending this class should set the following variables
     # self.name = 'sample namespace'

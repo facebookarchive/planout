@@ -29,7 +29,7 @@ class DefaultButtonExperiment(DefaultExperiment):
     return {'banner_text': 'Generic greetings!'}
 
 class ButtonNamespace(SimpleNamespace):
-  def setup_attributes(self):
+  def setup(self):
     self.name = 'my_demo'
     self.primary_unit = 'userid'
     self.num_segments = 100

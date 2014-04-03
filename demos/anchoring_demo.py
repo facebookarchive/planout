@@ -39,7 +39,6 @@ def main():
     anchoring_exp = AnchoringExperiment(userid=session['userid'])
     price = anchoring_exp.get('price')
 
-    # need to add a text box and button to submit a bid.
     return render_template_string("""
     <html>
       <head>

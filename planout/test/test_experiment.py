@@ -12,63 +12,62 @@ from planout.experiment import Experiment
 from planout.interpreter import Interpreter
 from planout.ops.random import UniformChoice
 
+global_log = []
 class ExperimentTest(unittest.TestCase):
 
-  def test_experiment(self):
+  def experiment_tester(self, exp_class):
+    global global_log
+    global_log = []
 
-    my_log = []
+    e = exp_class(i=42)
+    val = e.get_params()
 
-    class TestExperiment(Experiment):
-      name = 'foo'
+    self.assertTrue('foo' in val)
+    self.assertEqual(val['foo'], 'a')
 
+    self.assertEqual(len(global_log), 1)
+
+
+  def test_vanilla_experiment(self):
+    class TestVanillaExperiment(Experiment):
       def configure_logger(self): pass
-      def log(self, stuff): my_log.append(stuff)
+      def log(self, stuff): global_log.append(stuff)
       def previously_logged(self): pass
+
+      def setup(self):
+        self.name = 'test_name'
 
       def assign(self, params, i):
         params.foo = UniformChoice(choices=['a', 'b'], unit=i)
-    
-    e = TestExperiment(i=42)
-    val = e.get_params()
 
-    self.assertTrue('foo' in val)
-    self.assertEqual(val['foo'], 'a')
+    self.experiment_tester(TestVanillaExperiment)
 
-    self.assertEqual(len(my_log), 1)
 
-  def test_interpreted_planout_experiment(self):
-
-    compiled = json.loads("""
-    {"op":"set",
-     "var":"foo",
-     "value":{
-       "choices":["a","b"],
-       "op":"uniformChoice",
-       "unit": {"op": "get", "var": "i"}
-       }
-    }
-""")
-    my_log = []
-
-    class TestExperiment(Experiment):
-      name = 'foo'
-
+  def test_interpreted_experiment(self):
+    class TestInterpretedExperiment(Experiment):
       def configure_logger(self): pass
-      def log(self, stuff): my_log.append(stuff)
+      def log(self, stuff): global_log.append(stuff)
       def previously_logged(self): pass
 
+      def setup(self):
+        self.name = 'test_name'
+
       def assign(self, params, **kwargs):
+        compiled = json.loads("""
+            {"op":"set",
+             "var":"foo",
+             "value":{
+               "choices":["a","b"],
+               "op":"uniformChoice",
+               "unit": {"op": "get", "var": "i"}
+               }
+            }
+            """)
         proc = Interpreter(compiled, self.salt, kwargs)
         params.update(proc.get_params())
+
+    self.experiment_tester(TestInterpretedExperiment)
     
-    e = TestExperiment(i=42)
-    val = e.get_params()
-
-    self.assertTrue('foo' in val)
-    self.assertEqual(val['foo'], 'a')
-
-    self.assertEqual(len(my_log), 1)
-
-
+    
 if __name__ == '__main__':
   unittest.main()
