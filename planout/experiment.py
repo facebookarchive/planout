@@ -26,9 +26,9 @@ def requires_assignment(f):
   return wrapped_f
 
 # decorator for methods that should be exposure logged
-def exposure_logged(f):
+def requires_exposure_logging(f):
   def wrapped_f(self, *args, **kwargs):
-    if self._auto_exposure_log and self.in_experiment and not self.logged:
+    if self._auto_exposure_log and self.in_experiment and not self.exposure_logged:
       self.log_exposure()
     return f(self, *args, **kwargs)
   return wrapped_f
@@ -40,9 +40,9 @@ class Experiment(object):
   logger_configured = False
 
   def __init__(self, **inputs):
-    self.inputs = inputs       # input data
-    self._logged = False       # True when assignments have been exposure logged
-    self._salt = None          # Experiment-level salt
+    self.inputs = inputs           # input data
+    self._exposure_logged = False  # True when assignments have been exposure logged
+    self._salt = None              # Experiment-level salt
     self.in_experiment = True
 
     # use the name of the class as the default name
@@ -122,14 +122,13 @@ class Experiment(object):
     else:
       return None
 
-  # the logged setter / getter may be unnecessary
   @property
-  def logged(self):
-    return self._logged
+  def exposure_logged(self):
+    return self._exposure_logged
 
-  @logged.setter
-  def logged(self, value):
-    self._logged = value
+  @exposure_logged.setter
+  def exposure_logged(self, value):
+    self._exposure_logged = value
 
   def set_auto_exposure_logging(self, value):
     """
@@ -138,7 +137,7 @@ class Experiment(object):
     self._auto_exposure_log = value
 
   @requires_assignment
-  @exposure_logged
+  @requires_exposure_logging
   def get_params(self):
     """
     Get all PlanOut parameters. Triggers exposure log.
@@ -147,7 +146,7 @@ class Experiment(object):
     return dict(self._assignment)
 
   @requires_assignment
-  @exposure_logged
+  @requires_exposure_logging
   def get(self, name, default=None):
     """
     Get PlanOut parameter (returns default if undefined). Triggers exposure log.
@@ -155,7 +154,7 @@ class Experiment(object):
     return self._assignment.get(name, default)
 
   @requires_assignment
-  @exposure_logged
+  @requires_exposure_logging
   def __str__(self):
     """
     String representation of exposure log data. Triggers exposure log.
@@ -164,12 +163,12 @@ class Experiment(object):
 
   def log_exposure(self, extras=None):
     """Logs exposure to treatment"""
-    self.logged = True
-    self.log_event('exposure', extras)
+    if not self.exposure_logged:
+      self.exposure_logged = True
+      self.log_event('exposure', extras)
 
   def log_event(self, event_type, extras=None):
     """Log an arbitrary event"""
-    self.logged = True
     if extras:
       extra_payload = {'event': event_type, 'extra_data': extras.copy()}
     else:
