@@ -3,7 +3,7 @@ id: how-planout-works
 title: How PlanOut works
 layout: docs
 permalink: /docs/how-planout-works.html
-next: logging.html
+next: random-operators.html
 ---
 
 PlanOut works by hashing input data into numbers, and using these numbers to
