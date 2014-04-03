@@ -3,8 +3,8 @@ id: random-operators
 title: Random assignment operators
 layout: docs
 permalink: /docs/random-operators.html
-prev: /docs/how-planout-works.html
-next: /docs/logging.html
+prev: how-planout-works.html
+next: logging.html
 ---
 
 PlanOut comes built in with a few built-in random assignment operators (or
