@@ -1,0 +1,21 @@
+---
+title: Blog
+sectionid: blog
+id: all-posts
+---
+
+{% include header.html %}
+
+<section class='content'><div class='width'>
+
+{% include nav_blog.html %}
+
+<article class='withtoc'>
+    <h1>All Posts</h1>
+    {% for page in site.posts %}
+      <p><strong><a href="/planout{{ page.url }}">{{ page.title }}</a></strong> on {{ page.date | date: "%B %e, %Y" }} by {{ page.author }}</p>
+    {% endfor %}
+</article>
+
+</div></section>
+{% include footer.html %}

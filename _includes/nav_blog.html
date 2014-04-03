@@ -1,0 +1,13 @@
+<nav class='toc'>
+  <section>
+    <h3>Recent posts</h3>
+    <ul>
+      {% for post in site.posts limit:10 %}
+        <li><a href="/planout{{ post.url }}"{% if page.title == post.title %} class="active"{% endif %}>{{ post.short-title}}</a></li>
+      {% endfor %}
+      <!--<li><a href="/planout/blog/all.html">All posts ...</a></li>-->
+    </ul>
+  </section>
+</nav>
+
+
