@@ -7,7 +7,7 @@ prev: getting-started.html
 next: about-planout.html
 ---
 
-This tutorial will show you how to make a simple PlanOut experiment
+This tutorial will show you how to make a PlanOut experiment
 using [Flask](http://flask.pocoo.org), a simple framework for building websites. We assume that
 you have PlanOut and Flask installed already.
 
