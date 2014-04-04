@@ -15,27 +15,26 @@ to make experiments easier to run, and prevent common pitfalls in deploying and
 analyzing experiments.
 
 ### Why are you open sourcing PlanOut?
-We wanted to share our knowledge and experiences with running and analyzing
+We wanted to share our experiences with running and analyzing
 many large experiments at Facebook. This open source release accompanies
 [Designing and Deploying Online Field Experiments](https://www.facebook.com/download/255785951270811/planout.pdf) by Eytan Bakshy, Dean Eckles,
 and Michael S. Bernstein.
 
 While we often communicate our work through writing academic papers,
 we felt that most users of experimentation platforms who have little
-background in the design and analysis of experiments, would be better
+background in the design and analysis of experiments would be better
 reached through software and online documentation.
 
 
 ### Who is PlanOut for?
 We hope that the software is useful for researchers and businesses who
 want to run experiments out of the box. We have also tried to build things in a
-way that is easy to port to other platforms and adapt to work with production
-systems with additional performance and organizational requirements.
+way that is easy to port to other platforms and environments.
 
 ### Can I contribute to PlanOut?
 The main goal with this release is to provide an implementation of how we
 run experiments at Facebook, and set developers and researchers along in this
-direction. We intend on lightly maintaining PlanOut, but hope that the
+direction. We intend on lightly maintaining PlanOut, and hope that the
 community can continue to develop it, either through contributing directly to
 the original repository, or by forking it.
 
