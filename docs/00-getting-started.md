@@ -11,7 +11,8 @@ In this tutorial we will guide you through installing PlanOut and explain how
 to implement basic experiments.
 
 ## Quick install
-You can install PlanOut using Easy Install with
+You can install PlanOut using Easy Install:
+
 ```
 sudo easy_install planout
 ```
