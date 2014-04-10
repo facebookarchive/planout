@@ -2,9 +2,9 @@ from distutils.core import setup
 
 setup(
     name='PlanOut',
-    version='0.1.0',
+    version='0.1.1',
     author='Facebook, Inc.',
-    author_email='planout@fb.com',
+    author_email='eytan@fb.com',
     packages=[
         'planout', 
         'planout.ops', 
@@ -13,7 +13,6 @@ setup(
     url='http://pypi.python.org/pypi/PlanOut/',
     license='LICENSE',
     description='PlanOut is a framework for online field experimentation.',
+    keywords=['experimentation', 'A/B testing'],
     long_description=open('README.md').read(),
-    install_requires=[
-    ],
 )

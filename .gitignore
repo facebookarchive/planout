@@ -3,3 +3,6 @@
 *.log
 *.swp
 build/*
+*.tar.gz
+Gemfile.lock
+MANIFEST
