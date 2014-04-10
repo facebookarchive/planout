@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='PlanOut',
-    version='0.1.1',
+    version='0.1.2',
     author='Facebook, Inc.',
     author_email='eytan@fb.com',
     packages=[
@@ -14,5 +14,7 @@ setup(
     license='LICENSE',
     description='PlanOut is a framework for online field experimentation.',
     keywords=['experimentation', 'A/B testing'],
-    long_description=open('README.md').read(),
+    long_description='PlanOut is a framework for online field experimentation.',
 )
+
+#long_description=open('README.md').read(),
