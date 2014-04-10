@@ -11,12 +11,17 @@ In this tutorial we will guide you through installing PlanOut and explain how
 to implement basic experiments.
 
 ## Quick install
-PlanOut requires you to checkout and download the software from github. It has
-been tested on Mac OS X and Linux.
+You can install PlanOut using Easy Install with
+```
+sudo easy_install planout
+```
+
+Or you can checkout and download the software from github:
 
 ```
 sudo python setup.py install
 ```
+It has been tested on Mac OS X and Linux.
 
 ## Your first experiment
 
