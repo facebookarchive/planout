@@ -1,0 +1,10 @@
+{"inputs": {"userid": 0}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 8, "group_size": 1, "ratings_per_user_goal": 8}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 1}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 160, "group_size": 10, "ratings_per_user_goal": 16}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 2}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 640, "group_size": 10, "ratings_per_user_goal": 64}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 3}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 160, "group_size": 10, "ratings_per_user_goal": 16}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 4}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 80, "group_size": 10, "ratings_per_user_goal": 8}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 5}, "name": "Exp1", "checksum": "4b80881d", "params": {"group_size": 1, "specific_goal": 0}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 6}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 80, "group_size": 10, "ratings_per_user_goal": 8}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 7}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 8, "group_size": 1, "ratings_per_user_goal": 8}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 8}, "name": "Exp1", "checksum": "4b80881d", "params": {"specific_goal": 1, "ratings_goal": 80, "group_size": 10, "ratings_per_user_goal": 8}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
+{"inputs": {"userid": 9}, "name": "Exp1", "checksum": "4b80881d", "params": {"group_size": 1, "specific_goal": 0}, "time": 1397225561, "salt": "Exp1", "event": "exposure"}
