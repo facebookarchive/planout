@@ -57,6 +57,10 @@ class Experiment(object):
     self._checksum = self.checksum()
     self._assigned = False
 
+  def set_overrides(self, overrides):
+    self._assignment.set_overrides(overrides)
+    return self
+
   def _assign(self):
     """Assignment and setup that only happens when we need to log data"""
     self.configure_logger() # sets up loggers

@@ -3,7 +3,7 @@ import simple_experiment_examples as simple_experiment
 
 def demo_experiment1(module):
   print 'using %s...' % module.__name__
-  exp1_runs = [module.Exp1(userid=i) for i in xrange(10)]
+  exp1_runs = [module.Exp1(userid=i).set_overrides({'userid':4}) for i in xrange(10)]
   print [(e.get('group_size'), e.get('ratings_goal')) for e in exp1_runs]
 
 def demo_experiment2(module):
