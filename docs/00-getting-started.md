@@ -28,9 +28,9 @@ It has been tested on Mac OS X and Linux.
 
 ### Defining an experiment
 To create your first experiment, you will define a subclass of the
-`SimpleExperiment` class. Experiment classes come with all the low-level stuff
-you generally don't want to worry about while setting up experiments, like
-making sure different experiments assign parameters (variables that
+`SimpleExperiment` object. *Experiment objects* come with all the low-level
+stuff you generally don't want to worry about while setting up experiments,
+like making sure different experiments assign parameters (variables that
 control your site), independently of one another, or log to the right
 places at the right time.
 
@@ -161,6 +161,3 @@ Here is what the log would look like
 ```
 
 You now have a working experiment.
-
-## Learn more
-Continue on to the [Web app](docs/sample-web-app.html) guide, or check out the more [sample experiments](https://github.com/facebook/planout/blob/master/demos/simple_experiment_examples.py) on Github.

@@ -20,7 +20,7 @@
     title: Namespaces
     subitems:
     - id: simple-namespaces
-      title: Quick start
+      title: Iterating on experiments
   - id: interpreter
     title: The PlanOut interpreter
     subitems:
