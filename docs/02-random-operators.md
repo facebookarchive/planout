@@ -73,3 +73,12 @@ params.x = RandomFloat(min=0, max=10), unit=userid)
 Sample samples from a list without replacement. It has one required parameter,
 `choices`, and an optional parameter, `num_draws` (need to check this). If
 `num_draws` is not specified, then Sample will simply shuffle the input array.
+
+```python
+params.x = Sample(choices=['a','b','c'])
+params.y = Sample(choices=['a','b','c'], num_draws=2)
+```
+
+In the code above, `x` will be a three element list, containing 'a', 'b', and
+'c', exactly once, in a random order, and `y` be a two-element subset of
+`['a','b', 'c']`.
