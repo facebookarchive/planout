@@ -22,7 +22,9 @@ Within a given namespace, each primary unit belongs to at most one experiment.
 Rather than requesting a parameter from an experiment, developers request a
 parameter from a namespace, which then handles identifying the experiment
 that that unit is part of, if there is is an experiment that the primary unit
-belongs to.
+belongs to. From a developer's point of view, parameters are requested and logged
+using namespaces exactly as one would using experiments (at least via the
+`SimpleExperiment` and `SimpleNamespace` classes).
 
 Under the hood, primary units are mapped to one of a large number of segments
 (e.g., 10,000).
@@ -41,4 +43,4 @@ If the primary unit is not mapped to an experiment, or a parameter is requested 
 Namespaces are useful whenever there is at least one variable in your code
 base that you would like to experiment with, over time or simultaneously.
 
-As a starting point, PlanOut provides a basic implementation of namespaces with the `SimpleNamespace` class.
+As a starting point, PlanOut provides a basic implementation of namespaces with the `SimpleNamespace` class, which is outlined in the next page.
