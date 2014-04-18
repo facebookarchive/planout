@@ -19,20 +19,33 @@ There are no hard and fast rules for what kinds of changes are actually a proble
 ## Randomization failures
 Experiments are used to test the change of one or more parameters on some average outcome (e.g., messages sent, or clicks on a button). Differences can be safely attributed to a change in parameters if treatments are assigned to users completely at random.
 
-In practice, there are a number of common ways for two groups to not be equivalent (beyond random imbalance):
+In practice, there are a number of common ways for two groups to not be equivalent (beyond random imbalance), including:
+
  - Some units from one group were previously in a different group, while users from the other group were not.
+
  - Some units in one group were recently added to the experiment.
+
  - There was a bug in the code for one group but not the other, and that bug recently got fixed.
 
-In these cases, we suggest that you launch a new experiment, either through the use of [namespaces](namespaces.html), or by re-assigning all of the units in your experiment.  This can be done by simply changing the salt of your experiment:
+In these cases, we suggest that you launch a new experiment, ideally through the use of [namespaces](namespaces.html).
+
+You can alternatively re-assign all of the units in your experiment by simply
+changing the salt of your experiment. You can do this using the Python API
+by renaming your old experiment class, and defining a subclass of the old
+experiment that sets a new salt and experiment name:
 
 ```python
-class MyNewExperiment(MyOldExperiment):
-  def set_experiment_properties(self):
+class MyExperiment(MyOldExperiment):
+  def setup(self):
     self.name = 'new_experiment_name'
     self.salt = 'new_experiment_salt'
 ```
 
+Using a new salt re-randomizes units, and using a new name distinguishes your
+old experiment from the new experiment ways, which should be analyzed separately,
+since most units will likely be assigned to completely different parameters.
+Note that maintaining these separate salts and experiment names happens automatically
+when you use namespaces!
 
 ### Unanticipated consequences from changing experiments
 Changes to experiment definitions will generally alter which parameters users are assigned to. For example, consider an experiment that manipulates the label of a button for sharing a link. The main outcome of interest is the effect of this text on how many links users share per day.
