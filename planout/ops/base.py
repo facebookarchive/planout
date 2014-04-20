@@ -172,9 +172,9 @@ class PlanOutOpCommutative(PlanOutOpSimple):
 
   def pretty(self):
     pretty_values = Operators.pretty(self.args['values'])
-    return '%s(%s)' % (self.getUnaryString(), ', '.join(pretty_values))
+    return '%s(%s)' % (self.getCommutativeString(), ', '.join(pretty_values))
 
-  def getUnaryString(self):
+  def getCommutativeString(self):
     return self.args['op']
 
   @abstractmethod

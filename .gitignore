@@ -3,6 +3,7 @@
 *.log
 *.swp
 build/*
+_site/*
 *.tar.gz
 Gemfile.lock
 MANIFEST
