@@ -4,6 +4,7 @@ title: Best practices
 layout: docs
 permalink: /docs/best-practices.html
 prev: planout-language.html
+next: extending-logging.html
 ---
 
 PlanOut makes it easy to implement bug-free code that randomly assigns users (or other units) to parameters. The Experiment and Namespace classes are designed to reduce common errors in deploying and logging experiments. Here are a few tips for running experiments:

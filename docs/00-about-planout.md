@@ -4,6 +4,7 @@ title: About PlanOut
 layout: docs
 permalink: /docs/about-planout.html
 prev: planout-language.html
+next: how-planout-works.html
 ---
 
 PlanOut was developed at Facebook as a language for describing complex

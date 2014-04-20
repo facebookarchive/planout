@@ -20,12 +20,12 @@
     title: Namespaces
     subitems:
     - id: simple-namespaces
-      title: Iterating on experiments
+      title: Quick start
   - id: interpreter
     title: The PlanOut interpreter
     subitems:
     - id: serialization
-      title: Serializing experiments
+      title: Why serialize?
     - id: planout-language
       title: Language reference
   - id: best-practices
@@ -36,7 +36,7 @@
     title: Extending logging
 #  - id: extending-namespaces
 #    title: Extending namespaces
-#  - id: creating-new-operators
-#    title: Creating new operators
+  - id: creating-new-operators
+    title: Creating new operators
 #  - id: creating-random-operators
 #    title: Creating random operators
