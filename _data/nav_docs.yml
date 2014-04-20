@@ -38,5 +38,5 @@
 #    title: Extending namespaces
   - id: creating-new-operators
     title: Creating new operators
-#  - id: creating-random-operators
-#    title: Creating random operators
+  - id: creating-random-operators
+    title: Creating random operators
