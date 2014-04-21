@@ -87,7 +87,7 @@ simple_expression
   | IDENTIFIER '(' arguments ')'
     { $$ = $3; $$["op"] = $1; }
   | IDENTIFIER '[' simple_expression ']'
-    { $$ = {"op": "index", "base": $1, "index": $3}; }
+    { $$ = {"op": "index", "base": {"op": "get", "var": $1}, "index": $3}; }
   | '[' array ']' '[' simple_expression ']'
     { $$ = {"op": "index", "base": {"op": "array", "values": $2}, "index": $5}; }
   | '{' rules_list '}'
