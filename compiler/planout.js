@@ -102,7 +102,7 @@ case 9: this.$ = {"op": "array", "values": $$[$0-1]};
 break;
 case 10: this.$ = $$[$0-1]; this.$["op"] = $$[$0-3]; 
 break;
-case 11: this.$ = {"op": "index", "base": $$[$0-3], "index": $$[$0-1]}; 
+case 11: this.$ = {"op": "index", "base": {"op": "get", "var": $$[$0-3]}, "index": $$[$0-1]}; 
 break;
 case 12: this.$ = {"op": "index", "base": {"op": "array", "values": $$[$0-4]}, "index": $$[$0-1]}; 
 break;
