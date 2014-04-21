@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+<head>
+    <meta charset='utf-8'>
+    <title>PlanOut | {{ page.title }}</title>
+    <link rel='stylesheet' href='/planout/static/planout.css' type='text/css'/>
+    <link rel="stylesheet" href='/planout/static/pygments.css' type='text/css'/>
+    <link rel='shortcut icon' href='/planout/static/favicon.ico'>
+    <meta name='viewport' content='width=device-width'>
+    <meta property='og:type' content='website'>
+    <meta property="og:title" content="PlanOut | {{ page.title }}" />
+    <meta property='og:description' content='PlanOut makes it easy to design and implement sophisticated randomized experiments in Python.'>
+    <meta property='og:image' content='http://eytan.github.io/planout/static/og_dice.png'>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-49528430-1', 'facebook.github.io');
+      ga('send', 'pageview');
+    </script>
+</head>
+<body>
+
+<header class='topbar'><nav class='width'>
+<a href='/planout/index.html'>
+  <h1 class='v{{ page.content | size | modulo: 36 }}'>PlanOut</h1></a>
+    <ul>
+      <li><a href="/planout/docs/getting-started.html"
+          {% if (page.id != 'about-planout') and (page.sectionid == 'docs') %}
+          class="active" {% endif %}>
+          Docs
+      </a></li>
+      <li><a href="/planout/docs/about-planout.html"
+          {% if (page.id == 'about-planout') %} class="active" {% endif %}>
+          About
+      </a></li>
+      <li><a href="/planout/blog/"{% if page.sectionid == 'blog' %} class="active"{% endif %}>Blog</a></li>
+      <li><a href="http://github.com/facebook/planout">GitHub</a>
+    </ul>
+</nav></header>
