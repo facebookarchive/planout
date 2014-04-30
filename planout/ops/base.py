@@ -171,8 +171,13 @@ class PlanOutOpCommutative(PlanOutOpSimple):
     return self.commutativeExecute(self.parameters['values'])
 
   def pretty(self):
-    pretty_values = Operators.pretty(self.args['values'])
-    return '%s(%s)' % (self.getCommutativeString(), ', '.join(pretty_values))
+    values = Operators.strip_array(self.args['values'])
+    if type(values) is list:
+      pretty_values = ', '.join([Operators.pretty(i) for i in values])
+    else:
+      pretty_values = Operators.pretty(values)
+
+    return '%s(%s)' % (self.getCommutativeString(), pretty_values)
 
   def getCommutativeString(self):
     return self.args['op']

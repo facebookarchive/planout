@@ -179,7 +179,7 @@ class And(PlanOutOp):
     return is_valid
 
   def pretty(self):
-    pretty_c = [Operators.pretty(c) for c in self.args['values']]
+    pretty_c = [Operators.pretty(i) for i in self.args['values']]
     return '&& '.join(pretty_c)
 
 class Or(PlanOutOp):
@@ -209,7 +209,8 @@ class Product(PlanOutOpCommutative):
     return reduce(lambda x,y: x*y, values)
 
   def pretty(self):
-    pretty_c = [Operators.pretty(c) for c in self.args['values']]
+    values = Operators.strip_array(self.args['values'])
+    pretty_c = [Operators.pretty(i) for i in values]
     return ' * '.join(pretty_c)
 
 class Sum(PlanOutOpCommutative):

@@ -70,6 +70,15 @@ class Operators():
     return ', '.join(ps)
 
   @staticmethod
+  def strip_array(params):
+    if type(params) is list:
+      return params
+    if type(params) is dict and params.get('op', None) == 'array':
+      return params['values']
+    else:
+      return params
+
+  @staticmethod
   def pretty(params):
     if Operators.isOperator(params):
       try:
