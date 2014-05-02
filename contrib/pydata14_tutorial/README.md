@@ -1,15 +1,17 @@
 # PyData '14 PlanOut Tutorial
 Welcome to the PyData '14 Silicon Valley PlanOut tutorial! You'll find a collection of IPython notebooks for Eytan Bakshy's tutorial on PlanOut.
 
-If you are not at PyData, or want to follow along on your own computer, you need to install some software and clone the PlanOut git repository.
+If you want to follow along the live tutorial on your own computer (or are not at PyData!), you need to install some software and clone the PlanOut git repository.
 
 ## Requirements
 ### Software requirements
 The tutorial requires IPython, Pandas, and PlanOut. The former two come with Anaconda. PlanOut has only been tested on Mac OS X and Linux.
 
- * IPython ([installation instructions](http://ipython.org/install.html))
+ * IPython ([installation instructions](http://ipython.org/install.html). We recommend Anaconda.)
  * PlanOut v0.2 or greater (first timers `sudo easy_install planout`, older timers `sudo easy_install --upgrade planout`)
  * Node.js - optional (installation link on the [node.js homepage](http://nodejs.org))
+
+Note that you may need to re-install the `planout` package if you installed PlanOut before installing IPython.
 
 ### Downloading the tutorial files
 If you have git, you can checkout PlanOut by typing:
