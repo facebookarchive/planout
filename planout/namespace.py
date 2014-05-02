@@ -140,21 +140,26 @@ class SimpleNamespace(Namespace):
 
     return True
 
-
-  def _assign_experiment(self):
-    # randomly assign user to a segment
+  def get_segment(self):
+    # randomly assign primary unit to a segment
     a = Assignment(self.name)
     a.segment = RandomInteger(min=0, max=self.num_segments,
       unit=itemgetter(*self.primary_unit)(self.inputs))
+    return a.segment
 
+
+  def _assign_experiment(self):
+    "assign primary unit to an experiment"
+
+    segment = self.get_segment()
     # is the unit allocated to an experiment?
-    if a.segment in self.segment_allocations:
-      experiment_name = self.segment_allocations[a.segment]
+    if segment in self.segment_allocations:
+      experiment_name = self.segment_allocations[segment]
       experiment = self.current_experiments[experiment_name](**self.inputs)
-      experiment.name = '%s-%s' % (self.name, experiment.name)
-      experiment.salt = '%s.%s' % (self.name, experiment.name)
+      experiment.name = '%s-%s' % (self.name, experiment_name)
+      experiment.salt = '%s.%s' % (self.name, experiment_name)
       self._experiment = experiment
-      self._in_experiment = True
+      self._in_experiment = experiment.in_experiment
     else:
       self._assign_default_experiment()
       self._in_experiment = False
@@ -191,3 +196,17 @@ class SimpleNamespace(Namespace):
       return self.default_get(name, default)
     else:
       return self._experiment.get(name, self.default_get(name, default))
+
+  @requires_experiment
+  def log_exposure(self, extras=None):
+    """Logs exposure to treatment"""
+    if self._experiment is None:
+      pass
+    self._experiment.log_exposure(extras)
+
+  @requires_experiment
+  def log_event(self, event_type, extras=None):
+    """Log an arbitrary event"""
+    if self._experiment is None:
+      pass
+    self._experiment.log_event(event_type, extras)

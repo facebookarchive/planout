@@ -163,9 +163,8 @@ class Experiment(object):
 
   def log_exposure(self, extras=None):
     """Logs exposure to treatment"""
-    if not self.exposure_logged:
-      self.exposure_logged = True
-      self.log_event('exposure', extras)
+    self.exposure_logged = True
+    self.log_event('exposure', extras)
 
   def log_event(self, event_type, extras=None):
     """Log an arbitrary event"""
