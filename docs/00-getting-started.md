@@ -2,8 +2,14 @@
 
 
 ## Quick install
-Check out the git repository and type:
+You can install PlanOut using `pip`. Within a [`virtualenv`](http://www.virtualenv.org/en/latest/), install with
 
 ```
-sudo python setup.py install
+pip install planout
+```
+
+You can also install directly from source. Check out the git repository, create a virtualenv, activate it and run:
+
+```
+python setup.py install
 ```
