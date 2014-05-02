@@ -237,6 +237,7 @@ class SimpleExperiment(Experiment):
       my_logger[self.name] = logging.getLogger(self.name)
       my_logger[self.name].setLevel(logging.INFO)
       my_logger[self.name].addHandler(logging.FileHandler(file_name))
+      my_logger[self.name].propagate = False
 
   def log(self, data):
     """Logs data to a file"""
