@@ -47,6 +47,14 @@ class Namespace(object):
   def get(self, name, default):
     pass
 
+  @abstractmethod
+  def log_exposure(self, extras=None):
+    pass
+
+  @abstractmethod
+  def log_event(self, event_type, extras=None):
+    pass
+
 class SimpleNamespace(Namespace):
   __metaclass__ = ABCMeta
   def __init__(self, **kwargs):
