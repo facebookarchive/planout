@@ -118,7 +118,8 @@ class Sample(PlanOutOpRandom):
 
   # implements Fisher-Yates shuffle
   def simpleExecute(self):
-    choices = self.parameters['choices']
+    # copy the list of choices so that we don't mutate it
+    choices = [x for x in self.parameters['choices']]
     num_draws = self.parameters.get('draws', len(choices))
     for i in xrange(len(choices) - 1, 0, -1):
       j = self.getHash(i) % (i + 1)
