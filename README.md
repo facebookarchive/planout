@@ -66,12 +66,12 @@ Join now! #ff0000
 The ``SimpleExperiment`` class will automatically concatenate the name of the experiment, ``FirstExperiment``, the variable name, and the input data (``userid``) and hash that string to perform the random assignment. Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
 
 ### Installation
-You can immediately install PlanOut using Easy Install with
+You can immediately install PlanOut using `pip` with:
 ```
-sudo easy_install planout
+pip install planout
 ```
 
-Or you can check out the github and type:
+Or you can checkout the Github repository and type:
 
 ```
 sudo python setup.py install
