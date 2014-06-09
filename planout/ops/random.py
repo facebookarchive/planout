@@ -23,7 +23,7 @@ class PlanOutOpRandom(base.PlanOutOpSimple):
     salt = self.parameters['salt']
     salty = '%s.%s' % (self.mapper.experiment_salt, salt)
     unit_str = '.'.join(map(str, self.getUnit(appended_unit)))
-    return int(hashlib.sha1(salty + '.' + unit_str).hexdigest()[:15], 16)
+    return int(hashlib.sha1('%s.%s' % (salty, unit_str)).hexdigest()[:15], 16)
 
   def getUniform(self, min_val=0.0, max_val=1.0, appended_unit=None):
     zero_to_one = self.getHash(appended_unit)/PlanOutOpRandom.LONG_SCALE
