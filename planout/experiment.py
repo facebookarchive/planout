@@ -65,6 +65,7 @@ class Experiment(object):
       self._assignment.get('in_experiment', self.in_experiment)
     # check if inputs+params were previously logged
     self._logged = self.previously_logged()
+    self._assigned = True
 
   def setup(self):
     """Set experiment attributes, e.g., experiment name and salt."""
