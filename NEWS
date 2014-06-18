@@ -1,0 +1,7 @@
+* Noteworthy changes in release 0.3 (2014-06-18) [alpha]
+- IMPORTANT UPDATE: The hash function used in prior versions did not match the expected behavior in the documentation (caught by @akalicki). We have updated PlanOut's hashing function, which will likely cause units to be randomly assigned to different parameters. If you are already using PlanOut in a production environment, please upgrade with care. If you are not currently using PlanOut in a production environment, please upgrade immediately:
+
+  pip install -U planout
+  
+- Other updates:
+  -The assign() method is now only called once. Thanks @akalicki for catching this.
