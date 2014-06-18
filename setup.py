@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='PlanOut',
-    version='0.2.4',
+    version='0.3',
     author='Facebook, Inc.',
     author_email='eytan@fb.com',
     packages=[

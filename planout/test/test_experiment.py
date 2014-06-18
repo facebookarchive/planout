@@ -23,7 +23,7 @@ class ExperimentTest(unittest.TestCase):
     val = e.get_params()
 
     self.assertTrue('foo' in val)
-    self.assertEqual(val['foo'], 'a')
+    self.assertEqual(val['foo'], 'b')
 
     self.assertEqual(len(global_log), 1)
 
