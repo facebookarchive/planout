@@ -23,7 +23,7 @@ class ExperimentTest(unittest.TestCase):
     val = e.get_params()
 
     self.assertTrue('foo' in val)
-    self.assertEqual(val['foo'], 'a')
+    self.assertEqual(val['foo'], 'b')
 
     self.assertEqual(len(global_log), 1)
 
@@ -41,6 +41,28 @@ class ExperimentTest(unittest.TestCase):
         params.foo = UniformChoice(choices=['a', 'b'], unit=i)
 
     self.experiment_tester(TestVanillaExperiment)
+
+  def test_single_assingmnet(self):
+    class TestSingleAssignment(Experiment):
+      def configure_logger(self): pass
+      def log(self, stuff): global_log.append(stuff)
+      def previously_logged(self): pass
+
+      def setup(self):
+        self.name = 'test_name'
+
+      def assign(self, params, i, counter):
+        params.foo = UniformChoice(choices=['a', 'b'], unit=i)
+        counter['count'] = counter.get('count', 0) + 1
+
+    assignment_count = {'count': 0}
+    e = TestSingleAssignment(i=10, counter=assignment_count)
+    self.assertEqual(assignment_count['count'], 0)
+    e.get('foo')
+    self.assertEqual(assignment_count['count'], 1)
+    e.get('foo')
+    self.assertEqual(assignment_count['count'], 1)
+
 
 
   def test_interpreted_experiment(self):

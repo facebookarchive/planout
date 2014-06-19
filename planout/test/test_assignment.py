@@ -24,8 +24,8 @@ class AssignmentTest(unittest.TestCase):
     a.foo = UniformChoice(choices=['a', 'b'], unit=self.tester_unit)
     a.bar = UniformChoice(choices=['a', 'b'], unit=self.tester_unit)
     a.baz = UniformChoice(choices=['a', 'b'], unit=self.tester_unit)
-    self.assertEqual(a.foo, 'a')
-    self.assertEqual(a.bar, 'b')
+    self.assertEqual(a.foo, 'b')
+    self.assertEqual(a.bar, 'a')
     self.assertEqual(a.baz, 'a')
 
 
