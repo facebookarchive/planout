@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 from .ops.random import *
+from .ops.base import PlanOutOp
 from collections import MutableMapping
 
 # The Assignment class is the main work horse that lets you to execute
@@ -19,26 +20,43 @@ class Assignment(MutableMapping):
   def __init__(self, experiment_salt):
     self.experiment_salt = experiment_salt
     self._data = {}
+    self._overrides = {}
 
-  def evaluate(self, value):
-    return value
+  def evaluate(self, value, salt=None):
+    """Recursively evaluate PlanOut interpreter code"""
+    # if the object is a PlanOut operator, execute it it.
+    if isinstance(value, PlanOutOp):
+      if isinstance(value, PlanOutOpRandom):
+        if salt is not None and 'salt' not in value.args:
+          value.args['salt'] = salt
+      return value.execute(self)
+    # if the object is a list, iterate over the list and evaluate each element
+    elif type(value) is list:
+      return [self.evaluate(i, salt) for i in value]
+    else:
+      return value # data is a literal
+
+
+  def set_overrides(self, overrides):
+    self._overrides = overrides
+    for param in overrides:
+      self._data[param] = overrides[param]
+    return self
 
   def __setitem__(self, name, value):
-    if name in ('_data', 'experiment_salt'):
+    if name in ('_data', '_overrides', 'experiment_salt'):
       self.__dict__[name] = value
       return
 
-    if isinstance(value, PlanOutOpRandom):
-      if 'salt' not in value.args:
-        value.args['salt'] = name
-      self._data[name] = value.execute(self)
-    else:
-      self._data[name] = value
+    if name in self._overrides:
+      return
+
+    self._data[name] = self.evaluate(value, name)
 
   __setattr__ = __setitem__
 
   def __getitem__(self, name):
-    if name in ('_data', 'experiment_salt'):
+    if name in ('_data', '_overrides', 'experiment_salt'):
       return self.__dict__[name]
     else:
       return self._data[name]

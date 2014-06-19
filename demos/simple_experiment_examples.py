@@ -7,6 +7,7 @@
 
 from planout.experiment import SimpleExperiment
 from planout.ops.random import *
+from planout.ops.core import Product
 
 class Exp1(SimpleExperiment):
   def assign(self, e, userid):
@@ -15,7 +16,10 @@ class Exp1(SimpleExperiment):
     if e.specific_goal:
       e.ratings_per_user_goal = UniformChoice(
         choices=[8, 16, 32, 64], unit=userid)
-      e.ratings_goal = e.group_size * e.ratings_per_user_goal
+      e.ratings_goal = UniformChoice(
+        choices=[8, 16, 32, 64], unit=userid) * e.group_size
+      #e.ratings_goal = e.group_size * e.ratings_per_user_goal
+      #e.ratings_goal = Product(values=[e.group_size , e.ratings_per_user_goal])
     return e
 
 class Exp2(SimpleExperiment):

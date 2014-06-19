@@ -1,5 +1,6 @@
 import hashlib
 import base
+from core import Product, Sum
 
 
 class PlanOutOpRandom(base.PlanOutOpSimple):
@@ -28,6 +29,11 @@ class PlanOutOpRandom(base.PlanOutOpSimple):
   def getUniform(self, min_val=0.0, max_val=1.0, appended_unit=None):
     zero_to_one = self.getHash(appended_unit)/PlanOutOpRandom.LONG_SCALE
     return min_val + (max_val-min_val)*zero_to_one
+
+  def __mul__(self, other):
+    return Product(values=[self, other])
+
+  __rmul__ = __mul__
 
 
 class RandomFloat(PlanOutOpRandom):
