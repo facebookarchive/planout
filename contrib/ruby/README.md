@@ -3,7 +3,8 @@ This is a rough implementation of the Experiment / logging infrasture for runnin
 
 ## How it works
 
-The following Ruby code:
+This defines a simple experiment that randomly assigns three variables, foo, bar, and baz.
+`foo` and `baz` use `userid` as input, while `bar` uses a pair, namely `userid` combined with the value of `foo` from the prior step.
 ```Ruby
 class Exp < SimpleExperiment
   def assign(params, userid)
@@ -19,11 +20,13 @@ class Exp < SimpleExperiment
       unit:userid, min: 5, max: 20))
   end
 end
+```
 
+Then, we can examine the assignments produced for a few input userids. Note that since exposure logging is enabled by default, all of the experiments' inputs, configuration information, timestamp, and parameter assignments are pooped out via the Logger class.
+
+```Ruby
 (1..5).each do |i|
   my_exp = Exp.new(userid:i)
-  #my_exp.auto_exposure_log = false
-  # toggling the above disables or re-enables auto-logging
   puts "\n\nnew experiment time with userid %s!\n" % i
   puts "first time triggers a log event"
   puts 'my params are...', my_exp.get_params()
@@ -32,7 +35,7 @@ end
 end
 ```
 
-Produces something like this.
+The output of the Ruby script looks something like this...
 
 ```
 new experiment time with userid 1!
