@@ -8,16 +8,14 @@ This defines a simple experiment that randomly assigns three variables, foo, bar
 ```Ruby
 class MyFirstExp < SimpleExperiment
   def assign(params, userid)
-    params.set('foo', UniformChoice.new(
-      unit: userid, choices: ['x', 'y']
-    ))
-    params.set('bar', WeightedChoice.new(
-      unit: [userid, params.get('foo')],
+    params[:foo] = UniformChoice.new(
+      unit: userid, choices: ['x', 'y'])
+    params[:bar] = WeightedChoice.new(
+      unit: [userid, params[:foo]],
       choices: ['a','b','c'],
       weights: [0.2, 0.5, 0.3])
-    )
-    params.set('baz', RandomFloat.new(
-      unit:userid, min: 5, max: 20))
+    params[:baz] = RandomFloat.new(
+      unit:userid, min: 5, max: 20)
   end
 end
 ```
