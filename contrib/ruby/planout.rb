@@ -130,6 +130,18 @@ class Assignment
     @data = Hash.new
   end
 
+  def evaluate(data)
+    return data
+  end
+
+  def get(var, default=nil)
+    if @data.has_key? var
+      return @data[var]
+    else
+      return default
+    end
+  end
+
   # in python this would be defined as __setattr__ or __setitem__
   # not sure how to do this in Ruby.
   def set(name, value)
@@ -143,20 +155,16 @@ class Assignment
     end
   end
 
-  def evaluate(data)
-    return data
+  def [](x)
+    return self.get(x)
+  end
+
+  def []=(x,y)
+    self.set(x,y)
   end
 
   def get_params()
     return @data
-  end
-
-  def get(var, default=nil)
-    if @data.has_key? var
-      return @data[var]
-    else
-      return default
-    end
   end
 end
 
@@ -291,23 +299,21 @@ class SimpleExperiment < Experiment
   end
 end
 
-class Exp < SimpleExperiment
+class MyFirstExp < SimpleExperiment
   def assign(params, userid)
-    params.set('foo', UniformChoice.new(
-      unit: userid, choices: ['x', 'y']
-    ))
-    params.set('bar', WeightedChoice.new(
-      unit: [userid, params.get('foo')],
+    params[:foo] = UniformChoice.new(
+      unit: userid, choices: ['x', 'y'])
+    params[:bar] = WeightedChoice.new(
+      unit: [userid, params[:foo]],
       choices: ['a','b','c'],
       weights: [0.2, 0.5, 0.3])
-    )
-    params.set('baz', RandomFloat.new(
-      unit:userid, min: 5, max: 20))
+    params[:baz] = RandomFloat.new(
+      unit:userid, min: 5, max: 20)
   end
 end
 
-(1..5).each do |i|
-  my_exp = Exp.new(userid:i)
+(1..2).each do |i|
+  my_exp = MyFirstExp.new(userid:i)
   #my_exp.auto_exposure_log = false
   # toggling the above disables or re-enables auto-logging
   puts "\n\nnew experiment time with userid %s!\n" % i
