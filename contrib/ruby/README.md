@@ -23,35 +23,28 @@ end
 Then, we can examine the assignments produced for a few input userids. Note that since exposure logging is enabled by default, all of the experiments' inputs, configuration information, timestamp, and parameter assignments are pooped out via the Logger class.
 
 ```Ruby
-(1..5).each do |i|
-  my_exp = MyFirstExp.new(userid:i)
-  puts "\n\nnew experiment time with userid %s!\n" % i
-  puts "first time triggers a log event"
-  puts 'my params are...', my_exp.get_params()
-  puts 'second time...'
-  puts 'my params are...', my_exp.get_params()
+class MyFirstExperiment < SimpleExperiment
+  def assign(params, userid)
+    params[:foo] = UniformChoice.new(
+      choices: ['x', 'y'], unit: userid)
+    params[:bar] = WeightedChoice.new(
+      choices: ['a','b','c'],
+      weights: [0.2, 0.5, 0.3],
+      unit: [userid, params[:foo]])
+    params[:baz] = RandomFloat.new(
+      min: 5, max: 20, unit: userid)
+  end
 end
 ```
 
 The output of the Ruby script looks something like this...
 
 ```
-new experiment time with userid 1!
-first time triggers a log event
-{"name":"MyFirstExp","time":1404830928,"salt":"MyFirstExp","inputs":{"userid":1},"params":{"foo":"x","bar":"c","baz":16.362308463262522},"event":"exposure"}
-my params are...
-{"foo"=>"x", "bar"=>"c", "baz"=>16.362308463262522}
-second time...
-my params are...
-{"foo"=>"x", "bar"=>"c", "baz"=>16.362308463262522}
+getting assignment for user 1 note: first time triggers a log event
+logged data: {"name":"MyFirstExperiment","time":1404834015,"salt":"MyFirstExperiment","inputs":{"userid":1},"params":{"foo":"y","bar":"b","baz":6.545786477076732},"event":"exposure"}
+my foo and baz are y and 6.55.
 
-
-new experiment time with userid 2!
-first time triggers a log event
-{"name":"MyFirstExp","time":1404830928,"salt":"MyFirstExp","inputs":{"userid":2},"params":{"foo":"x","bar":"c","baz":16.637518156498846},"event":"exposure"}
-my params are...
-{"foo"=>"x", "bar"=>"c", "baz"=>16.637518156498846}
-second time...
-my params are...
-{"foo"=>"x", "bar"=>"c", "baz"=>16.637518156498846}
+getting assignment for user 2 note: first time triggers a log event
+logged data: {"name":"MyFirstExperiment","time":1404834015,"salt":"MyFirstExperiment","inputs":{"userid":2},"params":{"foo":"y","bar":"c","baz":18.514514154012573},"event":"exposure"}
+my foo and baz are y and 18.51.
 ```
