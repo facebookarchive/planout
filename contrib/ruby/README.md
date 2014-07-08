@@ -6,7 +6,7 @@ This is a rough implementation of the Experiment / logging infrasture for runnin
 This defines a simple experiment that randomly assigns three variables, foo, bar, and baz.
 `foo` and `baz` use `userid` as input, while `bar` uses a pair, namely `userid` combined with the value of `foo` from the prior step.
 ```Ruby
-class Exp < SimpleExperiment
+class MyFirstExp < SimpleExperiment
   def assign(params, userid)
     params.set('foo', UniformChoice.new(
       unit: userid, choices: ['x', 'y']
@@ -26,7 +26,7 @@ Then, we can examine the assignments produced for a few input userids. Note that
 
 ```Ruby
 (1..5).each do |i|
-  my_exp = Exp.new(userid:i)
+  my_exp = MyFirstExp.new(userid:i)
   puts "\n\nnew experiment time with userid %s!\n" % i
   puts "first time triggers a log event"
   puts 'my params are...', my_exp.get_params()
@@ -40,10 +40,20 @@ The output of the Ruby script looks something like this...
 ```
 new experiment time with userid 1!
 first time triggers a log event
-{"name":"Exp","time":1404802228,"salt":"Exp","inputs":{"userid":1},"params":{"foo":"x","bar":"c","baz":6.123874064902064},"event":"exposure"}
+{"name":"MyFirstExp","time":1404830928,"salt":"MyFirstExp","inputs":{"userid":1},"params":{"foo":"x","bar":"c","baz":16.362308463262522},"event":"exposure"}
 my params are...
-{"foo"=>"x", "bar"=>"c", "baz"=>6.123874064902064}
+{"foo"=>"x", "bar"=>"c", "baz"=>16.362308463262522}
 second time...
 my params are...
-{"foo"=>"x", "bar"=>"c", "baz"=>6.123874064902064}
+{"foo"=>"x", "bar"=>"c", "baz"=>16.362308463262522}
+
+
+new experiment time with userid 2!
+first time triggers a log event
+{"name":"MyFirstExp","time":1404830928,"salt":"MyFirstExp","inputs":{"userid":2},"params":{"foo":"x","bar":"c","baz":16.637518156498846},"event":"exposure"}
+my params are...
+{"foo"=>"x", "bar"=>"c", "baz"=>16.637518156498846}
+second time...
+my params are...
+{"foo"=>"x", "bar"=>"c", "baz"=>16.637518156498846}
 ```
