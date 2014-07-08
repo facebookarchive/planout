@@ -241,7 +241,9 @@ class Experiment
     return @assignment.get_params()
   end
 
-  def get(name, default)
+  def get(name, default=nil)
+    requires_assignment()
+    requires_exposure_logging()
     return @assignment.get(name, default)
   end
 
@@ -290,7 +292,7 @@ class SimpleExperiment < Experiment
     #@loger.level = Logger::WARN
     @logger.formatter = proc do
       |severity, datetime, progname, msg|
-      "#{msg}\n"
+      "logged data: #{msg}\n"
     end
   end
 
@@ -299,28 +301,25 @@ class SimpleExperiment < Experiment
   end
 end
 
-class MyFirstExp < SimpleExperiment
+class MyFirstExperiment < SimpleExperiment
   def assign(params, userid)
     params[:foo] = UniformChoice.new(
-      unit: userid, choices: ['x', 'y'])
+      choices: ['x', 'y'], unit: userid)
     params[:bar] = WeightedChoice.new(
-      unit: [userid, params[:foo]],
       choices: ['a','b','c'],
-      weights: [0.2, 0.5, 0.3])
+      weights: [0.2, 0.5, 0.3],
+      unit: [userid, params[:foo]])
     params[:baz] = RandomFloat.new(
-      unit:userid, min: 5, max: 20)
+      min: 5, max: 20, unit: userid)
   end
 end
 
 (1..2).each do |i|
-  my_exp = MyFirstExp.new(userid:i)
+  my_exp = MyFirstExperiment.new(userid:i)
   #my_exp.auto_exposure_log = false
   # toggling the above disables or re-enables auto-logging
-  puts "\n\nnew experiment time with userid %s!\n" % i
-  puts "first time triggers a log event"
-  puts 'my params are...', my_exp.get_params()
-  puts 'second time...'
-  puts 'my params are...', my_exp.get_params()
+  puts "\ngetting assignment for user %s note: first time triggers a log event" % i
+  puts 'my foo and baz are %s and %.2f.' % [my_exp.get(:foo), my_exp.get(:baz)]
 end
 
 
