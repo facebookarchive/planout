@@ -1,4 +1,7 @@
 require 'digest/sha1'
+require 'Logger'
+require 'JSON'
+
 
 class Operator
   attr :args
@@ -120,6 +123,8 @@ end
 
 class Assignment
   attr_reader :experiment_salt
+  attr_reader :data
+
   def initialize(experiment_salt)
     @experiment_salt = experiment_salt
     @data = Hash.new
@@ -142,51 +147,190 @@ class Assignment
     return data
   end
 
-  def data()
+  def get_params()
     return @data
   end
-end
 
+  def get(var, default=nil)
+    if @data.has_key? var
+      return @data[var]
+    else
+      return default
+    end
+  end
+end
 
 # I'd like to create decorators equivalent to Python's
 # @requires_assignment() and @requires_exposure_logging
 # (experiment.py:21, 29), but have no idea how...
+
 class Experiment
+  attr :auto_exposure_log
+
   def initialize(**inputs)
     @inputs = inputs
     @exposure_logged = false
     @_salt = nil
     @in_experiment = true
-    @_name = self.class
+    @name = self.class.name
     @auto_exposure_log = true
 
-    self.setup()
-    self.assignment = Assignment(self.name)
-    self.assigned = false
+    @assignment = Assignment.new(@name)
+    @assigned = false
+
+    @logger = nil
+    setup_logger()
+  end
+
+  def _assign()
+    self.configure_logger()
+    self.assign(@assignment, **@inputs)
+    @in_experiment = @assignment.get(
+      'in_experiment', @in_experiment)
+    @assigned = true
+  end
+
+  def setup()
+    return nil
   end
 
   def salt=(value)
     @_salt = value
   end
 
+  def auto_exposure_log=(value)
+    @auto_exposure_log = value
+  end
+
   def salt
     return @_salt ? @_salt : @name
   end
 
+  def configure_logger()
+    return nil
+  end
+
+  def requires_assignment()
+    if not @assigned
+      self._assign()
+    end
+  end
+
+  def is_logged?
+    return @logged
+  end
+
+  def requires_exposure_logging()
+    if @auto_exposure_log and @in_experiment and not @exposure_logged
+      self.log_exposure()
+    end
+  end
+
+
+  def get_params()
+    requires_assignment()
+    requires_exposure_logging()
+    return @assignment.get_params()
+  end
+
+  def get(name, default)
+    return @assignment.get(name, default)
+  end
+
+  def assign(params, *inputs)
+    # up to child class to implement
+    return nil
+  end
+
+  def log_event(event_type, extras = nil)
+    if extras.nil?
+      extra_payload = {'event' => event_type}
+    else
+      extra_payload = {
+        'event' => event_type,
+        'extra_data' => extras.clone
+      }
+    end
+    self.log(self.as_blob(extra_payload))
+  end
+
+  def log_exposure(extras = nil)
+    @exposure_logged = true
+    self.log_event('exposure', extras)
+  end
+
+  def as_blob(extras = {})
+    d = {
+      'name' => @name,
+      'time' => Time.now.to_i,
+      'salt' => self.salt,
+      'inputs' => @inputs,
+      'params' => @assignment.data
+    }
+    extras.each do |key, value|
+      d[key] = value
+    end
+    return d
+  end
   # would like to know if I'm going in the right direction
   # from a Ruby hacker before I continue...
 end
 
-(1..10).each do |userid|
-  a = Assignment.new('exp_salt')
-  a.set('foo', UniformChoice.new(
-    unit: userid, choices: ['x', 'y']
-  ))
-  a.set('bar', WeightedChoice.new(
-    unit: userid,
-    choices: ['a','b','c'],
-    weights: [0.2, 0.5, 0.3])
-  )
-  a.set('baz', RandomFloat.new(unit:userid, min: 5, max: 20))
-  puts a.data()
+class SimpleExperiment < Experiment
+  def setup_logger()
+    @logger = Logger.new(STDOUT)
+    #@loger.level = Logger::WARN
+    @logger.formatter = proc do
+      |severity, datetime, progname, msg|
+      "#{msg}\n"
+    end
+  end
+
+  def log(data)
+    @logger.info(JSON.dump(data))
+  end
 end
+
+class Exp < SimpleExperiment
+  def assign(params, userid)
+    params.set('foo', UniformChoice.new(
+      unit: userid, choices: ['x', 'y']
+    ))
+    params.set('bar', WeightedChoice.new(
+      unit: [userid, params.get('foo')],
+      choices: ['a','b','c'],
+      weights: [0.2, 0.5, 0.3])
+    )
+    params.set('baz', RandomFloat.new(
+      unit:userid, min: 5, max: 20))
+  end
+end
+
+(1..5).each do |i|
+  my_exp = Exp.new(userid:i)
+  #my_exp.auto_exposure_log = false
+  # toggling the above disables or re-enables auto-logging
+  puts "\n\nnew experiment time with userid %s!\n" % i
+  puts "first time triggers a log event"
+  puts 'my params are...', my_exp.get_params()
+  puts 'second time...'
+  puts 'my params are...', my_exp.get_params()
+end
+
+
+
+# ### this is just a proof of concept for Assignment
+# (1..10).each do |userid|
+#   a = Assignment.new('exp_salt')
+#   a.set('foo', UniformChoice.new(
+#     unit: userid, choices: ['x', 'y']
+#   ))
+#   a.set('bar', WeightedChoice.new(
+#     unit: userid,
+#     choices: ['a','b','c'],
+#     weights: [0.2, 0.5, 0.3])
+#   )
+#   a.set('baz', RandomFloat.new(
+#     unit:userid, min: 5, max: 20))
+#   puts a.data
+# end
