@@ -130,6 +130,18 @@ class Assignment
     @data = Hash.new
   end
 
+  def evaluate(data)
+    return data
+  end
+
+  def get(var, default=nil)
+    if @data.has_key? var
+      return @data[var]
+    else
+      return default
+    end
+  end
+
   # in python this would be defined as __setattr__ or __setitem__
   # not sure how to do this in Ruby.
   def set(name, value)
@@ -143,20 +155,16 @@ class Assignment
     end
   end
 
-  def evaluate(data)
-    return data
+  def [](x)
+    return self.get(x)
+  end
+
+  def []=(x,y)
+    self.set(x,y)
   end
 
   def get_params()
     return @data
-  end
-
-  def get(var, default=nil)
-    if @data.has_key? var
-      return @data[var]
-    else
-      return default
-    end
   end
 end
 
@@ -175,11 +183,13 @@ class Experiment
     @name = self.class.name
     @auto_exposure_log = true
 
-    @assignment = Assignment.new(@name)
+    self.setup()  # sets name, salt, etc.
+
+    @assignment = Assignment.new(self.salt)
     @assigned = false
 
     @logger = nil
-    setup_logger()
+    setup()
   end
 
   def _assign()
@@ -198,12 +208,12 @@ class Experiment
     @_salt = value
   end
 
-  def auto_exposure_log=(value)
-    @auto_exposure_log = value
-  end
-
   def salt
     return @_salt ? @_salt : @name
+  end
+
+  def auto_exposure_log=(value)
+    @auto_exposure_log = value
   end
 
   def configure_logger()
@@ -233,7 +243,9 @@ class Experiment
     return @assignment.get_params()
   end
 
-  def get(name, default)
+  def get(name, default=nil)
+    requires_assignment()
+    requires_exposure_logging()
     return @assignment.get(name, default)
   end
 
@@ -277,12 +289,12 @@ class Experiment
 end
 
 class SimpleExperiment < Experiment
-  def setup_logger()
+  def configure_logger()
     @logger = Logger.new(STDOUT)
     #@loger.level = Logger::WARN
     @logger.formatter = proc do
       |severity, datetime, progname, msg|
-      "#{msg}\n"
+      "logged data: #{msg}\n"
     end
   end
 
@@ -291,30 +303,33 @@ class SimpleExperiment < Experiment
   end
 end
 
-class Exp < SimpleExperiment
-  def assign(params, userid)
-    params.set('foo', UniformChoice.new(
-      unit: userid, choices: ['x', 'y']
-    ))
-    params.set('bar', WeightedChoice.new(
-      unit: [userid, params.get('foo')],
-      choices: ['a','b','c'],
-      weights: [0.2, 0.5, 0.3])
-    )
-    params.set('baz', RandomFloat.new(
-      unit:userid, min: 5, max: 20))
+class VotingExperiment < SimpleExperiment
+  def setup()
+  #  self.salt = "VotingExperiment"
+  end
+
+  # all assign() methods take params and an inputs array
+  def assign(params, **inputs)
+    userid = inputs[:userid]
+    params[:button_color] = UniformChoice.new(
+      choices: ['ff0000', '#00ff00'], unit: userid)
+    params[:button_text] = UniformChoice.new(
+      choices: ["I'm voting", "I'm a voter"], unit: userid, salt:'x')
   end
 end
 
-(1..5).each do |i|
-  my_exp = Exp.new(userid:i)
+my_exp = VotingExperiment.new(userid:14)
+my_button_color = my_exp.get(:button_color)
+button_text = my_exp.get(:button_text)
+puts "button color is %s and button text is %s." % [my_button_color,button_text]
+
+(14..16).each do |i|
+  my_exp = VotingExperiment.new(userid:i)
   #my_exp.auto_exposure_log = false
   # toggling the above disables or re-enables auto-logging
-  puts "\n\nnew experiment time with userid %s!\n" % i
-  puts "first time triggers a log event"
-  puts 'my params are...', my_exp.get_params()
-  puts 'second time...'
-  puts 'my params are...', my_exp.get_params()
+  puts "\ngetting assignment for user %s note: first time triggers a log event" % i
+  puts "button color is %s and button text is %s" % 
+    [my_exp.get(:button_color), my_exp.get(:button_text)]
 end
 
 
