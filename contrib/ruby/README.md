@@ -20,7 +20,7 @@ end
 
 Then, we can examine the assignments produced for a few input userids. Note that since exposure logging is enabled by default, all of the experiments' inputs, configuration information, timestamp, and parameter assignments are pooped out via the Logger class.
 
-```
+```Ruby
 (155..156).each do |i|
   my_exp = VotingExperiment.new(userid:i)
   #my_exp.auto_exposure_log = false
