@@ -6,45 +6,40 @@ This is a rough implementation of the Experiment / logging infrasture for runnin
 This defines a simple experiment that randomly assigns three variables, foo, bar, and baz.
 `foo` and `baz` use `userid` as input, while `bar` uses a pair, namely `userid` combined with the value of `foo` from the prior step.
 ```Ruby
-class MyFirstExp < SimpleExperiment
-  def assign(params, userid)
-    params[:foo] = UniformChoice.new(
-      unit: userid, choices: ['x', 'y'])
-    params[:bar] = WeightedChoice.new(
-      unit: [userid, params[:foo]],
-      choices: ['a','b','c'],
-      weights: [0.2, 0.5, 0.3])
-    params[:baz] = RandomFloat.new(
-      unit:userid, min: 5, max: 20)
+class VotingExperiment < SimpleExperiment
+  # all assign() methods take params and an inputs array
+  def assign(params, **inputs)
+    userid = inputs[:userid]
+    params['button_color'] = UniformChoice.new(
+      choices: ['ff0000', '#00ff00'], unit: userid)
+    params['button_text'] = UniformChoice.new(
+      choices: ["I'm voting", "I'm a voter"], unit: userid, salt:'x')
   end
 end
 ```
 
 Then, we can examine the assignments produced for a few input userids. Note that since exposure logging is enabled by default, all of the experiments' inputs, configuration information, timestamp, and parameter assignments are pooped out via the Logger class.
 
-```Ruby
-class MyFirstExperiment < SimpleExperiment
-  def assign(params, userid)
-    params[:foo] = UniformChoice.new(
-      choices: ['x', 'y'], unit: userid)
-    params[:bar] = WeightedChoice.new(
-      choices: ['a','b','c'],
-      weights: [0.2, 0.5, 0.3],
-      unit: [userid, params[:foo]])
-    params[:baz] = RandomFloat.new(
-      min: 5, max: 20, unit: userid)
-  end
+```
+(155..156).each do |i|
+  my_exp = VotingExperiment.new(userid:i)
+  #my_exp.auto_exposure_log = false
+  # toggling the above disables or re-enables auto-logging
+  puts "\ngetting assignment for user %s note: first time triggers a log event" % i
+  puts "button color is %s and button text is %s" %
+    [my_exp.get(:button_color), my_exp.get(:button_text)]
 end
 ```
 
 The output of the Ruby script looks something like this...
 
 ```
-getting assignment for user 1 note: first time triggers a log event
-logged data: {"name":"MyFirstExperiment","time":1404834015,"salt":"MyFirstExperiment","inputs":{"userid":1},"params":{"foo":"y","bar":"b","baz":6.545786477076732},"event":"exposure"}
-my foo and baz are y and 6.55.
+getting assignment for user 155 note: first time triggers a log event
+logged data: {"name":"VotingExperiment","time":1404894056,"salt":"VotingExperiment","inputs":{"userid":155},"params":{"button_color":"#00ff00","button_text":"I'm voting"},"event":"exposure"}
+button color is #00ff00 and button text is I'm voting
 
-getting assignment for user 2 note: first time triggers a log event
-logged data: {"name":"MyFirstExperiment","time":1404834015,"salt":"MyFirstExperiment","inputs":{"userid":2},"params":{"foo":"y","bar":"c","baz":18.514514154012573},"event":"exposure"}
+getting assignment for user 156 note: first time triggers a log event
+logged data: {"name":"VotingExperiment","time":1404894056,"salt":"VotingExperiment","inputs":{"userid":156},"params":{"button_color":"#00ff00","button_text":"I'm voting"},"event":"exposure"}
+button color is #00ff00 and button text is I'm voting
 my foo and baz are y and 18.51.
 ```
