@@ -21,25 +21,16 @@ end
 Then, we can examine the assignments produced for a few input userids. Note that since exposure logging is enabled by default, all of the experiments' inputs, configuration information, timestamp, and parameter assignments are pooped out via the Logger class.
 
 ```Ruby
-(155..156).each do |i|
-  my_exp = VotingExperiment.new(userid:i)
-  #my_exp.auto_exposure_log = false
-  # toggling the above disables or re-enables auto-logging
-  puts "\ngetting assignment for user %s note: first time triggers a log event" % i
-  puts "button color is %s and button text is %s" %
-    [my_exp.get(:button_color), my_exp.get(:button_text)]
-end
+VotingExperiment.new(userid:14)
+my_button_color = my_exp.get(:button_color)
+button_text = my_exp.get(:button_text)
+puts "button color is %s and button text is %s." % [my_button_color,button_text]
 ```
 
 The output of the Ruby script looks something like this...
 
 ```
-getting assignment for user 155 note: first time triggers a log event
-logged data: {"name":"VotingExperiment","time":1404894056,"salt":"VotingExperiment","inputs":{"userid":155},"params":{"button_color":"#00ff00","button_text":"I'm voting"},"event":"exposure"}
-button color is #00ff00 and button text is I'm voting
+logged data: {"name":"VotingExperiment","time":1404944726,"salt":"VotingExperiment","inputs":{"userid":14},"params":{"button_color":"ff0000","button_text":"I'm a voter"},"event":"exposure"}
 
-getting assignment for user 156 note: first time triggers a log event
-logged data: {"name":"VotingExperiment","time":1404894056,"salt":"VotingExperiment","inputs":{"userid":156},"params":{"button_color":"#00ff00","button_text":"I'm voting"},"event":"exposure"}
-button color is #00ff00 and button text is I'm voting
-my foo and baz are y and 18.51.
+button color is ff0000 and button text is I'm a voter.
 ```
