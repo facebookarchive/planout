@@ -183,11 +183,13 @@ class Experiment
     @name = self.class.name
     @auto_exposure_log = true
 
-    @assignment = Assignment.new(@name)
+    self.setup()  # sets name, salt, etc.
+
+    @assignment = Assignment.new(self.salt)
     @assigned = false
 
     @logger = nil
-    setup_logger()
+    setup()
   end
 
   def _assign()
@@ -206,12 +208,12 @@ class Experiment
     @_salt = value
   end
 
-  def auto_exposure_log=(value)
-    @auto_exposure_log = value
-  end
-
   def salt
     return @_salt ? @_salt : @name
+  end
+
+  def auto_exposure_log=(value)
+    @auto_exposure_log = value
   end
 
   def configure_logger()
@@ -287,7 +289,7 @@ class Experiment
 end
 
 class SimpleExperiment < Experiment
-  def setup_logger()
+  def configure_logger()
     @logger = Logger.new(STDOUT)
     #@loger.level = Logger::WARN
     @logger.formatter = proc do
@@ -301,25 +303,28 @@ class SimpleExperiment < Experiment
   end
 end
 
-class MyFirstExperiment < SimpleExperiment
-  def assign(params, userid)
-    params[:foo] = UniformChoice.new(
-      choices: ['x', 'y'], unit: userid)
-    params[:bar] = WeightedChoice.new(
-      choices: ['a','b','c'],
-      weights: [0.2, 0.5, 0.3],
-      unit: [userid, params[:foo]])
-    params[:baz] = RandomFloat.new(
-      min: 5, max: 20, unit: userid)
+class VotingExperiment < SimpleExperiment
+  def setup()
+  #  self.salt = "VotingExperiment"
+  end
+
+  # all assign() methods take params and an inputs array
+  def assign(params, **inputs)
+    userid = inputs[:userid]
+    params[:button_color] = UniformChoice.new(
+      choices: ['ff0000', '#00ff00'], unit: userid)
+    params[:button_text] = UniformChoice.new(
+      choices: ["I'm voting", "I'm a voter"], unit: userid, salt:'x')
   end
 end
 
-(1..2).each do |i|
-  my_exp = MyFirstExperiment.new(userid:i)
+(155..156).each do |i|
+  my_exp = VotingExperiment.new(userid:i)
   #my_exp.auto_exposure_log = false
   # toggling the above disables or re-enables auto-logging
   puts "\ngetting assignment for user %s note: first time triggers a log event" % i
-  puts 'my foo and baz are %s and %.2f.' % [my_exp.get(:foo), my_exp.get(:baz)]
+  puts "button color is %s and button text is %s" % 
+    [my_exp.get(:button_color), my_exp.get(:button_text)]
 end
 
 
