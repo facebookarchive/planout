@@ -318,7 +318,12 @@ class VotingExperiment < SimpleExperiment
   end
 end
 
-(155..156).each do |i|
+my_exp = VotingExperiment.new(userid:14)
+my_button_color = my_exp.get(:button_color)
+button_text = my_exp.get(:button_text)
+puts "button color is %s and button text is %s." % [my_button_color,button_text]
+
+(14..16).each do |i|
   my_exp = VotingExperiment.new(userid:i)
   #my_exp.auto_exposure_log = false
   # toggling the above disables or re-enables auto-logging
