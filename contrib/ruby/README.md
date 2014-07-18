@@ -21,7 +21,7 @@ end
 Then, we can examine the assignments produced for a few input userids. Note that since exposure logging is enabled by default, all of the experiments' inputs, configuration information, timestamp, and parameter assignments are pooped out via the Logger class.
 
 ```Ruby
-VotingExperiment.new(userid:14)
+my_exp = VotingExperiment.new(userid:14)
 my_button_color = my_exp.get(:button_color)
 button_text = my_exp.get(:button_text)
 puts "button color is %s and button text is %s." % [my_button_color,button_text]
