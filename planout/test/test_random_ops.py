@@ -60,6 +60,35 @@ class TestRandomOperators(unittest.TestCase):
     self.assertTrue(abs(observed_p-expected_p) <= se)
 
 
+  def test_salts(self):
+    """Test salting behavior"""
+    i = 20
+    a = Assignment('assign_salt_a')
+
+    # assigning variables with different names and the same unit should yield
+    # different randomizations, when salts are not explicitly specified
+    a.x = RandomInteger(min=0, max=100000, unit=i)
+    a.y = RandomInteger(min=0, max=100000, unit=i)
+    self.assertTrue(a.x != a.y)
+
+    # when salts are specified, they act the same way auto-salting does
+    a.z = RandomInteger(min=0, max=100000, unit=i, salt='x')
+    self.assertTrue(a.x == a.z)
+
+    # when the Assignment-level salt is different, variables with the same
+    # name (or salt) should generally be assigned to different values
+    b = Assignment('assign_salt_b')
+    b.x = RandomInteger(min=0, max=100000, unit=i)
+    self.assertTrue(a.x != b.x)
+
+    # when a full salt is specified, only the full salt is used to do hashing
+    a.f = RandomInteger(min=0, max=100000, unit=i, full_salt='fs')
+    b.f = RandomInteger(min=0, max=100000, unit=i, full_salt='fs')
+    self.assertTrue(a.f == b.f)
+    a.f = RandomInteger(min=0, max=100000, unit=i, full_salt='fs2')
+    b.f = RandomInteger(min=0, max=100000, unit=i, full_salt='fs2')
+    self.assertTrue(a.f == b.f)
+
   def test_bernoulli(self):
     """Test bernoulli trial"""
 
