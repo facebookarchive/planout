@@ -28,7 +28,7 @@ class TestRandomOperators(unittest.TestCase):
   @staticmethod
   def valueMassToDensity(value_mass):
     """convert value_mass dictionary to a density"""
-    values, ns = zip(*value_mass.items())
+    values, ns = zip(*value_mass)
     ns_sum = float(sum(ns))
     value_density = dict(zip(values, [i/ns_sum for i in ns]))
     return value_density
@@ -72,9 +72,9 @@ class TestRandomOperators(unittest.TestCase):
         return e
       return exp_func
 
-    self.distributionTester(bernoulliTrial(0.0), {0:1, 1:0})
-    self.distributionTester(bernoulliTrial(0.1), {0:0.9, 1:0.1})
-    self.distributionTester(bernoulliTrial(1.0), {0:0, 1:1})
+    self.distributionTester(bernoulliTrial(0.0), ((0,1), (1,0)))
+    self.distributionTester(bernoulliTrial(0.1), ((0,0.9), (1,0.1)))
+    self.distributionTester(bernoulliTrial(1.0), ((0,0), (1,1)))
 
   def test_uniform_choice(self):
     """Test uniform choice"""
@@ -89,9 +89,10 @@ class TestRandomOperators(unittest.TestCase):
         return e
       return exp_func
 
-    self.distributionTester(uniformChoice(['a']), {'a':1})
-    self.distributionTester(uniformChoice(['a','b']), {'a':1, 'b':1})
-    self.distributionTester(uniformChoice([1,2,3,4]), {1:1, 2:1, 3:1, 4:1})
+    self.distributionTester(uniformChoice(['a']), [('a',1)])
+    self.distributionTester(uniformChoice(['a','b']), (('a',1), ('b',1)))
+    self.distributionTester(
+      uniformChoice([1,2,3,4]), ((1,1), (2,1), (3,1), (4,1)))
 
 
   def test_weighted_choice(self):
@@ -99,20 +100,27 @@ class TestRandomOperators(unittest.TestCase):
 
     # returns experiment function with x = WeightedChoice(c,w) draw
     # experiment salt is a string version of weighted_dict's keys
-    def weightedChoice(weight_dict):
-      c, w = zip(*weight_dict.items())
+    def weightedChoice(weight_pairs):
+      c, w = zip(*weight_pairs)
       @experiment_decorator(','.join(map(str, w)))
       def exp_func(e, i):
         e.x = WeightedChoice(choices=c, weights=w, unit=i)
         return e
       return exp_func
 
-    d = {'a':1}
+    d = (('a',1),)
     self.distributionTester(weightedChoice(d), d)
-    d = {'a':1, 'b':2}
+    d = (('a',1), ('b',2))
     self.distributionTester(weightedChoice(d), d)
-    d = {'a':0, 'b':2, 'c':0}
+    d = ((('a',0), ('b',2), ('c',0)))
     self.distributionTester(weightedChoice(d), d)
+
+    # we should be able to repeat the same choice multiple times
+    # in weightedChoice(). in this case we repeat 'a'.
+    da = ((('a',1), ('b',2), ('c',0),('a',2)))
+    db = ((('a',3), ('b',2), ('c',0)))
+    self.distributionTester(weightedChoice(da), db)
+
 
   def test_sample(self):
     """Test random sampling without replacement"""
@@ -137,9 +145,9 @@ class TestRandomOperators(unittest.TestCase):
       for xs in zip(*xs_list):
         self.assertProbs(xs, value_density, float(N))
 
-    listDistributionTester(sample([1,2,3], draws=3), {1:1,2:1,3:1})
-    listDistributionTester(sample([1,2,3], draws=2), {1:1,2:1,3:1})
-    listDistributionTester(sample(['a','a','b'], draws=3), {'a':2,'b':1})
+    listDistributionTester(sample([1,2,3], draws=3), ((1,1),(2,1),(3,1)))
+    listDistributionTester(sample([1,2,3], draws=2), ((1,1),(2,1),(3,1)))
+    listDistributionTester(sample(['a','a','b'], draws=3), (('a',2),('b',1)))
 
 
 if __name__ == '__main__':

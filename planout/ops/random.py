@@ -100,15 +100,15 @@ class WeightedChoice(PlanOutOpRandom):
     # eventually add weighted choice
     if len(choices) == 0:
       return []
-    cum_weights = dict(zip(choices, weights))
+    cum_weights = dict(enumerate(weights))
     cum_sum = 0.0
-    for choice in cum_weights:
-      cum_sum += cum_weights[choice]
-      cum_weights[choice] = cum_sum
+    for index in cum_weights:
+      cum_sum += cum_weights[index]
+      cum_weights[index] = cum_sum
     stop_value = self.getUniform(0.0, cum_sum)
-    for choice in cum_weights:
-      if stop_value <= cum_weights[choice]:
-        return choice
+    for index in cum_weights:
+      if stop_value <= cum_weights[index]:
+        return choices[index]
 
 class Sample(PlanOutOpRandom):
   def options(self):
