@@ -66,7 +66,7 @@ class ExperimentTest(unittest.TestCase):
     self.experiment_tester(TestVanillaExperiment)
 
   # makes sure assignment only happens once
-  def test_single_assingmnet(self):
+  def test_single_assignment(self):
     class TestSingleAssignment(Experiment):
       def configure_logger(self): pass
       def log(self, stuff): global_log.append(stuff)

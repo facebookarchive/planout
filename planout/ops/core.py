@@ -81,13 +81,6 @@ class Set(PlanOutOp):
     return "%s = %s;" % (self.args['var'], strp)
 
 
-class SetOverride(Set):
-  def execute(self, mapper):
-    var, value = self.args['var'], self.args['value']
-    if not mapper.has_override(var):
-      super(SetOverride, self).execute(mapper)
-
-
 class Array(PlanOutOp):
   def options(self):
     return {'values': {'required': 1, 'description': 'array of values'}}
