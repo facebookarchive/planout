@@ -27,6 +27,17 @@ class ExperimentTest(unittest.TestCase):
 
     self.assertEqual(len(global_log), 1)
 
+  def validate_log(self, blob, expected_fields):
+    blob = global_log[0]
+    for field in expected_fields:
+      self.assertTrue(field in blob)
+      if expected_fields[field] is dict:
+        self.assertTrue(self.validate_log(
+          blob[field],
+          expected_fields[field]
+          ))
+      else:
+        self.assertEqual(blob[field], expected_fields[field])
 
   def test_vanilla_experiment(self):
     class TestVanillaExperiment(Experiment):
@@ -42,6 +53,7 @@ class ExperimentTest(unittest.TestCase):
 
     self.experiment_tester(TestVanillaExperiment)
 
+  # makes sure assignment only happens once
   def test_single_assingmnet(self):
     class TestSingleAssignment(Experiment):
       def configure_logger(self): pass
@@ -85,11 +97,11 @@ class ExperimentTest(unittest.TestCase):
                }
             }
             """)
-        proc = Interpreter(compiled, self.salt, kwargs)
+        proc = Interpreter(compiled, self.salt, kwargs, params)
         params.update(proc.get_params())
 
     self.experiment_tester(TestInterpretedExperiment)
-    
-    
+
+
 if __name__ == '__main__':
   unittest.main()

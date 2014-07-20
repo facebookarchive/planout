@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 from .ops.random import *
+from .ops.base import PlanOutOp
 from collections import MutableMapping
 
 # The Assignment class is the main work horse that lets you to execute
@@ -24,16 +25,14 @@ class Assignment(MutableMapping):
   def evaluate(self, value):
     return value
 
-  @property
-  def overrides(self):
+  def get_overrides(self):
     return self._overrides
 
-  @overriders.setter
-  def overrides(self, overrides):
+  def set_overrides(self, overrides):
     # maybe this should be a deep copy?
     self._overrides = overrides.copy()
     for var in self._overrides:
-      self.var = var
+      self.__dict__[var] = self._overrides[var]
 
   def __setitem__(self, name, value):
     if name in ('_data', '_overrides', 'experiment_salt'):
