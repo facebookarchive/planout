@@ -32,7 +32,7 @@ class Assignment(MutableMapping):
     # maybe this should be a deep copy?
     self._overrides = overrides.copy()
     for var in self._overrides:
-      self.__dict__[var] = self._overrides[var]
+      self._data[var] = self._overrides[var]
 
   def __setitem__(self, name, value):
     if name in ('_data', '_overrides', 'experiment_salt'):

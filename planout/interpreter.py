@@ -62,13 +62,13 @@ class Interpreter(object):
     self._env.set_overrides(overrides)
     return self
 
-  def has_override(self, name):
-    """Check to see if a variable has an override."""
-    return name in self.get_overrides()
-
   def get_overrides(self):
     """Get a dictionary of all overrided values"""
     return self._env.get_overrides()
+
+  def has_override(self, name):
+    """Check to see if a variable has an override."""
+    return name in self.get_overrides()
 
   def evaluate(self, planout_code):
     """Recursively evaluate PlanOut interpreter code"""
