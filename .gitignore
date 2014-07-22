@@ -5,3 +5,4 @@ build/
 *.log
 *tar.gz
 MANIFEST
+*.ipynb*
