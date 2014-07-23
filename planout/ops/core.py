@@ -66,6 +66,8 @@ class Set(PlanOutOp):
 
   def execute(self, mapper):
     var, value = self.args['var'], self.args['value']
+    if mapper.has_override(var):
+      return
     # if a salt is not specified, use the variable name as the salt
     if ops.Operators.isOperator(value) and 'salt' not in value:
       value['salt'] = var
@@ -77,13 +79,6 @@ class Set(PlanOutOp):
   def pretty(self):
     strp = ops.Operators.pretty(self.args['value'])
     return "%s = %s;" % (self.args['var'], strp)
-
-
-class SetOverride(Set):
-  def execute(self, mapper):
-    var, value = self.args['var'], self.args['value']
-    if not mapper.has_override(var):
-      super(SetOverride, self).execute(mapper)
 
 
 class Array(PlanOutOp):

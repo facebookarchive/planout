@@ -53,7 +53,7 @@ class Experiment(object):
 
     self.setup()                   # sets name, salt, etc.
 
-    self._assignment = self.get_assignment()
+    self._assignment = Assignment(self.salt)
     self._checksum = self.checksum()
     self._assigned = False
 
@@ -70,8 +70,14 @@ class Experiment(object):
     # If the experiment name is not specified, just use the class name
     pass
 
-  def get_assignment(self):
-    return Assignment(self.salt)
+  def set_overrides(self, value):
+    """Sets variables that are to remain fixed during execution."""
+    # note that setting this will overwrite inputs to the experiment
+    self._assignment.set_overrides(value)
+    o = self._assignment.get_overrides()
+    for var in o:
+      if var in self.inputs:
+        self.inputs[var] = o[var]
 
   @property
   def salt(self):

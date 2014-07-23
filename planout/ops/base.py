@@ -53,7 +53,7 @@ class PlanOutOp(object):
     # any operator can safely use these parameters
     # in particular, salt is automatically appended to variables
     # which don't have salt specified.
-    safe_params = set(['op', 'salt'])
+    safe_params = set(['op', 'salt', 'full_salt'])
     # verify that all parameters are legit parameters
     instance_opts = self._options()
     for param in parameters:

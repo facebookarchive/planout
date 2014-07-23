@@ -39,11 +39,6 @@ class Operators():
     }
 
   @staticmethod
-  def enable_overrides():
-    import core
-    Operators.operators['set'] = core.SetOverride
-
-  @staticmethod
   def isOperator(op):
     return \
       type(op) is dict and "op" in op and op["op"] in Operators.operators

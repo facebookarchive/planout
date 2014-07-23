@@ -28,6 +28,14 @@ class AssignmentTest(unittest.TestCase):
     self.assertEqual(a.bar, 'a')
     self.assertEqual(a.baz, 'a')
 
+  def test_overrides(self):
+    a = Assignment(self.tester_salt)
+    a.set_overrides({'x': 42, 'y': 43})
+    a.x = 5
+    a.y = 6
+    self.assertEqual(a.x, 42)
+    self.assertEqual(a.y, 43)
+
 
 if __name__ == '__main__':
   unittest.main()

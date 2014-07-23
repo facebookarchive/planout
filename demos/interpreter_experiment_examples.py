@@ -14,7 +14,8 @@ class SimpleInterpretedExperiment(SimpleExperiment):
     procedure = Interpreter(
       json.load(open(self.filename)),
       self.salt,
-      kwargs
+      kwargs,
+      params
       )
     params.update(procedure.get_params())
 

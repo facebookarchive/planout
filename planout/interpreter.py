@@ -7,6 +7,7 @@
 
 from copy import deepcopy
 from .ops.utils import Operators
+from .assignment import Assignment
 
 
 Operators.initFactory()
@@ -14,10 +15,13 @@ Operators.initFactory()
 class Interpreter(object):
   """PlanOut interpreter"""
 
-  def __init__(self, serialization, experiment_salt='global_salt', inputs={}):
+  def __init__(self, serialization, experiment_salt='global_salt',
+    inputs={}, environment=None):
     self._serialization = serialization
-    self._env = {}
-    self._overrides = {}
+    if environment is None:
+      self._env = Assignment(experiment_salt)
+    else:
+      self._env = environment
     self.experiment_salt = self._experiment_salt = experiment_salt
     self._evaluated = False
     self._inputs = inputs.copy()
@@ -34,9 +38,7 @@ class Interpreter(object):
   def set_env(self, new_env):
     """Replace the current environment with a dictionary"""
     self._env = deepcopy(new_env)
-    # apply overrides
-    for v in self._overrides:
-      self._env[v] = self._overrides[v]
+    # note that overrides are inhereted from new_env
     return self
 
   def has(self, name):
@@ -57,18 +59,16 @@ class Interpreter(object):
     Sets variables to maintain a frozen state during the interpreter's
     execution. This is useful for debugging PlanOut scripts.
     """
-    Operators.enable_overrides()
-    self._overrides = overrides
-    self.set_env(self._env)  # this will reset overrides
+    self._env.set_overrides(overrides)
     return self
-
-  def has_override(self, name):
-    """Check to see if a variable has an override."""
-    return name in self._overrides
 
   def get_overrides(self):
     """Get a dictionary of all overrided values"""
-    return self._overrides
+    return self._env.get_overrides()
+
+  def has_override(self, name):
+    """Check to see if a variable has an override."""
+    return name in self.get_overrides()
 
   def evaluate(self, planout_code):
     """Recursively evaluate PlanOut interpreter code"""
