@@ -52,7 +52,7 @@
     title: Continuous treatments
   - id: within-subjects
     title: Within-subjects designs
-  - id: social-cues
+  - id: 10-social-cues-recipe.md
     title: Social cues experiment
   - id: cluster-randomized
     title: Cluster-randomized experiments
