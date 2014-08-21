@@ -40,3 +40,21 @@
     title: Creating new operators
   - id: creating-random-operators
     title: Creating random operators
+- title: Cookbooks & recipes
+  items:
+  - id: recipies-introduction
+    title: Introduction
+  - id: simple-ab-test
+    title: Simple A/B test
+  - id: factorial-design
+    title: Factorial Designs
+  - id: continuous-treatments
+    title: Continuous treatments
+  - id: within-subjects
+    title: Within-subjects designs
+  - id: 10-social-cues-recipe.md
+    title: Social cues experiment
+  - id: cluster-randomized
+    title: Cluster-randomized experiments
+  - id: network-experiments
+    title: Basic network experiments
