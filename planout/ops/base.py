@@ -145,7 +145,7 @@ class PlanOutOpUnary(PlanOutOpSimple):
   __metaclass__ = ABCMeta
   def options(self):
     return {
-      'value': {'required': 1, 'description': 'input value to commutative operator'}}
+      'value': {'required': 1, 'description': 'input value to unary operator'}}
 
   def simpleExecute(self):
     return self.unaryExecute(self.parameters['value'])

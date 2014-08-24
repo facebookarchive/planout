@@ -48,29 +48,77 @@ class TestBasicOperators(unittest.TestCase):
   def test_cond(self):
     getInput = lambda i, r: {'op': 'equals', 'left': i, 'right': r}
     testIf = lambda i: self.runConfig({
-      'op': 'cond', 'cond': [
-      {'if': getInput(i, 0), 'then': {'op': 'set', 'var': 'x', 'value': 'x_0'}},
-      {'if': getInput(i, 1), 'then': {'op': 'set', 'var': 'x', 'value': 'x_1'}}
-    ]})
+      'op': 'cond',
+      'cond': [
+        {'if': getInput(i, 0),
+         'then': {'op': 'set', 'var': 'x', 'value': 'x_0'}},
+        {'if': getInput(i, 1),
+         'then': {'op': 'set', 'var': 'x', 'value': 'x_1'}}
+      ]
+    })
     self.assertEquals({'x': 'x_0'}, testIf(0))
     self.assertEquals({'x': 'x_1'}, testIf(1))
 
   def test_get(self):
-    d = self.runConfig({'op': 'seq', 'seq': [
-      {'op': 'set', 'var': 'x', 'value': 'x_val'},
-      {'op': 'set', 'var': 'y', 'value':
-        {'op': 'get', 'var': 'x'}}
-    ]})
+    d = self.runConfig({
+      'op': 'seq',
+      'seq': [
+        {'op': 'set', 'var': 'x', 'value': 'x_val'},
+        {'op': 'set', 'var': 'y', 'value': {'op': 'get', 'var': 'x'}}
+      ]
+    })
     self.assertEquals({'x': 'x_val', 'y': 'x_val'}, d)
 
   def test_index(self):
-    x = self.run_config_single({'op': 'index', 'index': 0, 'base': [1,2,3]})
-    self.assertEquals(x, 1)
-    x = self.run_config_single({'op': 'index', 'index': 2, 'base': [1,2,3]})
-    self.assertEquals(x, 3)
-    x = self.run_config_single({'op': 'index', 'index': 2, 'base':
-     {'op': 'array', 'values': [1,2,3]}})
-    self.assertEquals(x, 3)
+    array_literal =  [10, 20, 30]
+    dict_literal = {'a': 42, 'b': 43}
+
+    # basic indexing works with array literals
+    x = self.run_config_single(
+        {'op': 'index', 'index': 0, 'base': array_literal}
+    )
+    self.assertEquals(x, 10)
+
+    x = self.run_config_single(
+        {'op': 'index', 'index': 2, 'base': array_literal}
+    )
+    self.assertEquals(x, 30)
+
+    # basic indexing works with dictionary literals
+    x = self.run_config_single(
+        {'op': 'index', 'index': 'a', 'base': dict_literal}
+    )
+    self.assertEquals(x, 42)
+
+    # invalid indexes are mapped to None
+    x = self.run_config_single(
+        {'op': 'index', 'index': 6, 'base': array_literal}
+    )
+    self.assertEquals(x, None)
+
+    # invalid indexes are mapped to None
+    x = self.run_config_single(
+        {'op': 'index', 'index': 'c', 'base': dict_literal}
+    )
+    self.assertEquals(x, None)
+
+    # non literals also work
+    x = self.run_config_single({
+      'op': 'index',
+      'index': 2,
+      'base': {'op': 'array', 'values': array_literal}
+    })
+    self.assertEquals(x, 30)
+    
+  def test_coalesce(self):
+    x = self.run_config_single({'op': 'coalesce', 'values': [None]})
+    self.assertEquals(x, None)
+
+    x = self.run_config_single({'op': 'coalesce', 'values': [None, 42, None]})
+    self.assertEquals(x, 42)
+
+    x = self.run_config_single({'op': 'coalesce', 'values': [None, None, 43]})
+    self.assertEquals(x, 43)
 
   def test_length(self):
     arr = range(5)
@@ -128,14 +176,18 @@ class TestBasicOperators(unittest.TestCase):
     self.assertEquals(True, x)
 
   def test_commutative(self):
+    # test commutative arithmetic operators
     arr = [33, 7, 18, 21, -3]
 
     min_test = self.run_config_single({'op': 'min', 'values': arr})
     self.assertEquals(min(arr), min_test)
+
     max_test = self.run_config_single({'op': 'max', 'values': arr})
     self.assertEquals(max(arr), max_test)
+
     sum_test = self.run_config_single({'op': 'sum', 'values': arr})
     self.assertEquals(sum(arr), sum_test)
+
     product_test = self.run_config_single({'op': 'product', 'values': arr})
     self.assertEquals(reduce(lambda x,y: x*y, arr), product_test)
 

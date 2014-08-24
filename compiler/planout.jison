@@ -5,6 +5,10 @@
 "#"(.)*\n                                 /* skip comments */
 \s+                                       /* skip whitespace */
 
+"true"                                    return 'TRUE'
+"false"                                   return 'FALSE'
+"null"                                    return 'NULL'
+
 "switch"                                  return 'SWITCH';
 "if"                                      return 'IF';
 "else"                                    return 'ELSE';
@@ -17,6 +21,7 @@
 
 "||"                                      return 'OR'
 "&&"                                      return 'AND'
+"??"                                      return 'COALESCE'
 "=="                                      return 'EQUALS'
 ">="                                      return 'GTE'
 "<="                                      return 'LTE'
@@ -42,11 +47,12 @@
 %token LTE
 %token NEQ
 %token OR
+%token COALESCE
 %token SWITCH
 %token THEN
 
 %left '!'
-%left OR AND
+%left OR AND COALESCE
 %left EQUALS NEQ LTE GTE '>' '<'
 %left '+' '-'
 %left '*' '/' '%'
@@ -82,6 +88,12 @@ expression
 simple_expression
   : IDENTIFIER
     { $$ = {"op": "get", "var": $1}; }
+  | TRUE
+   { $$ = true; }
+  | FALSE
+   { $$ = false; }
+  | NULL
+   { $$ = {"op": "literal", "value": null}; }
   | '[' array ']'
     { $$ = {"op": "array", "values": $2}; }
   | IDENTIFIER '(' arguments ')'
@@ -96,6 +108,7 @@ simple_expression
     { $$ = $2; }
   | CONST
     { $$ = $1; }
+  | JSON_START json { $$ = {"op": "literal", "value": $2}; }
   | simple_expression '%' simple_expression
     { $$ = {"op": "%", "left": $1, "right": $3}; }
   | simple_expression '/' simple_expression
@@ -124,6 +137,8 @@ simple_expression
     { $$ = {"op": "not", "value": $2}; }
   | simple_expression OR simple_expression
     { $$ = {"op": "or", "values": [$1, $3]}; }
+  | simple_expression COALESCE simple_expression
+    { $$ = {"op": "coalesce", "values": [$1, $3]}; }
   | simple_expression AND simple_expression
     { $$ = {"op": "and", "values": [$1, $3]}; }
   ;
@@ -135,6 +150,23 @@ array
     { $$ = [$1]; }
   | array ',' simple_expression
     { $$ = $1; $$.push($3); }
+  ;
+
+json: /* true, false, null, etc. */
+  IDENTIFIER { $$ = JSON.parse($1); }
+  | CONST { $$ = $1; }
+  | '[' json_array ']' { $$ = $2; }
+  | '{' json_map '}' { $$ = $2; }
+  ;
+
+json_array: /* empty */ { $$ = []; }
+  | json { $$ = []; $$.push_back($1); }
+  | json_array ',' json { $$ = $1; $$.push_back($3); }
+  ;
+
+json_map: /* empty */ { $$ = {}; }
+  | json ':' json { $$ = {}; $$[$1] = $3; }
+  | json_map ',' json ':' json { $$ = $1; $$[$3] = $5; }
   ;
 
 arguments

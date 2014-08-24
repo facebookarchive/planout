@@ -27,6 +27,7 @@ class Operators():
       "min": core.Min,
       "max": core.Max,
       "length": core.Length,
+      "coalesce": core.Coalesce,
       "product": core.Product,
       "sum": core.Sum,
       "randomFloat": random.RandomFloat,

@@ -100,6 +100,22 @@ class Array(PlanOutOp):
     f = "[%s]" % ', '.join(l)
     return f
 
+class Coalesce(PlanOutOp):
+  def options(self):
+    return {'values': {'required': 1, 'description': 'array of values'}}
+
+  def execute(self, mapper):
+    for x in self.args['values']:
+      eval_x = mapper.evaluate(x)
+      if eval_x is not None:
+        return eval_x
+    return None
+
+  def pretty(self):
+    values = Operators.strip_array(self.args['values'])
+    pretty_c = [Operators.pretty(i) for i in values]
+    return 'coalesce(%s)' % ', '.join(pretty_c)
+
 
 class Index(PlanOutOpSimple):
   def options(self):
@@ -108,6 +124,18 @@ class Index(PlanOutOpSimple):
       'index': {'required': 1, 'description': 'index'}}
 
   def simpleExecute(self):
+    # returns value at index if it exists, returns None otherwise.
+    # works with both lists and dictionaries.
+    base, index = self.parameters['base'], self.parameters['index']
+    if type(base) is list:
+      if index >= 0 and index < len(base):
+        return base[index]
+      else:
+        return None
+    else:
+      # assume we have a dictionary
+      return base.get(index)
+
     return self.parameters['base'][self.parameters['index']]
 
   def pretty(self):
