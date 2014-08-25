@@ -8,6 +8,7 @@
 "true"                                    return 'TRUE'
 "false"                                   return 'FALSE'
 "null"                                    return 'NULL'
+"@"                                       return 'JSON_START'
 
 "switch"                                  return 'SWITCH';
 "if"                                      return 'IF';
@@ -160,8 +161,8 @@ json: /* true, false, null, etc. */
   ;
 
 json_array: /* empty */ { $$ = []; }
-  | json { $$ = []; $$.push_back($1); }
-  | json_array ',' json { $$ = $1; $$.push_back($3); }
+  | json { $$ = []; $$.push($1); }
+  | json_array ',' json { $$ = $1; $$.push($3); }
   ;
 
 json_map: /* empty */ { $$ = {}; }

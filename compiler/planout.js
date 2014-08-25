@@ -182,17 +182,14 @@ break;
 case 37:
  this.$ = [$$[$0]]; 
 break;
-case 38:
+case 38: case 45:
  this.$ = $$[$0-2]; this.$.push($$[$0]); 
 break;
 case 39:
  this.$ = JSON.parse($$[$0]); 
 break;
 case 44:
- this.$ = []; this.$.push_back($$[$0]); 
-break;
-case 45:
- this.$ = $$[$0-2]; this.$.push_back($$[$0]); 
+ this.$ = []; this.$.push($$[$0]); 
 break;
 case 46: case 49: case 58:
  this.$ = {}; 
@@ -714,44 +711,46 @@ case 3:return 14
 break;
 case 4:return 15
 break;
-case 5:return 48;
+case 5:return 25
 break;
-case 6:return 50;
+case 6:return 48;
 break;
-case 7:return 52;
+case 7:return 50;
 break;
-case 8:return 7
+case 8:return 52;
 break;
-case 9: yy_.yytext = Number(yy_.yytext); return 24; 
+case 9:return 7
 break;
-case 10: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 24; 
+case 10: yy_.yytext = Number(yy_.yytext); return 24; 
 break;
 case 11: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 24; 
 break;
-case 12:return 39
+case 12: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 24; 
 break;
-case 13:return 41
+case 13:return 39
 break;
-case 14:return 40
+case 14:return 41
 break;
-case 15:return 31
+case 15:return 40
 break;
-case 16:return 34
+case 16:return 31
 break;
-case 17:return 33
+case 17:return 34
 break;
-case 18:return 32
+case 18:return 33
 break;
-case 19:return 54
+case 19:return 32
 break;
-case 20:return 10
+case 20:return 54
 break;
-case 21:return yy_.yytext
+case 21:return 10
+break;
+case 22:return yy_.yytext
 break;
 }
 },
-rules: [/^(?:#(.)*\n)/,/^(?:\s+)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:null\b)/,/^(?:switch\b)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:[a-zA-Z][a-zA-Z0-9_]*)/,/^(?:[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)/,/^(?:"(\\.|[^\\"])*")/,/^(?:'[^\']*')/,/^(?:\|\|)/,/^(?:&&)/,/^(?:\?\?)/,/^(?:==)/,/^(?:>=)/,/^(?:<=)/,/^(?:!=)/,/^(?:=>)/,/^(?:;)/,/^(?:=|:|\[|\]|\(|\)|,|\{|\}|\+|%|\*|-|\/|%|>|<|!)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"inclusive":true}}
+rules: [/^(?:#(.)*\n)/,/^(?:\s+)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:null\b)/,/^(?:@)/,/^(?:switch\b)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:[a-zA-Z][a-zA-Z0-9_]*)/,/^(?:[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)/,/^(?:"(\\.|[^\\"])*")/,/^(?:'[^\']*')/,/^(?:\|\|)/,/^(?:&&)/,/^(?:\?\?)/,/^(?:==)/,/^(?:>=)/,/^(?:<=)/,/^(?:!=)/,/^(?:=>)/,/^(?:;)/,/^(?:=|:|\[|\]|\(|\)|,|\{|\}|\+|%|\*|-|\/|%|>|<|!)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],"inclusive":true}}
 });
 return lexer;
 })();
