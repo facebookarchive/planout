@@ -20,6 +20,8 @@
 \"(\\.|[^\\"])*\"                         { yytext = yytext.substr(1, yyleng-2); return 'CONST'; }
 \'[^\']*\'                                { yytext = yytext.substr(1, yyleng-2); return 'CONST'; }
 
+"="                                       return 'EQUALS_ASSIGN'
+"<-"                                      return 'ARROW_ASSIGN'
 "||"                                      return 'OR'
 "&&"                                      return 'AND'
 "??"                                      return 'COALESCE'
@@ -35,6 +37,8 @@
 
 /lex
 
+%token EQUALS_ASSIGN
+%token ARROW_ASSIGN
 %token AND
 %token CONST
 %token DEFAULT
@@ -52,6 +56,7 @@
 %token SWITCH
 %token THEN
 
+%left EQUALS_ASSIGN ARROW_ASSIGN
 %left '!'
 %left OR AND COALESCE
 %left EQUALS NEQ LTE GTE '>' '<'
@@ -75,7 +80,9 @@ rules_list
 rule
   : expression
     { $$ = $1; }
-  | IDENTIFIER '=' simple_expression END_STATEMENT
+  | IDENTIFIER EQUALS_ASSIGN simple_expression END_STATEMENT
+    { $$ = {"op": "set", "var": $1, "value": $3}; }
+  | IDENTIFIER ARROW_ASSIGN simple_expression END_STATEMENT
     { $$ = {"op": "set", "var": $1, "value": $3}; }
   ;
 
