@@ -93,7 +93,7 @@ simple_expression
   | FALSE
    { $$ = false; }
   | NULL
-   { $$ = {"op": "literal", "value": null}; }
+   { $$ = null; }
   | '[' array ']'
     { $$ = {"op": "array", "values": $2}; }
   | IDENTIFIER '(' arguments ')'

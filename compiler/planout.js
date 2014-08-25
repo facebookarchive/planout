@@ -108,7 +108,7 @@ case 10:
  this.$ = false; 
 break;
 case 11:
- this.$ = {"op": "literal", "value": null}; 
+ this.$ = null; 
 break;
 case 12:
  this.$ = {"op": "array", "values": $$[$0-1]}; 
