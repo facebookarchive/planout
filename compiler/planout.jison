@@ -63,6 +63,8 @@
 %left '+' '-'
 %left '*' '/' '%'
 
+%left '['
+
 %%
 
 start
@@ -106,10 +108,8 @@ simple_expression
     { $$ = {"op": "array", "values": $2}; }
   | IDENTIFIER '(' arguments ')'
     { $$ = $3; $$["op"] = $1; }
-  | IDENTIFIER '[' simple_expression ']'
-    { $$ = {"op": "index", "base": {"op": "get", "var": $1}, "index": $3}; }
-  | '[' array ']' '[' simple_expression ']'
-    { $$ = {"op": "index", "base": {"op": "array", "values": $2}, "index": $5}; }
+  | simple_expression '[' simple_expression ']'
+    { $$ = {"op": "index", "base": $1, "index": $3}; }
   | '{' rules_list '}'
     { $$ = {"op": "seq", "seq": $2}; }
   | '(' simple_expression ')'
