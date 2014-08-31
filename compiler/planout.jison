@@ -79,6 +79,8 @@ rules_list
 rule
   : expression
     { $$ = $1; }
+  | expression END_STATEMENT
+    { $$ = $1; }
   | IDENTIFIER '=' simple_expression END_STATEMENT
     { $$ = {"op": "set", "var": $1, "value": $3}; }
   | IDENTIFIER ARROW_ASSIGN simple_expression END_STATEMENT

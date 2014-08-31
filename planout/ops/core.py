@@ -68,9 +68,17 @@ class Set(PlanOutOp):
     var, value = self.args['var'], self.args['value']
     if mapper.has_override(var):
       return
-    # if a salt is not specified, use the variable name as the salt
+
+    # if the value is operator, add the name of the variable as a salt if no
+    # salt is provided.
     if ops.Operators.isOperator(value) and 'salt' not in value:
       value['salt'] = var
+
+    # if we are setting the special variable, experiment_salt, update mapper
+    # object accordingly with the new experiment-level salt
+    if var == 'experiment_salt':
+      mapper.experiment_salt = value
+
     mapper.set(var, mapper.evaluate(value))
 
   def validate(self):
