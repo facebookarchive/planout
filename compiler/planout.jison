@@ -182,7 +182,12 @@ arguments
   | arguments_list
     { $$ = $1; }
   | values_list
-    { $$ = $1; }
+    { if ($1["values"].length > 1) {
+        $$ = $1;
+      } else {
+        $$ = {"value": $1["values"][0]};
+      }
+    }
   ;
 
 arguments_list
