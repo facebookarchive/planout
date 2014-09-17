@@ -285,6 +285,10 @@ class Divide(PlanOutOpBinary):
   def binaryExecute(self, left, right):
     return float(left) / float(right)
 
+class Round(PlanOutOpUnary):
+  def unaryExecute(self, value):
+    return round(value)
+
 class Not(PlanOutOpUnary):
   def unaryExecute(self, value):
     return not value

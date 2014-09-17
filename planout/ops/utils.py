@@ -23,6 +23,7 @@ class Operators():
       "%": core.Mod,
       "/": core.Divide,
       "not": core.Not,
+      "round": core.Round,
       "negative": core.Negative,
       "min": core.Min,
       "max": core.Max,
