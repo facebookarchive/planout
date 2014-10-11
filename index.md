@@ -5,13 +5,13 @@ id: home
 hero: true
 ---
 
-PlanOut is a Python-based framework for online field experiments. PlanOut was created to make it easy to run more sophisticated experiments and to quickly iterate on these experiments, while satisfying the constraints of deployed Internet services with many users.
+PlanOut is a framework for online field experiments. It was created to make it easy to run and iterate on sophisticated experiments, while satisfying the constraints of deployed Internet services with many users.
 
 Developers integrate PlanOut by defining experiments that detail
 how _units_ (e.g., users, cookie IDs) should get mapped to parameters that
 control the user experience. For example, to create a 2x2 factorial experiment
-randomizing both the color and the text on a button, you create a class like
-this:
+randomizing both the color and the text on a button using the Python-based
+framework, you create a class like this:
 
 ```python
 class MyExperiment(SimpleExperiment):
@@ -47,7 +47,7 @@ The PlanOut framework includes:
   including follow-on experiments.
 
   * A reference implementation of the PlanOut interpreter, which lets you
-  serialize, store, and execute experiment definitions.
+  serialize, store, and execute experiment definitions on multiple platforms.
 
   * A compiler that transforms the PlanOut domain specific language into
   serialized PlanOut code.

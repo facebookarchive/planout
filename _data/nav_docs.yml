@@ -16,18 +16,22 @@
     title: Random operators
   - id: logging
     title: Logging
+  - id: testing
+    title: Testing
+  - id: interpreter
+    title: The PlanOut language
+    subitems:
+    - id: serialization
+      title: Why interpret?
+    - id: planout-language
+      title: The PlanOut language
+    - id: integrating-interpreter
+      title: Integratation
   - id: namespaces
     title: Namespaces
     subitems:
     - id: simple-namespaces
       title: Quick start
-  - id: interpreter
-    title: The PlanOut interpreter
-    subitems:
-    - id: serialization
-      title: Why serialize?
-    - id: planout-language
-      title: Language reference
   - id: best-practices
     title: Best practices
 - title: Extending PlanOut

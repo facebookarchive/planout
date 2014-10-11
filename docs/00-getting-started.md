@@ -8,7 +8,7 @@ next: sample-web-app.html
 ---
 
 In this tutorial we will guide you through installing PlanOut and explain how
-to implement basic experiments.
+to implement basic experiments in Python using PlanOut.
 
 ## Quick install
 You can install PlanOut using Easy Install by typing the following in your
