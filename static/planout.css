@@ -19,9 +19,12 @@ body {
 }
 
 h1, h2, h3, h4 {
-    font-weight: normal;
-    margin: 1em 0 0.2em;
-    line-height: 1.2em;
+    font-weight: bold;
+    line-height: 1.0em;
+}
+
+h1 {
+  font-weight: bold;
 }
 
 h1:first-child, h2:first-child, h3:first-child, h4:first-child {
@@ -30,18 +33,21 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child {
 
 h1 {
     font-size: 1.7em;
+    margin: 1.5em 0 0.2em;
 }
 
 h2 {
-    font-size: 1.5em;
+    font-size: 1.3em;
+    margin: 1.3em 0 0.2em;
 }
 
 h3 {
-    font-size: 1.3em;
+    font-size: 1.1em;
+    margin: 1.3em 0 0.2em;
 }
 
 h4 {
-    font-size: 1.1em;
+    font-size: 1.0em;
 }
 
 p, pre, ul {

@@ -10,23 +10,23 @@ next: sample-web-app.html
 In this tutorial we will guide you through installing PlanOut and explain how
 to implement basic experiments in Python using PlanOut.
 
-## Quick install
-You can install PlanOut using Easy Install by typing the following in your
+### Quick install
+PlanOut has been tested on Mac OS X and Linux.
+You can install PlanOut using pip by typing the following in your
 terminal:
 
 ```
-sudo easy_install planout
+pip install planout
 ```
 
-Or you can checkout the live repository from Github, and type:
+In case you don't have the `pip` installation system, you can find installation instructions [here](http://pip.readthedocs.org/en/latest/installing.html). If you are on
+a Mac, you can also install `pip` via [Homebrew](http://brew.sh).
+
+Alternatively, you can clone the live repository from [Github](https://github.com/facebook/planout), and type:
 
 ```
 sudo python setup.py install
 ```
-
-PlanOut has been tested on Mac OS X and Linux.
-
-## Your first experiment
 
 ### Defining an experiment
 To create your first experiment, you will define a subclass of the

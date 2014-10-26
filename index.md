@@ -5,13 +5,15 @@ id: home
 hero: true
 ---
 
-PlanOut is a framework for online field experiments. It was created to make it easy to run and iterate on sophisticated experiments, while satisfying the constraints of deployed Internet services with many users.
+PlanOut is a framework for online field experiments. It was created to make it easy to run and iterate on sophisticated experiments in a statistically sound manner
+while satisfying the constraints of deployed Internet services.
 
-Developers integrate PlanOut by defining experiments that detail
-how _units_ (e.g., users, cookie IDs) should get mapped to parameters that
-control the user experience. For example, to create a 2x2 factorial experiment
-randomizing both the color and the text on a button using the Python-based
-framework, you create a class like this:
+Developers implement experiments using PlanOut by providing a high-level
+specification for how _units_ (e.g., users, cookie IDs) should be mapped to
+parameters that control the user experience.
+For example, to create a 2x2 factorial experiment that randomizes both the color
+and the text on a button, using the Python-based framework, one can simply
+create a class like this:
 
 ```python
 class MyExperiment(SimpleExperiment):
@@ -22,8 +24,8 @@ class MyExperiment(SimpleExperiment):
       unit=userid)
 ```
 
-Then, in the application code, instead of just using a constant,
-you query the experiment object to find out what
+Then, in the application code, instead of just using a constant (e.g., '#ff00000'),
+you query an instance of the class to find out what
 values should be used for the current user:
 
 ```python
@@ -40,17 +42,13 @@ logged.
 
 The PlanOut framework includes:
 
-  * Extensible Python classes for defining experiments that make it easy to
-  implement randomized assignments, and automatically log important data.
+  * Extensible classes for [implementing](getting-started.html) and [testing](testing.html) experiments, which [automatically log](logging.html)
+  important data.
 
-  * A system for managing multiple mutually exclusive experiments,
-  including follow-on experiments.
+  * A system for managing and deploying multiple mutually exclusive experiments, called [namespaces](namespaces.html)
 
-  * A reference implementation of the PlanOut interpreter, which lets you
-  serialize, store, and execute experiment definitions on multiple platforms.
-
-  * A compiler that transforms the PlanOut domain specific language into
-  serialized PlanOut code.
+  * The [PlanOut language](interpreter.html), which lets you define,
+  serialize, store, and execute experiment definitions in a platform-independent way.
 
 ### Who is PlanOut for?
 PlanOut is for researchers, businesses, and students wanting to run experiments.

@@ -11,7 +11,7 @@ You will usually want to log which units (e.g., users) are exposed to your exper
 
 Logging this information enables monitoring your experiment and improving your analysis of the results. In particular, many experiments only change your service for the small portion of users that use a particular part of the service; keeping track of these users will make your analysis more precise.
 
-The `SimpleExperiment` class providing functionality for logging data to a file using Python's `logger` module. Additionally, you can extend `Experiment` to log to one or more [other data stores instead](extending-logging.html), such as a database, scribe, or a real-time counter. 
+The `SimpleExperiment` class providing functionality for logging data to a file using Python's `logger` module. Additionally, you can extend `Experiment` to log to one or more [other data stores instead](extending-logging.html), such as a database, scribe, or a real-time counter.
 
 ## Anatomy of a log
 Consider Experiment 1 from the [PlanOut paper](https://www.facebook.com/download/255785951270811/planout.pdf):
