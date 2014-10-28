@@ -383,8 +383,12 @@ section.content {
     padding: 20px 0;
 }
 
-section.content article ul li {
+section.content article ul {
   margin-bottom: 1em;
+}
+
+section.content li {
+  margin-bottom: 0em;
 }
 
 
@@ -432,9 +436,8 @@ nav.toc section:first-child h3 {
 
 nav.toc ul {
    list-style: none;
-   margin: 0;
+   margin: 0em;
    padding-left: 1em;
-
 }
 
 footer {

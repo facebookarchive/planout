@@ -18,15 +18,11 @@
     title: Logging
   - id: testing
     title: Testing
-  - id: interpreter
+  - id: planout-language
     title: The PlanOut language
     subitems:
-    - id: serialization
-      title: Why interpret?
-    - id: planout-language
-      title: The PlanOut language
-    - id: integrating-interpreter
-      title: Integratation
+    - id: using-the-interpreter
+      title: Using the interpreter
   - id: namespaces
     title: Namespaces
     subitems:
