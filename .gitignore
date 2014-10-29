@@ -4,6 +4,7 @@
 *.swp
 build/*
 _site/*
+*node_modules/*
 *.tar.gz
 .ipynb_checkpoint*
 Gemfile.lock
