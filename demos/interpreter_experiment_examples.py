@@ -1,37 +1,18 @@
-from planout.interpreter import *
-from planout.experiment import SimpleExperiment
+from planout.experiment import SimpleInterpretedExperiment
 import json
-import hashlib
-from abc import ABCMeta, abstractmethod
-
-class SimpleInterpretedExperiment(SimpleExperiment):
-  """Simple class for loading a file-based PlanOut interpreter experiment"""
-  __metaclass__ = ABCMeta
-
-  filename = None
-
-  def assign(self, params, **kwargs):
-    procedure = Interpreter(
-      json.load(open(self.filename)),
-      self.salt,
-      kwargs,
-      params
-      )
-    params.update(procedure.get_params())
-
-  def checksum(self):
-    # src doesn't count first line of code, which includes function name
-    src = open(self.filename).read()
-    return hashlib.sha1(src).hexdigest()[:8]
 
 class Exp1(SimpleInterpretedExperiment):
-  filename = "sample_scripts/exp1.json"
+  def loadScript(self):
+    self.script = json.loads(open("sample_scripts/exp1.json").read())
 
 class Exp2(SimpleInterpretedExperiment):
-  filename = "sample_scripts/exp2.json"
+  def loadScript(self):
+    self.script = json.loads(open("sample_scripts/exp2.json").read())
 
 class Exp3(SimpleInterpretedExperiment):
-  filename = "sample_scripts/exp3.json"
+  def loadScript(self):
+    self.script = json.loads(open("sample_scripts/exp3.json").read())
 
 class Exp4(SimpleInterpretedExperiment):
-  filename = "sample_scripts/exp4.json"
+  def loadScript(self):
+    self.script = json.loads(open("sample_scripts/exp4.json").read())

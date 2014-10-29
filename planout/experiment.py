@@ -15,6 +15,7 @@ from abc import ABCMeta, abstractmethod
 import __main__ as main
 
 from .assignment import Assignment
+from .interpreter import Interpreter
 
 
 # decorator for methods that assume assignments have been made
@@ -54,7 +55,6 @@ class Experiment(object):
     self.setup()                   # sets name, salt, etc.
 
     self._assignment = Assignment(self.salt)
-    self._checksum = self.checksum()
     self._assigned = False
 
   def _assign(self):
@@ -63,6 +63,7 @@ class Experiment(object):
     self.assign(self._assignment, **self.inputs)
     self.in_experiment = \
       self._assignment.get('in_experiment', self.in_experiment)
+    self._checksum = self.checksum()
     self._assigned = True
 
   def setup(self):
@@ -258,3 +259,38 @@ class SimpleExperiment(Experiment):
     # that if the object is a new instance, this is the first time we are
     # seeing the inputs/outputs given.
     return False
+
+class SimpleInterpretedExperiment(SimpleExperiment):
+  """A variant of SimpleExperiment that loads data from a given script"""
+  __metaclass__ = ABCMeta
+
+  @abstractmethod
+  def loadScript(self):
+    """loads deserialized PlanOut script to be executed by the interpreter"""
+    # this method should set self.script to a dictionary-based representation
+    # of a PlanOut script. Most commonly, this method would retreive a
+    # JSON-encoded string from a database or file, e.g.
+    # self.script = json.loads(open("myfile").read())
+    self.script = None
+
+  def assign(self, params, **kwargs):
+    self.loadScript()  # lazily load script
+    # self.script must be a dictionary
+    assert hasattr(self, 'script') and type(self.script) == dict  
+
+    interpreterInstance = Interpreter(
+      self.script,
+      self.salt,
+      kwargs,
+      params
+      )
+    # execute script
+    results = interpreterInstance.get_params()
+    # insert results into param object dictionary
+    params.update(results)
+
+  def checksum(self):
+    # self.script must be a dictionary
+    assert hasattr(self, 'script') and type(self.script) == dict  
+
+    return hashlib.sha1(json.dumps(self.script)).hexdigest()[:8]
