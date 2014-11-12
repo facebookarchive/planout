@@ -1,0 +1,11 @@
+# Test If / else construction
+
+a = uniformChoice(unit=userid);
+
+if (a == 10) {
+    b = a;    
+} else if (a == 20) {
+    c = a;
+} else {
+    d = a;
+}

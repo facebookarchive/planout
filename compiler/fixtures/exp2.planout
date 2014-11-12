@@ -1,0 +1,7 @@
+num_cues = randomInteger(
+  min=1, max=min(values=[length(values=liking_friends), 3]),
+  unit=[userid, pageid]);
+
+friends_shown = sample(
+  choices=liking_friends, draws=num_cues,
+  unit=[userid, pageid]);

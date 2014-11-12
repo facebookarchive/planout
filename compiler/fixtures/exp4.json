@@ -1,0 +1,1 @@
+{"op":"seq","seq":[{"op":"set","var":"prob_collapse","value":{"min":0,"max":1,"unit":{"op":"get","var":"sourceid"},"op":"randomFloat"}},{"op":"set","var":"collapse","value":{"p":{"op":"get","var":"prob_collapse"},"unit":{"op":"array","values":[{"op":"get","var":"storyid"},{"op":"get","var":"viewerid"}]},"op":"bernoulliTrial"}}]}

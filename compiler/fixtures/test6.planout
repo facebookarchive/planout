@@ -1,0 +1,10 @@
+# Test Switch cases
+
+a = unitId;
+
+switch {
+    case a > 10 then 
+        b = a;
+    case a < 10 then
+        c = c;
+}

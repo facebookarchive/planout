@@ -1,0 +1,143 @@
+(* This is the start rule *)
+seq = {rule};
+
+comment = ?/\#.+\r?\n/? ;
+semi_colon = ';' ['\r'] ['\n'] ;
+
+identifier = ?/[a-zA-Z][a-zA-Z0-9_]*/? ;
+
+int = ?/-?[0-9]+/?;
+pointfloat = ?/([0-9]*\.[0-9]+|[0-9]+\.)/? ;
+expfloat = ?/([0-9]+\.?|[0-9]*\.)[eE][+-]?[0-9]+/? ;
+float = pointfloat | expfloat;
+
+string = ?/\"(.+?)\"/? ;
+true = 'true' ;
+false = 'false' ;
+null = 'null' ;
+const 
+  = float
+  | int
+  | true
+  | false
+  | null
+  | string 
+  ;
+
+rule 
+  = assignment
+  | expression semi_colon
+  | expression 
+  | comment
+  ;
+
+assign = '->' | '=';
+value = simple_expression;
+assignment = identifier assign ~ value semi_colon ;
+  
+expression
+  = switch_expression
+  | if_expression
+  ;
+
+(*list = '[' @+:atom {',' @+:atom}* ']';*)
+switch_expression = 'switch' ~ '{' @+:switch_case {semi_colon @+:switch_case}* '}' ;
+switch_cases
+  = switch_cases switch_case semi_colon
+  ;
+switch_case
+  = simple_expression 'then' expression 
+  ;
+
+if_expression
+  = 'if' ~ '(' simple_expression ')' if_case [optional_else_expression] ;
+
+if_case = '{' ~ seq '}';
+
+optional_else_expression
+  = 'else' if_expression
+  | 'else' if_case
+  ;
+
+json_start = '@' ;
+json
+  = identifier
+  | const
+  | '[' json_array ']'
+  | '{' json_map '}'
+  ;
+
+json_array
+  = json
+  | json_array ',' json
+  ;
+
+json_map
+  = json ':' json
+  | json_map ',' json ':' json
+  ;
+
+array_part = simple_expression | identifier ;
+array = '[' ~ @+:array_part {',' @+:array_part }* ']' ;
+
+mul_expr = simple_expression '*' ~ simple_expression ;
+sub_expr = simple_expression '-' ~ simple_expression ;
+add_expr = simple_expression '+' ~ simple_expression ;
+mod_expr = simple_expression '%' ~ simple_expression ;
+div_expr = simple_expression '/' ~ simple_expression ;
+gt_expr  = simple_expression '>' ~ simple_expression ;
+lt_expr  = simple_expression '<' ~ simple_expression ;
+eql_expr = simple_expression '==' ~ simple_expression ;
+ne_expr  = simple_expression '!=' ~ simple_expression ;
+lte_expr = simple_expression '<=' ~ simple_expression ;
+gte_expr = simple_expression '>=' ~ simple_expression ;
+
+or_expr = simple_expression 'or' ~ simple_expression ;
+and_expr = simple_expression 'and' ~ simple_expression ;
+coalesce_expr = simple_expression 'coalesce' ~ simple_expression ;
+
+neg_expr = '-' ~ simple_expression ;
+not_expr = '!' ~ simple_expression ;
+
+slice_expr = simple_expression '[' ~ simple_expression ']' ;
+
+func_call = identifier '(' ~ arguments ')' ;
+arguments
+  = @+:argument {',' @+:argument }*
+  ;
+
+argument
+  = identifier '=' ~ simple_expression
+  | simple_expression
+  ;
+
+get_expr = identifier ;
+
+simple_expression
+  = mul_expr
+  | sub_expr
+  | add_expr
+  | mod_expr
+  | div_expr
+  | gt_expr
+  | lt_expr
+  | eql_expr
+  | ne_expr
+  | lte_expr
+  | gte_expr
+  | neg_expr
+  | not_expr
+  | or_expr
+  | and_expr
+  | coalesce_expr
+  | slice_expr
+  | array
+  | json_start json 
+  | func_call
+  | get_expr
+  | const ~
+  ;
+
+(*
+list = '[' @+:atom {',' @+:atom}* ']';
+*)
