@@ -21,8 +21,10 @@
   - id: planout-language
     title: The PlanOut language
     subitems:
-    - id: using-the-interpreter
-      title: Using the interpreter
+    - id: getting-started-with-the-interpreter
+      title: Getting started
+    - id: planout-language-reference
+      title: Language reference
   - id: namespaces
     title: Namespaces
     subitems:

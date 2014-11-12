@@ -21,33 +21,10 @@ Consider an experiment from Beenen et al's paper,
 [Using Social Psychology to Motivate Contributions
 to Online Communities](http://repository.cmu.edu/cgi/viewcontent.cgi?article=1087&context=hcii), which examines questions around social loafing and goal-setting in online systems.
 Their experiment first randomly assigns participants to different group sizes,
-and then randomized them into to receiving either a general or specific goal.
+and then randomizes them into to receiving either a general or specific goal.
 If they are assigned to a specific goal, they are assigned an additional
 parameter, the goal, expressed in terms of ratings per user, for each group size.
 
-The experiment can be expressed in the
-[PlanOut language](interpreter.html) as:
-
-```javascript
-group_size = uniformChoice(choices=[1, 10], unit=userid);
-specific_goal = bernoulliTrial(p=0.8, unit=userid);
-if (specific_goal) {
-  ratings_per_user_goal = uniformChoice(choices=[8, 16, 32, 64], unit=userid);
-  ratings_goal = group_size * ratings_per_user_goal;
-}
-```
-
-### Testing using the PlanOut editor
-The data can then be loaded up via the PlanOut editor (link), which comes
-pre-loaded with this sample experiment.  You can try out various userids
-interactively by specifying the inputs and overrides in JSON format, as depicted
-in the screenshot below.
-
-(screenshot).
-### Python implementation.
-
-Using the Python-based PlanOut framework, Beenen et al.'s experiment can be
-defined as follows:
 
 ```python
 class MotivationExperiment(SimpleExperiment):
@@ -58,10 +35,13 @@ class MotivationExperiment(SimpleExperiment):
       params.ratings_per_user_goal = UniformChoice(
         choices=[8, 16, 32, 64], unit=userid)
       params.ratings_goal = params.group_size * params.ratings_per_user_goal
-    return e
 ```
 
-Here is an example of how we might test the script:
+
+## Testing using the Python API
+
+Let's walk through how we would go about testing the experiment in Python.
+First, let's see how a `userid` gets mapped to parameters.
 
 ```python
 e = MotivationExperiment(userid=6)
@@ -108,4 +88,31 @@ yields,
 
 ```
 {'specific_goal': 1, 'ratings_goal': 160, 'group_size': 10, 'ratings_per_user_goal': 16}
+```
+
+## Testing with the PlanOut editor
+The experiment can be expressed in the
+[PlanOut language](interpreter.html) as:
+
+```javascript
+group_size = uniformChoice(choices=[1, 10], unit=userid);
+specific_goal = bernoulliTrial(p=0.8, unit=userid);
+if (specific_goal) {
+  ratings_per_user_goal = uniformChoice(choices=[8, 16, 32, 64], unit=userid);
+  ratings_goal = group_size * ratings_per_user_goal;
+}
+```
+
+Overrides are one of the main ways to interact with a PlanOut script when using
+the PlanOut editor. Simply enter a JSON-formatted dictionary of parameters and
+values (as you would with `set_overrides()`) to interactively test your script.
+
+
+
+## Integrating with a live site
+A simple way to test a live Web application using PlanOut is to pass overrides
+into your endpoint as a query parameter, e.g.,
+
+```
+http://my.site/home.php?overrides=specific_goal:1,ratings_goal:16
 ```
