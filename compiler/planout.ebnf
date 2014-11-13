@@ -36,17 +36,7 @@ value = simple_expression;
 assignment = identifier assign ~ value semi_colon ;
   
 expression
-  = switch_expression
-  | if_expression
-  ;
-
-(*list = '[' @+:atom {',' @+:atom}* ']';*)
-switch_expression = 'switch' ~ '{' @+:switch_case {semi_colon @+:switch_case}* '}' ;
-switch_cases
-  = switch_cases switch_case semi_colon
-  ;
-switch_case
-  = simple_expression 'then' expression 
+  = if_expression
   ;
 
 if_expression

@@ -226,15 +226,3 @@ optional_else_expression
   | ELSE simple_expression
     { $$ = {"op": "cond", "cond": [{"if": true, "then": $2}]}; }
   ;
-
-cases_list
-  : /* empty */
-    { $$ = []; }
-  | cases_list case END_STATEMENT
-    { $$ = $1; $$.push($2); }
-  ;
-
-case
-  : simple_expression THEN expression
-    { $$ = {"op": "case", "condidion": $1, "result": $3}; }
-  ;

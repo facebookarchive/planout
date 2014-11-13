@@ -115,11 +115,5 @@ class PlanoutSemantics(object):
         thunk = ast[4][1]
         return {'op': 'cond', 'cond': [{'if': ast[2], 'then': thunk}]}
 
-    def switch_expression(self, ast):
-        return {'op': 'switch', 'cases': ast[-1]}
-
-    def case(self, ast):
-        return {'op': 'case', 'condition': ast[0], 'result': ast[-1]}
-
     def _default(self, ast):
         return ast
