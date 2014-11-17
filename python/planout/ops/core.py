@@ -89,6 +89,16 @@ class Set(PlanOutOp):
     return "%s = %s;" % (self.args['var'], strp)
 
 
+class Return(PlanOutOp):
+  def options(self):
+    return {'value': {'required': 1, 'description': 'return value'}}
+
+  def execute(self, mapper):
+    value = mapper.evaluate(self.args['value'])
+    mapper.set('in_experiment', value)
+    raise ops.StopPlanOutException()
+
+
 class Array(PlanOutOp):
   def options(self):
     return {'values': {'required': 1, 'description': 'array of values'}}

@@ -14,6 +14,8 @@
 "if"                                      return 'IF';
 "else"                                    return 'ELSE';
 
+"return"                                  return 'RETURN';
+
 [a-zA-Z][a-zA-Z0-9_]*                     return 'IDENTIFIER'
 
 [-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?    { yytext = Number(yytext); return 'CONST'; }
@@ -53,6 +55,7 @@
 %token COALESCE
 %token SWITCH
 %token THEN
+%token RETURN
 
 %left '!'
 %left OR AND COALESCE
@@ -91,6 +94,8 @@ expression
   : switch_expression
     { $$ = $1; }
   | if_expression
+    { $$ = $1; }
+  | return_expression
     { $$ = $1; }
   ;
 
@@ -217,6 +222,11 @@ if_expression
       }
     }
   ;
+
+return_expression
+  : RETURN simple_expression
+   { $$ = {"op": "return", "value": $2} }
+;
 
 optional_else_expression
   : /* empty */

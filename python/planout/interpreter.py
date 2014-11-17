@@ -6,7 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 from copy import deepcopy
-from .ops.utils import Operators
+from .ops.utils import Operators, StopPlanOutException
 from .assignment import Assignment
 
 
@@ -31,7 +31,12 @@ class Interpreter(object):
     """Get all assigned parameter values from an executed interpreter script"""
     # evaluate code if it hasn't already been evaluated
     if not self._evaluated:
-      self.evaluate(self._serialization)
+      try:
+        self.evaluate(self._serialization)
+      except StopPlanOutException:
+        # StopPlanOutException is raised when script calls "return", which
+        # short circuits execution
+        pass
       self._evaluated = True
     return self._env
 
@@ -81,7 +86,6 @@ class Interpreter(object):
     else:
       return planout_code  # data is a literal
 
-
 class Validator():
   """
   Inspects and validates serialized PlanOut experiment definitions.
@@ -108,3 +112,4 @@ class Validator():
   def get_input_variables(self):
     """get all variables used not defined by the PlanOut script"""
     pass
+
