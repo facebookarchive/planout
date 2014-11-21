@@ -32,9 +32,9 @@ assign     = '->' | '=';
 value      = simple_expression;
 assignment = identifier assign ~ value semi_colon ;
   
-expression
-  = if_expression
-  ;
+expression = return_expression | if_expression ;
+
+return_expression = 'return' ~ simple_expression ;
 
 if_expression
   = 'if' ~ '(' simple_expression ')' if_case [optional_else_expression] ;

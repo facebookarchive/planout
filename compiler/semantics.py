@@ -111,6 +111,9 @@ class PlanoutSemantics(object):
     def json(self, ast):
         return {'op': 'literal', 'value': ast[-1]}
 
+    def return_expression(self, ast):
+        return {'op': 'return', 'value': ast[-1]}
+
     def if_expression(self, ast):
         thunk = ast[4][1]
         return {'op': 'cond', 'cond': [{'if': ast[2], 'then': thunk}]}

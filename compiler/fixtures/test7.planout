@@ -1,0 +1,7 @@
+x = 22;
+if (userid > 10) {
+  return false;
+} else {
+  return true;
+}
+y = 99;
