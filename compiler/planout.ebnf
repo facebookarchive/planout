@@ -28,7 +28,7 @@ rule
   | comment
   ;
 
-assign     = '->' | '=';
+assign     = '<-' | '=';
 value      = simple_expression;
 assignment = identifier assign ~ value semi_colon ;
   
