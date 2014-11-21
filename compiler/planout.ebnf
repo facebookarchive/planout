@@ -1,20 +1,17 @@
 (* This is the start rule *)
 seq = {rule};
 
-comment = ?/\#.+\r?\n/? ;
+comment    = ?/\#.+\r?\n/? ;
 semi_colon = ';' ['\r'] ['\n'] ;
-
 identifier = ?/[a-zA-Z][a-zA-Z0-9_]*/? ;
-
-int = ?/-?[0-9]+/?;
+int        = ?/-?[0-9]+/? ;
 pointfloat = ?/([0-9]*\.[0-9]+|[0-9]+\.)/? ;
-expfloat = ?/([0-9]+\.?|[0-9]*\.)[eE][+-]?[0-9]+/? ;
-float = pointfloat | expfloat;
-
-string = ?/\"(.+?)\"/? ;
-true = 'true' ;
-false = 'false' ;
-null = 'null' ;
+expfloat   = ?/([0-9]+\.?|[0-9]*\.)[eE][+-]?[0-9]+/? ;
+float      = pointfloat | expfloat ;
+string     = ?/\"(.+?)\"/? ;
+true       = 'true' ;
+false      = 'false' ;
+null       = 'null' ;
 const 
   = float
   | int
@@ -26,13 +23,13 @@ const
 
 rule 
   = assignment
-  | expression semi_colon
+  | expression ($ | semi_colon)
   | expression 
   | comment
   ;
 
-assign = '->' | '=';
-value = simple_expression;
+assign     = '->' | '=';
+value      = simple_expression;
 assignment = identifier assign ~ value semi_colon ;
   
 expression
@@ -82,7 +79,7 @@ ne_expr  = simple_expression '!=' ~ simple_expression ;
 lte_expr = simple_expression '<=' ~ simple_expression ;
 gte_expr = simple_expression '>=' ~ simple_expression ;
 
-or_expr = simple_expression 'or' ~ simple_expression ;
+or_expr  = simple_expression 'or' ~ simple_expression ;
 and_expr = simple_expression 'and' ~ simple_expression ;
 coalesce_expr = simple_expression 'coalesce' ~ simple_expression ;
 
