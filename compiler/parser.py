@@ -16,7 +16,7 @@ from grako.parsing import graken, Parser
 from grako.exceptions import *  # noqa
 
 
-__version__ = '2014.11.21.07.05.19.04'
+__version__ = '2014.11.21.07.25.41.04'
 
 __all__ = [
     'planoutParser',
@@ -402,15 +402,10 @@ class planoutParser(Parser):
 
     @graken()
     def _argument_(self):
-        with self._choice():
-            with self._option():
-                self._identifier_()
-                self._token('=')
-                self._cut()
-                self._simple_expression_()
-            with self._option():
-                self._simple_expression_()
-            self._error('no available options')
+        self._identifier_()
+        self._token('=')
+        self._cut()
+        self._simple_expression_()
 
     @graken()
     def _get_expr_(self):

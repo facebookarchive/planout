@@ -1,4 +1,14 @@
-from collections import Mapping
+from collections import Mapping, Sequence
+from grako.exceptions import SemanticError
+
+_str_types = [str]
+try:
+    str_types.append(unicode)
+    str_types.append(basestring)
+except NameError:
+    #python 3
+    pass
+_str_types = tuple(_str_types)
 
 
 class PlanoutSemantics(object):
@@ -102,8 +112,12 @@ class PlanoutSemantics(object):
     def argument(self, ast):
         if isinstance(ast, Mapping):
             return ast
-        else:
+        elif isinstance(ast, _str_types):
+            return ast
+        elif isinstance(ast, Sequence):
             return {ast[0]: ast[-1]}
+        else:
+            return ast
 
     def true(self, ast):
         return True

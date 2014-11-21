@@ -94,7 +94,7 @@ arguments
 
 argument
   = identifier '=' ~ simple_expression
-  | simple_expression
+  (*| simple_expression*)
   ;
 
 get_expr = identifier ;
