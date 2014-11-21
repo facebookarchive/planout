@@ -1,3 +1,6 @@
+from collections import Mapping
+
+
 class PlanoutSemantics(object):
 
     def _binary_list_expr(self, ast, sym=None):
@@ -94,10 +97,13 @@ class PlanoutSemantics(object):
         return d
 
     def get_expr(self, ast):
-        return {'op': 'get', 'var': ast }
+        return {'op': 'get', 'var': ast}
 
     def argument(self, ast):
-        return {ast[0]: ast[-1]}
+        if isinstance(ast, Mapping):
+            return ast
+        else:
+            return {ast[0]: ast[-1]}
 
     def true(self, ast):
         return True
