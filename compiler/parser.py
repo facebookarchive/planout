@@ -16,7 +16,7 @@ from grako.parsing import graken, Parser
 from grako.exceptions import *  # noqa
 
 
-__version__ = '2014.11.21.06.52.04.04'
+__version__ = '2014.11.21.07.05.19.04'
 
 __all__ = [
     'planoutParser',
@@ -44,6 +44,7 @@ class planoutParser(Parser):
         def block0():
             self._rule_()
         self._closure(block0)
+        self._check_eof()
 
     @graken()
     def _comment_(self):
@@ -122,15 +123,7 @@ class planoutParser(Parser):
                 self._assignment_()
             with self._option():
                 self._expression_()
-                with self._group():
-                    with self._choice():
-                        with self._option():
-                            self._check_eof()
-                        with self._option():
-                            self._semi_colon_()
-                        self._error('no available options')
-            with self._option():
-                self._expression_()
+                self._semi_colon_()
             with self._option():
                 self._comment_()
             self._error('no available options')
@@ -139,10 +132,10 @@ class planoutParser(Parser):
     def _assign_(self):
         with self._choice():
             with self._option():
-                self._token('->')
+                self._token('<-')
             with self._option():
                 self._token('=')
-            self._error('expecting one of: -> =')
+            self._error('expecting one of: <- =')
 
     @graken()
     def _value_(self):

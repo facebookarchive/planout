@@ -1,5 +1,5 @@
 (* This is the start rule *)
-seq = {rule};
+seq = {rule} $;
 
 comment    = ?/\#.+\r?\n/? ;
 semi_colon = ';' ['\r'] ['\n'] ;
@@ -23,8 +23,7 @@ const
 
 rule 
   = assignment
-  | expression ($ | semi_colon)
-  | expression 
+  | expression semi_colon
   | comment
   ;
 
