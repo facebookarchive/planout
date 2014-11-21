@@ -16,7 +16,7 @@ from grako.parsing import graken, Parser
 from grako.exceptions import *  # noqa
 
 
-__version__ = '2014.11.13.00.14.02.03'
+__version__ = '2014.11.21.06.52.04.04'
 
 __all__ = [
     'planoutParser',
@@ -122,7 +122,13 @@ class planoutParser(Parser):
                 self._assignment_()
             with self._option():
                 self._expression_()
-                self._semi_colon_()
+                with self._group():
+                    with self._choice():
+                        with self._option():
+                            self._check_eof()
+                        with self._option():
+                            self._semi_colon_()
+                        self._error('no available options')
             with self._option():
                 self._expression_()
             with self._option():
@@ -154,37 +160,16 @@ class planoutParser(Parser):
     def _expression_(self):
         with self._choice():
             with self._option():
-                self._switch_expression_()
+                self._return_expression_()
             with self._option():
                 self._if_expression_()
             self._error('no available options')
 
     @graken()
-    def _switch_expression_(self):
-        self._token('switch')
+    def _return_expression_(self):
+        self._token('return')
         self._cut()
-        self._token('{')
-        self._switch_case_()
-        self.ast._append('@', self.last_node)
-
-        def block1():
-            self._semi_colon_()
-            self._switch_case_()
-            self.ast._append('@', self.last_node)
-        self._closure(block1)
-        self._token('}')
-
-    @graken()
-    def _switch_cases_(self):
-        self._switch_cases_()
-        self._switch_case_()
-        self._semi_colon_()
-
-    @graken()
-    def _switch_case_(self):
         self._simple_expression_()
-        self._token('then')
-        self._expression_()
 
     @graken()
     def _if_expression_(self):
@@ -545,13 +530,7 @@ class planoutSemantics(object):
     def expression(self, ast):
         return ast
 
-    def switch_expression(self, ast):
-        return ast
-
-    def switch_cases(self, ast):
-        return ast
-
-    def switch_case(self, ast):
+    def return_expression(self, ast):
         return ast
 
     def if_expression(self, ast):
