@@ -122,11 +122,11 @@ class TestBasicOperators(unittest.TestCase):
 
   def test_length(self):
     arr = range(5)
-    length_test = self.run_config_single({'op': 'length', 'values': arr})
+    length_test = self.run_config_single({'op': 'length', 'value': arr})
     self.assertEquals(len(arr), length_test)
-    length_test = self.run_config_single({'op': 'length', 'values': []})
+    length_test = self.run_config_single({'op': 'length', 'value': []})
     self.assertEquals(0, length_test)
-    length_test = self.run_config_single({'op': 'length', 'values':
+    length_test = self.run_config_single({'op': 'length', 'value':
       {'op': 'array', 'values': arr}
     })
     self.assertEquals(length_test, len(arr))
@@ -210,6 +210,44 @@ class TestBasicOperators(unittest.TestCase):
     self.assertEquals(11 % 3, mod)
     div = self.run_config_single({'op': '/', 'left': 3, 'right': 4})
     self.assertEquals(0.75, div)
+
+  def test_return(self):
+    def return_runner(return_value):
+      config = {
+        "op": "seq",
+        "seq": [
+          {
+            "op": "set",
+            "var": "x",
+            "value": 2
+          },
+          {
+            "op": "return",
+            "value": return_value
+          },
+          {
+            "op": "set",
+            "var": "y",
+            "value": 4
+          }
+        ]
+      }
+      e = Interpreter(config, 'test_salt')
+      return e
+
+    i = return_runner(True)
+    self.assertEquals({'x': 2}, i.get_params())
+    self.assertEquals(True, i.in_experiment)
+    i = return_runner(42)
+    self.assertEquals({'x': 2}, i.get_params())
+    self.assertEquals(True, i.in_experiment)
+    i = return_runner(False)
+    self.assertEquals({'x': 2}, i.get_params())
+    self.assertEquals(False, i.in_experiment)
+    i = return_runner(0)
+    self.assertEquals({'x': 2}, i.get_params())
+    self.assertEquals(False, i.in_experiment)
+
 
 if __name__ == '__main__':
     unittest.main()

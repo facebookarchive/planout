@@ -55,6 +55,7 @@ class Namespace(object):
   def log_event(self, event_type, extras=None):
     pass
 
+
 class SimpleNamespace(Namespace):
   __metaclass__ = ABCMeta
   def __init__(self, **kwargs):
@@ -71,6 +72,7 @@ class SimpleNamespace(Namespace):
     self._experiment = None          # memoized experiment object
     self._default_experiment = None  # memoized default experiment object
     self.default_experiment_class = DefaultExperiment
+    self._in_experiment = False
 
     # setup name, primary key, number of segments, etc
     self.setup()
@@ -78,7 +80,6 @@ class SimpleNamespace(Namespace):
 
     # load namespace with experiments
     self.setup_experiments()
-
 
   @abstractmethod
   def setup(self):
@@ -108,7 +109,6 @@ class SimpleNamespace(Namespace):
     else:
       self._primary_unit = [value]
 
-
   def add_experiment(self, name, exp_object, segments):
     num_avail = len(self.available_segments)
     if num_avail < segments:
@@ -132,7 +132,6 @@ class SimpleNamespace(Namespace):
     # associate the experiment name with an object
     self.current_experiments[name] = exp_object
 
-
   def remove_experiment(self, name):
     if name not in self.current_experiments:
       print 'error: there is no experiment called %s.' %  name
@@ -155,10 +154,9 @@ class SimpleNamespace(Namespace):
       unit=itemgetter(*self.primary_unit)(self.inputs))
     return a.segment
 
-
   def _assign_experiment(self):
     "assign primary unit to an experiment"
-
+    in_experiment = False
     segment = self.get_segment()
     # is the unit allocated to an experiment?
     if segment in self.segment_allocations:
@@ -168,31 +166,28 @@ class SimpleNamespace(Namespace):
       experiment.salt = '%s.%s' % (self.name, experiment_name)
       self._experiment = experiment
       self._in_experiment = experiment.in_experiment
-    else:
+    # if the unit does not belong to an experiment, or the unit has been
+    # disqualified from being in the assigned experiment, fall back on the
+    # default experiment
+    if not self._in_experiment:
       self._assign_default_experiment()
-      self._in_experiment = False
-
 
   def _assign_default_experiment(self):
     self._default_experiment = self.default_experiment_class(**self.inputs)
 
-
   @requires_default_experiment
   def default_get(self, name, default=None):
     return self._default_experiment.get(name, default)
-
 
   @property
   @requires_experiment
   def in_experiment(self):
     return self._in_experiment
 
-
   @in_experiment.setter
   def in_experiment(self, value):
     # in_experiment cannot be externally modified
     pass
-
 
   @requires_experiment
   def set_auto_exposure_logging(self, value):

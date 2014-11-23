@@ -9,6 +9,7 @@ from .ops.random import *
 from .ops.base import PlanOutOp
 from collections import MutableMapping
 
+
 # The Assignment class is the main work horse that lets you to execute
 # random operators using the names of variables being assigned as salts.
 # It is a MutableMapping, which means it plays nice with things like Flask

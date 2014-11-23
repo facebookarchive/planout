@@ -2,7 +2,8 @@ import json
 
 class StopPlanOutException(Exception):
   """Exception that gets raised when "return" op is evaluated"""
-  pass
+  def __init__(self, in_experiment):
+      self.in_experiment = in_experiment
 
 class Operators():
   @staticmethod

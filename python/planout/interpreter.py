@@ -24,8 +24,8 @@ class Interpreter(object):
       self._env = environment
     self.experiment_salt = self._experiment_salt = experiment_salt
     self._evaluated = False
+    self._in_experiment = True
     self._inputs = inputs.copy()
-
 
   def get_params(self):
     """Get all assigned parameter values from an executed interpreter script"""
@@ -33,12 +33,16 @@ class Interpreter(object):
     if not self._evaluated:
       try:
         self.evaluate(self._serialization)
-      except StopPlanOutException:
+      except StopPlanOutException as e:
         # StopPlanOutException is raised when script calls "return", which
-        # short circuits execution
-        pass
+        # short circuits execution and sets in_experiment
+        self._in_experiment = e.in_experiment
       self._evaluated = True
     return self._env
+
+  @property
+  def in_experiment(self):
+    return self._in_experiment
 
   def set_env(self, new_env):
     """Replace the current environment with a dictionary"""
@@ -86,6 +90,7 @@ class Interpreter(object):
     else:
       return planout_code  # data is a literal
 
+
 class Validator():
   """
   Inspects and validates serialized PlanOut experiment definitions.
@@ -112,4 +117,3 @@ class Validator():
   def get_input_variables(self):
     """get all variables used not defined by the PlanOut script"""
     pass
-

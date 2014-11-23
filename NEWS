@@ -1,7 +1,26 @@
+* Noteworthy changes in release 0.5 (2014-11-23)
+- Full support for parameter overrides, which allow for testing of PlanOut experiments
+
+- Full support for programmatically controlling logging behavior
+
+- A SimpleInterpretedExperiment to make it easier to get up and running with the PlanOut language and interpreter.
+
+- PlanOut language:
+  - Standardized handling of undefined keys: indexing into a list or dictionary for an invalid index or key always yields null; nulls may be coalesced via the null coalescing operator, coalesce()
+  - A return() operator for determining whether the input units are "in the experiment" (and therefore logged). Calling "return;" or "return <value with positive truthiness>" sets in_experiment to True. Returning a value with negative truthiness sets in_experiment to False.
+
+- PlanOut editor: the PlanOut editor is a reactive development environment and
+testing system for PlanOut-language experiments.
+
+- Breaking changes:
+  - Namespaces: when a unit is assigned to an experiment and in_experiment is set to False, the default experiment is executed.
+  - PlanOut language: the length() operator's argument is now 'value', as to allow for unnamed arguments to be passed in.
+
+
 * Noteworthy changes in release 0.3 (2014-06-18) [alpha]
 - IMPORTANT UPDATE: The hash function used in prior versions did not match the expected behavior in the documentation (caught by @akalicki). We have updated PlanOut's hashing function, which will likely cause units to be randomly assigned to different parameters. If you are already using PlanOut in a production environment, please upgrade with care. If you are not currently using PlanOut in a production environment, please upgrade immediately:
 
   pip install -U planout
-  
+
 - Other updates:
-  -The assign() method is now only called once. Thanks @akalicki for catching this.
+  -The assign() method is now only called once. Thanks to @akalicki for catching this.
