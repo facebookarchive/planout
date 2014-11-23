@@ -35,18 +35,19 @@ way that is easy to port to other platforms and environments.
 ### Can I contribute to PlanOut?
 The main goal with this release is to provide an implementation of how we
 run experiments at Facebook, and set developers and researchers along in this
-direction. We intend on lightly maintaining PlanOut, and hope that the
+direction. We intend on keeping PlanOut up to date, and hope that the
 community can continue to develop it, either through contributing directly to
 the original repository, or by forking it.
 
-We welcome bug fixes, ports to other platforms, like Node.js and Rails,
-and graphical interfaces for constructing serialized,
+We welcome bug fixes, ports to other platforms, extensions, and graphical interfaces for constructing serialized,
 JSON-formatted experiment definitions.
 
 ### Acknowledgements
 PlanOut was originally developed by Eytan Bakshy, Dean Eckles, and Michael S.
 Bernstein. Aspects of the logging and experimental management system were largely
-inspired by QuickExperiment, a tool developed by Breno Roberto and Wesley May.
+inspired by QuickExperiment, a tool developed by Breno Roberto, Andy Pincombe, Wesley May.
+Andy and Wes have been instrumental in reviewing and providing feedback on the
+current implementation PlanOut  at Facebook.
 Many of the best practices for running experiments were developed through
 collaboration with Daniel Ting and Wojeich Galuba on the Decision Tools team.
 Sean Taylor helped with the design and packaging of the Python implementation
@@ -54,6 +55,5 @@ of PlanOut. "Ta" Virot Chiraphadhanakul developed the [PlanOut language to JSON
 compiler](http://facebook.github.io/planout/demo/planout-compiler.html) for
 JavaScript. We would also like to thank former collaborators that
 played a role in the development of PlanOut, including John Fremlin.
-In addition, we'd like to thank Ben Congleton for his comments and
-suggestions on this release, and dice concept and design by Cat Le.
- Finally, we would like to thank James Pearce for all his help with the site.
+In addition, we'd like to thank Cat Le for the dice design and easter egg concept.
+ Finally, we would like to thank James Pearce for his help with setting up this site.
