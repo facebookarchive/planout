@@ -1,8 +1,8 @@
 import hashlib
-import base
+from .base import PlanOutOpSimple
 
 
-class PlanOutOpRandom(base.PlanOutOpSimple):
+class PlanOutOpRandom(PlanOutOpSimple):
   LONG_SCALE = float(0xFFFFFFFFFFFFFFF)
 
   def options(self):

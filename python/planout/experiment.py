@@ -269,14 +269,15 @@ class SimpleInterpretedExperiment(SimpleExperiment):
   """A variant of SimpleExperiment that loads data from a given script"""
   __metaclass__ = ABCMeta
 
-  @abstractmethod
   def loadScript(self):
     """loads deserialized PlanOut script to be executed by the interpreter"""
-    # this method should set self.script to a dictionary-based representation
+    # This method should set self.script to a dictionary-based representation
     # of a PlanOut script. Most commonly, this method would retreive a
     # JSON-encoded string from a database or file, e.g.
     # self.script = json.loads(open("myfile").read())
-    self.script = None
+    # If constructing experiments on the fly, one can alternatively set the
+    # self.script instance variable
+    pass
 
   def assign(self, params, **kwargs):
     self.loadScript()  # lazily load script
@@ -288,7 +289,7 @@ class SimpleInterpretedExperiment(SimpleExperiment):
       self.salt,
       kwargs,
       params
-      )
+    )
     # execute script
     results = interpreterInstance.get_params()
     # insert results into param object dictionary
