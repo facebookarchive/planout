@@ -3,6 +3,7 @@
 *.log
 *.swp
 build/*
+python/build/*
 _site/*
 *node_modules/*
 *.tar.gz

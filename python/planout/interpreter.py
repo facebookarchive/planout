@@ -6,7 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 from copy import deepcopy
-from .ops.utils import Operators
+from .ops.utils import Operators, StopPlanOutException
 from .assignment import Assignment
 
 
@@ -24,16 +24,25 @@ class Interpreter(object):
       self._env = environment
     self.experiment_salt = self._experiment_salt = experiment_salt
     self._evaluated = False
+    self._in_experiment = True
     self._inputs = inputs.copy()
-
 
   def get_params(self):
     """Get all assigned parameter values from an executed interpreter script"""
     # evaluate code if it hasn't already been evaluated
     if not self._evaluated:
-      self.evaluate(self._serialization)
+      try:
+        self.evaluate(self._serialization)
+      except StopPlanOutException as e:
+        # StopPlanOutException is raised when script calls "return", which
+        # short circuits execution and sets in_experiment
+        self._in_experiment = e.in_experiment
       self._evaluated = True
     return self._env
+
+  @property
+  def in_experiment(self):
+    return self._in_experiment
 
   def set_env(self, new_env):
     """Replace the current environment with a dictionary"""

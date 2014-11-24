@@ -13,9 +13,9 @@ from planout.interpreter import Interpreter
 from planout.ops.random import UniformChoice
 
 global_log = []
-class ExperimentTest(unittest.TestCase):
 
-  def experiment_tester(self, exp_class):
+class ExperimentTest(unittest.TestCase):
+  def experiment_tester(self, exp_class, in_experiment=True):
     global global_log
     global_log = []
 
@@ -31,11 +31,17 @@ class ExperimentTest(unittest.TestCase):
 
     # log should only have one entry, and should contain i as an input
     # and foo and bar as parameters
-    self.assertEqual(len(global_log), 1)
-    self.validate_log(params, {
-      'inputs': {'i': None},
-      'params': {'foo': None, 'bar': None}
-    })
+    if in_experiment:
+      self.assertEqual(len(global_log), 1)
+      self.validate_log(params, {
+        'inputs': {'i': None},
+        'params': {'foo': None, 'bar': None}
+      })
+    else:
+      self.assertEqual(len(global_log), 0)
+
+    # test to make sure experiment eligibility works correctly
+    self.assertEqual(e.in_experiment, in_experiment)
 
   def validate_log(self, blob, expected_fields):
     # Expected field is a dictionary containing all of the expected keys
@@ -56,14 +62,26 @@ class ExperimentTest(unittest.TestCase):
       def configure_logger(self): pass
       def log(self, stuff): global_log.append(stuff)
       def previously_logged(self): pass
-
       def setup(self):
         self.name = 'test_name'
-
       def assign(self, params, i):
         params.foo = UniformChoice(choices=['a', 'b'], unit=i)
 
     self.experiment_tester(TestVanillaExperiment)
+
+  def test_vanilla_experiment_disabled(self):
+    class TestVanillaExperiment(Experiment):
+      def configure_logger(self): pass
+      def log(self, stuff): global_log.append(stuff)
+      def previously_logged(self): pass
+      def setup(self):
+        self.name = 'test_name'
+      def assign(self, params, i):
+        params.foo = UniformChoice(choices=['a', 'b'], unit=i)
+        self._in_experiment = False
+
+    self.experiment_tester(TestVanillaExperiment, False)
+
 
   # makes sure assignment only happens once
   def test_single_assignment(self):
@@ -71,10 +89,8 @@ class ExperimentTest(unittest.TestCase):
       def configure_logger(self): pass
       def log(self, stuff): global_log.append(stuff)
       def previously_logged(self): pass
-
       def setup(self):
         self.name = 'test_name'
-
       def assign(self, params, i, counter):
         params.foo = UniformChoice(choices=['a', 'b'], unit=i)
         counter['count'] = counter.get('count', 0) + 1
@@ -88,16 +104,13 @@ class ExperimentTest(unittest.TestCase):
     self.assertEqual(assignment_count['count'], 1)
 
 
-
   def test_interpreted_experiment(self):
     class TestInterpretedExperiment(Experiment):
       def configure_logger(self): pass
       def log(self, stuff): global_log.append(stuff)
       def previously_logged(self): pass
-
       def setup(self):
         self.name = 'test_name'
-
       def assign(self, params, **kwargs):
         compiled = json.loads("""
           {"op":"seq",

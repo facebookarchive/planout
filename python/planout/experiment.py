@@ -29,7 +29,9 @@ def requires_assignment(f):
 # decorator for methods that should be exposure logged
 def requires_exposure_logging(f):
   def wrapped_f(self, *args, **kwargs):
-    if self._auto_exposure_log and self.in_experiment and not self.exposure_logged:
+    if \
+      self._auto_exposure_log and \
+      not self._exposure_logged:
       self.log_exposure()
     return f(self, *args, **kwargs)
   return wrapped_f
@@ -44,7 +46,7 @@ class Experiment(object):
     self.inputs = inputs           # input data
     self._exposure_logged = False  # True when assignments have been exposure logged
     self._salt = None              # Experiment-level salt
-    self.in_experiment = True
+    self._in_experiment = True     # Determines whether or not results should be logged
 
     # use the name of the class as the default name
     self._name = self.__class__.__name__
@@ -61,8 +63,6 @@ class Experiment(object):
     """Assignment and setup that only happens when we need to log data"""
     self.configure_logger() # sets up loggers
     self.assign(self._assignment, **self.inputs)
-    self.in_experiment = \
-      self._assignment.get('in_experiment', self.in_experiment)
     self._checksum = self.checksum()
     self._assigned = True
 
@@ -79,6 +79,10 @@ class Experiment(object):
     for var in o:
       if var in self.inputs:
         self.inputs[var] = o[var]
+
+  @property
+  def in_experiment(self):
+    return self._in_experiment
 
   @property
   def salt(self):
@@ -128,13 +132,10 @@ class Experiment(object):
     else:
       return None
 
+  # we should probably get rid of this public interface
   @property
   def exposure_logged(self):
     return self._exposure_logged
-
-  @exposure_logged.setter
-  def exposure_logged(self, value):
-    self._exposure_logged = value
 
   def set_auto_exposure_logging(self, value):
     """
@@ -169,11 +170,15 @@ class Experiment(object):
 
   def log_exposure(self, extras=None):
     """Logs exposure to treatment"""
-    self.exposure_logged = True
+    if not self._in_experiment:
+      return
+    self._exposure_logged = True
     self.log_event('exposure', extras)
 
   def log_event(self, event_type, extras=None):
     """Log an arbitrary event"""
+    if not self._in_experiment:
+      return
     if extras:
       extra_payload = {'event': event_type, 'extra_data': extras.copy()}
     else:
@@ -276,7 +281,7 @@ class SimpleInterpretedExperiment(SimpleExperiment):
   def assign(self, params, **kwargs):
     self.loadScript()  # lazily load script
     # self.script must be a dictionary
-    assert hasattr(self, 'script') and type(self.script) == dict  
+    assert hasattr(self, 'script') and type(self.script) == dict
 
     interpreterInstance = Interpreter(
       self.script,
@@ -291,6 +296,6 @@ class SimpleInterpretedExperiment(SimpleExperiment):
 
   def checksum(self):
     # self.script must be a dictionary
-    assert hasattr(self, 'script') and type(self.script) == dict  
+    assert hasattr(self, 'script') and type(self.script) == dict
 
     return hashlib.sha1(json.dumps(self.script)).hexdigest()[:8]

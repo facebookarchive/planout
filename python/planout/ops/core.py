@@ -89,6 +89,17 @@ class Set(PlanOutOp):
     return "%s = %s;" % (self.args['var'], strp)
 
 
+class Return(PlanOutOp):
+  def options(self):
+    return {'value': {'required': 1, 'description': 'return value'}}
+
+  def execute(self, mapper):
+    # if script calls return; or return();, assume the unit is in the experiment
+    value = mapper.evaluate(self.args['value'])
+    in_experiment = True if value else False
+    raise ops.StopPlanOutException(in_experiment)
+
+
 class Array(PlanOutOp):
   def options(self):
     return {'values': {'required': 1, 'description': 'array of values'}}
@@ -213,6 +224,7 @@ class And(PlanOutOp):
     pretty_c = [Operators.pretty(i) for i in self.args['values']]
     return '&& '.join(pretty_c)
 
+
 class Or(PlanOutOp):
   def options(self):
     return {
@@ -235,6 +247,7 @@ class Or(PlanOutOp):
     pretty_c = [Operators.pretty(c) for c in self.args['values']]
     return '|| '.join(pretty_c)
 
+
 class Product(PlanOutOpCommutative):
   def commutativeExecute(self, values):
     return reduce(lambda x,y: x*y, values)
@@ -243,6 +256,7 @@ class Product(PlanOutOpCommutative):
     values = Operators.strip_array(self.args['values'])
     pretty_c = [Operators.pretty(i) for i in values]
     return ' * '.join(pretty_c)
+
 
 class Sum(PlanOutOpCommutative):
   def commutativeExecute(self, values):
@@ -265,29 +279,36 @@ class GreaterThan(PlanOutOpBinary):
   def binaryExecute(self, left, right):
     return left > right
 
+
 class LessThan(PlanOutOpBinary):
   def binaryExecute(self, left, right):
     return left < right
+
 
 class LessThanOrEqualTo(PlanOutOpBinary):
   def binaryExecute(self, left, right):
     return left <= right
 
+
 class GreaterThanOrEqualTo(PlanOutOpBinary):
   def binaryExecute(self, left, right):
     return left >= right
+
 
 class Mod(PlanOutOpBinary):
   def binaryExecute(self, left, right):
     return left % right
 
+
 class Divide(PlanOutOpBinary):
   def binaryExecute(self, left, right):
     return float(left) / float(right)
 
+
 class Round(PlanOutOpUnary):
   def unaryExecute(self, value):
     return round(value)
+
 
 class Not(PlanOutOpUnary):
   def unaryExecute(self, value):
@@ -296,6 +317,7 @@ class Not(PlanOutOpUnary):
   def getUnaryString():
     return '!'
 
+
 class Negative(PlanOutOpUnary):
   def unaryExecute(self, value):
     return 0 - value
@@ -303,14 +325,17 @@ class Negative(PlanOutOpUnary):
   def getUnaryString():
     return '-'
 
+
 class Min(PlanOutOpCommutative):
   def commutativeExecute(self, values):
     return min(values)
+
 
 class Max(PlanOutOpCommutative):
   def commutativeExecute(self, values):
     return max(values)
 
-class Length(PlanOutOpCommutative):
-  def commutativeExecute(self, values):
-    return len(values)
+
+class Length(PlanOutOpUnary):
+  def unaryExecute(self, value):
+    return len(value)

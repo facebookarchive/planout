@@ -1,5 +1,10 @@
 import json
 
+class StopPlanOutException(Exception):
+  """Exception that gets raised when "return" op is evaluated"""
+  def __init__(self, in_experiment):
+      self.in_experiment = in_experiment
+
 class Operators():
   @staticmethod
   def initFactory():
@@ -10,6 +15,7 @@ class Operators():
       "get": core.Get,
       "seq": core.Seq,
       "set": core.Set,
+      "return": core.Return,
       "index": core.Index,
       "array": core.Array,
       "equals": core.Equals,
