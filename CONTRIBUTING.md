@@ -39,8 +39,8 @@ disclosure of security bugs. In those cases, please go through the process
 outlined on that page and do not file a public issue.
 
 ## Coding Style  
-* 2 spaces for indentation rather than tabs
 * 80 character line length
+* PEP-8 (if contributing Python code)
 
 
 ## License

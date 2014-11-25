@@ -20,282 +20,298 @@ from .interpreter import Interpreter
 
 # decorator for methods that assume assignments have been made
 def requires_assignment(f):
-  def wrapped_f(self, *args, **kwargs):
-    if not self._assigned:
-      self._assign()
-    return f(self, *args, **kwargs)
-  return wrapped_f
+    def wrapped_f(self, *args, **kwargs):
+        if not self._assigned:
+            self._assign()
+        return f(self, *args, **kwargs)
+    return wrapped_f
 
 # decorator for methods that should be exposure logged
+
+
 def requires_exposure_logging(f):
-  def wrapped_f(self, *args, **kwargs):
-    if \
-      self._auto_exposure_log and \
-      not self._exposure_logged:
-      self.log_exposure()
-    return f(self, *args, **kwargs)
-  return wrapped_f
+    def wrapped_f(self, *args, **kwargs):
+        if \
+                self._auto_exposure_log and \
+                not self._exposure_logged:
+            self.log_exposure()
+        return f(self, *args, **kwargs)
+    return wrapped_f
+
 
 class Experiment(object):
-  """Abstract base class for PlanOut experiments"""
-  __metaclass__ = ABCMeta
 
-  logger_configured = False
+    """Abstract base class for PlanOut experiments"""
+    __metaclass__ = ABCMeta
 
-  def __init__(self, **inputs):
-    self.inputs = inputs           # input data
-    self._exposure_logged = False  # True when assignments have been exposure logged
-    self._salt = None              # Experiment-level salt
-    self._in_experiment = True     # Determines whether or not results should be logged
+    logger_configured = False
 
-    # use the name of the class as the default name
-    self._name = self.__class__.__name__
+    def __init__(self, **inputs):
+        self.inputs = inputs           # input data
+        # True when assignments have been exposure logged
+        self._exposure_logged = False
+        self._salt = None              # Experiment-level salt
+        # Determines whether or not results should be logged
+        self._in_experiment = True
 
-    # auto-exposure logging is enabled by default
-    self._auto_exposure_log = True
+        # use the name of the class as the default name
+        self._name = self.__class__.__name__
 
-    self.setup()                   # sets name, salt, etc.
+        # auto-exposure logging is enabled by default
+        self._auto_exposure_log = True
 
-    self._assignment = Assignment(self.salt)
-    self._assigned = False
+        self.setup()                   # sets name, salt, etc.
 
-  def _assign(self):
-    """Assignment and setup that only happens when we need to log data"""
-    self.configure_logger() # sets up loggers
-    self.assign(self._assignment, **self.inputs)
-    self._checksum = self.checksum()
-    self._assigned = True
+        self._assignment = Assignment(self.salt)
+        self._assigned = False
 
-  def setup(self):
-    """Set experiment attributes, e.g., experiment name and salt."""
-    # If the experiment name is not specified, just use the class name
-    pass
+    def _assign(self):
+        """Assignment and setup that only happens when we need to log data"""
+        self.configure_logger()  # sets up loggers
+        self.assign(self._assignment, **self.inputs)
+        self._checksum = self.checksum()
+        self._assigned = True
 
-  def set_overrides(self, value):
-    """Sets variables that are to remain fixed during execution."""
-    # note that setting this will overwrite inputs to the experiment
-    self._assignment.set_overrides(value)
-    o = self._assignment.get_overrides()
-    for var in o:
-      if var in self.inputs:
-        self.inputs[var] = o[var]
+    def setup(self):
+        """Set experiment attributes, e.g., experiment name and salt."""
+        # If the experiment name is not specified, just use the class name
+        pass
 
-  @property
-  def in_experiment(self):
-    return self._in_experiment
+    def set_overrides(self, value):
+        """Sets variables that are to remain fixed during execution."""
+        # note that setting this will overwrite inputs to the experiment
+        self._assignment.set_overrides(value)
+        o = self._assignment.get_overrides()
+        for var in o:
+            if var in self.inputs:
+                self.inputs[var] = o[var]
 
-  @property
-  def salt(self):
-    # use the experiment name as the salt if the salt is not set
-    return self._salt if self._salt else self.name
+    @property
+    def in_experiment(self):
+        return self._in_experiment
 
-  @salt.setter
-  def salt(self, value):
-    self._salt = value
+    @property
+    def salt(self):
+        # use the experiment name as the salt if the salt is not set
+        return self._salt if self._salt else self.name
 
-  @property
-  def name(self):
-    return self._name
+    @salt.setter
+    def salt(self, value):
+        self._salt = value
 
-  @name.setter
-  def name(self, value):
-    self._name = re.sub(r'\s+', '-', value)
+    @property
+    def name(self):
+        return self._name
 
-  @abstractmethod
-  def assign(params, **kwargs):
-    """Returns evaluated PlanOut mapper with experiment assignment"""
-    pass
+    @name.setter
+    def name(self, value):
+        self._name = re.sub(r'\s+', '-', value)
 
-  @requires_assignment
-  def __asBlob(self, extras={}):
-    """Dictionary representation of experiment data"""
-    d = {
-      'name': self.name,
-      'time': int(time.time()),
-      'salt': self.salt,
-      'inputs': self.inputs,
-      'params': dict(self._assignment),
-    }
-    for k in extras:
-      d[k] = extras[k]
-    if self._checksum:
-      d['checksum'] = self._checksum
-    return d
+    @abstractmethod
+    def assign(params, **kwargs):
+        """Returns evaluated PlanOut mapper with experiment assignment"""
+        pass
 
-  def checksum(self):
-    # if we're running from a file and want to detect if the experiment file has changed
-    if hasattr(main, '__file__'):
-      # src doesn't count first line of code, which includes function name
-      src = ''.join(inspect.getsourcelines(self.assign)[0][1:])
-      return hashlib.sha1(src).hexdigest()[:8]
-    # if we're running in an interpreter, don't worry about it
-    else:
-      return None
+    @requires_assignment
+    def __asBlob(self, extras={}):
+        """Dictionary representation of experiment data"""
+        d = {
+            'name': self.name,
+            'time': int(time.time()),
+            'salt': self.salt,
+            'inputs': self.inputs,
+            'params': dict(self._assignment),
+        }
+        for k in extras:
+            d[k] = extras[k]
+        if self._checksum:
+            d['checksum'] = self._checksum
+        return d
 
-  # we should probably get rid of this public interface
-  @property
-  def exposure_logged(self):
-    return self._exposure_logged
+    def checksum(self):
+        # if we're running from a file and want to detect if the experiment
+        # file has changed
+        if hasattr(main, '__file__'):
+            # src doesn't count first line of code, which includes function
+            # name
+            src = ''.join(inspect.getsourcelines(self.assign)[0][1:])
+            return hashlib.sha1(src).hexdigest()[:8]
+        # if we're running in an interpreter, don't worry about it
+        else:
+            return None
 
-  def set_auto_exposure_logging(self, value):
-    """
-    Disables / enables auto exposure logging (enabled by default).
-    """
-    self._auto_exposure_log = value
+    # we should probably get rid of this public interface
+    @property
+    def exposure_logged(self):
+        return self._exposure_logged
 
-  @requires_assignment
-  @requires_exposure_logging
-  def get_params(self):
-    """
-    Get all PlanOut parameters. Triggers exposure log.
-    """
-    # In general, this should only be used by custom loggers.
-    return dict(self._assignment)
+    def set_auto_exposure_logging(self, value):
+        """
+        Disables / enables auto exposure logging (enabled by default).
+        """
+        self._auto_exposure_log = value
 
-  @requires_assignment
-  @requires_exposure_logging
-  def get(self, name, default=None):
-    """
-    Get PlanOut parameter (returns default if undefined). Triggers exposure log.
-    """
-    return self._assignment.get(name, default)
+    @requires_assignment
+    @requires_exposure_logging
+    def get_params(self):
+        """
+        Get all PlanOut parameters. Triggers exposure log.
+        """
+        # In general, this should only be used by custom loggers.
+        return dict(self._assignment)
 
-  @requires_assignment
-  @requires_exposure_logging
-  def __str__(self):
-    """
-    String representation of exposure log data. Triggers exposure log.
-    """
-    return str(self.__asBlob())
+    @requires_assignment
+    @requires_exposure_logging
+    def get(self, name, default=None):
+        """
+        Get PlanOut parameter (returns default if undefined). Triggers exposure log.
+        """
+        return self._assignment.get(name, default)
 
-  def log_exposure(self, extras=None):
-    """Logs exposure to treatment"""
-    if not self._in_experiment:
-      return
-    self._exposure_logged = True
-    self.log_event('exposure', extras)
+    @requires_assignment
+    @requires_exposure_logging
+    def __str__(self):
+        """
+        String representation of exposure log data. Triggers exposure log.
+        """
+        return str(self.__asBlob())
 
-  def log_event(self, event_type, extras=None):
-    """Log an arbitrary event"""
-    if not self._in_experiment:
-      return
-    if extras:
-      extra_payload = {'event': event_type, 'extra_data': extras.copy()}
-    else:
-      extra_payload = {'event': event_type}
-    self.log(self.__asBlob(extra_payload))
+    def log_exposure(self, extras=None):
+        """Logs exposure to treatment"""
+        if not self._in_experiment:
+            return
+        self._exposure_logged = True
+        self.log_event('exposure', extras)
 
-  @abstractmethod
-  def configure_logger(self):
-    """Set up files, database connections, sockets, etc for logging."""
-    pass
+    def log_event(self, event_type, extras=None):
+        """Log an arbitrary event"""
+        if not self._in_experiment:
+            return
+        if extras:
+            extra_payload = {'event': event_type, 'extra_data': extras.copy()}
+        else:
+            extra_payload = {'event': event_type}
+        self.log(self.__asBlob(extra_payload))
 
-  @abstractmethod
-  def log(self, data):
-    """Log experimental data"""
-    pass
+    @abstractmethod
+    def configure_logger(self):
+        """Set up files, database connections, sockets, etc for logging."""
+        pass
 
-  @abstractmethod
-  def previously_logged(self):
-    """Check if the input has already been logged.
-       Gets called once during in the constructor."""
-    # For high-use applications, one might have this method to check if
-    # there is a memcache key associated with the checksum of the inputs+params
-    pass
+    @abstractmethod
+    def log(self, data):
+        """Log experimental data"""
+        pass
+
+    @abstractmethod
+    def previously_logged(self):
+        """Check if the input has already been logged.
+           Gets called once during in the constructor."""
+        # For high-use applications, one might have this method to check if
+        # there is a memcache key associated with the checksum of the
+        # inputs+params
+        pass
 
 
 class DefaultExperiment(Experiment):
-  """
-  Dummy experiment which has no logging. Default experiments used by namespaces
-  should inherent from this class.
-  """
-  def configure_logger(self):
-    pass  # we don't log anything when there is no experiment
 
-  def log(self, data):
-    pass
-
-  def previously_logged(self):
-    return True
-
-  def assign(self, params, **kwargs):
-    # more complex default experiments can override this method
-    params.update(self.get_default_params())
-
-  def get_default_params(self):
     """
-    Default experiments that are just key-value stores should
-    override this method."""
-    return {}
+    Dummy experiment which has no logging. Default experiments used by namespaces
+    should inherent from this class.
+    """
+
+    def configure_logger(self):
+        pass  # we don't log anything when there is no experiment
+
+    def log(self, data):
+        pass
+
+    def previously_logged(self):
+        return True
+
+    def assign(self, params, **kwargs):
+        # more complex default experiments can override this method
+        params.update(self.get_default_params())
+
+    def get_default_params(self):
+        """
+        Default experiments that are just key-value stores should
+        override this method."""
+        return {}
+
 
 class SimpleExperiment(Experiment):
-  """Simple experiment base class which exposure logs to a file"""
 
-  __metaclass__ = ABCMeta
-  # We only want to set up the logger once, the first time the object is
-  # instantiated. We do this by maintaining this class variable.
-  logger = {}
-  log_file = {}
+    """Simple experiment base class which exposure logs to a file"""
 
-  def configure_logger(self):
-    """Sets up logger to log to a file"""
-    my_logger = self.__class__.logger
-    # only want to set logging handler once for each experiment (name)
-    if self.name not in self.__class__.logger:
-      if self.name not in self.__class__.log_file:
-        self.__class__.log_file[self.name] = '%s.log' % self.name
-      file_name = self.__class__.log_file[self.name]
-      my_logger[self.name] = logging.getLogger(self.name)
-      my_logger[self.name].setLevel(logging.INFO)
-      my_logger[self.name].addHandler(logging.FileHandler(file_name))
-      my_logger[self.name].propagate = False
+    __metaclass__ = ABCMeta
+    # We only want to set up the logger once, the first time the object is
+    # instantiated. We do this by maintaining this class variable.
+    logger = {}
+    log_file = {}
 
-  def log(self, data):
-    """Logs data to a file"""
-    self.__class__.logger[self.name].info(json.dumps(data))
+    def configure_logger(self):
+        """Sets up logger to log to a file"""
+        my_logger = self.__class__.logger
+        # only want to set logging handler once for each experiment (name)
+        if self.name not in self.__class__.logger:
+            if self.name not in self.__class__.log_file:
+                self.__class__.log_file[self.name] = '%s.log' % self.name
+            file_name = self.__class__.log_file[self.name]
+            my_logger[self.name] = logging.getLogger(self.name)
+            my_logger[self.name].setLevel(logging.INFO)
+            my_logger[self.name].addHandler(logging.FileHandler(file_name))
+            my_logger[self.name].propagate = False
 
-  def set_log_file(self, path):
-    self.__class__.log_file[self.name] = path
+    def log(self, data):
+        """Logs data to a file"""
+        self.__class__.logger[self.name].info(json.dumps(data))
 
-  def previously_logged(self):
-    """Check if the input has already been logged.
-       Gets called once during in the constructor."""
-    # SimpleExperiment doesn't connect with any services, so we just assume
-    # that if the object is a new instance, this is the first time we are
-    # seeing the inputs/outputs given.
-    return False
+    def set_log_file(self, path):
+        self.__class__.log_file[self.name] = path
+
+    def previously_logged(self):
+        """Check if the input has already been logged.
+           Gets called once during in the constructor."""
+        # SimpleExperiment doesn't connect with any services, so we just assume
+        # that if the object is a new instance, this is the first time we are
+        # seeing the inputs/outputs given.
+        return False
+
 
 class SimpleInterpretedExperiment(SimpleExperiment):
-  """A variant of SimpleExperiment that loads data from a given script"""
-  __metaclass__ = ABCMeta
 
-  @abstractmethod
-  def loadScript(self):
-    """loads deserialized PlanOut script to be executed by the interpreter"""
-    # this method should set self.script to a dictionary-based representation
-    # of a PlanOut script. Most commonly, this method would retreive a
-    # JSON-encoded string from a database or file, e.g.
-    # self.script = json.loads(open("myfile").read())
-    self.script = None
+    """A variant of SimpleExperiment that loads data from a given script"""
+    __metaclass__ = ABCMeta
 
-  def assign(self, params, **kwargs):
-    self.loadScript()  # lazily load script
-    # self.script must be a dictionary
-    assert hasattr(self, 'script') and type(self.script) == dict
+    def loadScript(self):
+        """loads deserialized PlanOut script to be executed by the interpreter"""
+        # This method should set self.script to a dictionary-based representation
+        # of a PlanOut script. Most commonly, this method would retreive a
+        # JSON-encoded string from a database or file, e.g.
+        # self.script = json.loads(open("myfile").read())
+        # If constructing experiments on the fly, one can alternatively set the
+        # self.script instance variable
+        pass
 
-    interpreterInstance = Interpreter(
-      self.script,
-      self.salt,
-      kwargs,
-      params
-      )
-    # execute script
-    results = interpreterInstance.get_params()
-    # insert results into param object dictionary
-    params.update(results)
+    def assign(self, params, **kwargs):
+        self.loadScript()  # lazily load script
+        # self.script must be a dictionary
+        assert hasattr(self, 'script') and type(self.script) == dict
 
-  def checksum(self):
-    # self.script must be a dictionary
-    assert hasattr(self, 'script') and type(self.script) == dict
+        interpreterInstance = Interpreter(
+            self.script,
+            self.salt,
+            kwargs,
+            params
+        )
+        # execute script
+        results = interpreterInstance.get_params()
+        # insert results into param object dictionary
+        params.update(results)
 
-    return hashlib.sha1(json.dumps(self.script)).hexdigest()[:8]
+    def checksum(self):
+        # self.script must be a dictionary
+        assert hasattr(self, 'script') and type(self.script) == dict
+
+        return hashlib.sha1(json.dumps(self.script)).hexdigest()[:8]

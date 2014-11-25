@@ -6,8 +6,8 @@ setup(
     author='Facebook, Inc.',
     author_email='eytan@fb.com',
     packages=[
-        'planout', 
-        'planout.ops', 
+        'planout',
+        'planout.ops',
         'planout.test'
     ],
     url='http://pypi.python.org/pypi/PlanOut/',
@@ -22,4 +22,4 @@ setup(
     """,
 )
 
-#long_description=open('README.md').read(),
+# long_description=open('README.md').read(),
