@@ -7,8 +7,9 @@ prev: why-planout.html
 next: sample-web-app.html
 ---
 
-In this tutorial we will guide you through installing PlanOut and explain how
-to implement basic experiments in Python using PlanOut.
+In this tutorial we will guide you through installing the Python reference
+implementation of PlanOut and explain how
+to implement basic experiments using the native PlanOut interface.
 
 ### Quick install
 PlanOut has been tested on Mac OS X and Linux.

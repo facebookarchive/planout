@@ -7,9 +7,9 @@ prev: getting-started.html
 next: about-planout.html
 ---
 
-This tutorial will show you how to make a PlanOut experiment
-using [Flask](http://flask.pocoo.org), a simple framework for building websites. We assume that
-you have PlanOut and Flask installed already.
+This tutorial will show you how to make a Python-based PlanOut experiment
+using [Flask](http://flask.pocoo.org), a simple framework for building websites.
+We assume that you have Python, PlanOut, and Flask already installed.
 
 We will explain the very basics of Flask to give you a sense of how PlanOut fits
 in with standard Web frameworks, and note that the process of integrating PlanOut
