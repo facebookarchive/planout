@@ -6,7 +6,7 @@
 
 var _ = require('underscore');
 var EventEmitter = require('events').EventEmitter;
-var merge = require('react/lib/merge');
+var assign = require('object-assign');
 
 var PlanOutAsyncRequests = require('../utils/PlanOutAsyncRequests');
 var PlanOutEditorConstants = require('../constants/PlanOutEditorConstants');
@@ -21,7 +21,7 @@ var _json = {};
 var _compilation_status = 'success';
 
 
-var PlanOutExperimentStore = merge(EventEmitter.prototype, {
+var PlanOutExperimentStore = assign({}, EventEmitter.prototype, {
   getScript: function() /*string*/ {
     return _script;
   },

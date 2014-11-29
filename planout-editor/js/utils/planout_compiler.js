@@ -84,7 +84,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = {"op": "seq", "seq": $$[$0]}; console.log(JSON.stringify(this.$)); return this.$; 
+ this.$ = {"op": "seq", "seq": $$[$0]}; return this.$; 
 break;
 case 2: case 38: case 45: case 64:
  this.$ = []; 

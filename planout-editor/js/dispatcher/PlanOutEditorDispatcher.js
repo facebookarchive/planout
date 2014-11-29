@@ -11,10 +11,10 @@
  * A singleton that operates as the central hub for application updates.
  */
 
-var Dispatcher = require('./Dispatcher');
-var copyProperties = require('react/lib/copyProperties');
+var Dispatcher = require('flux').Dispatcher;
+var assign = require('object-assign');
 
-var PlanOutEditorDispatcher = copyProperties(new Dispatcher(), {
+var PlanOutEditorDispatcher = assign(new Dispatcher(), {
 
   /**
    * A bridge function between the views and the dispatcher, marking the action

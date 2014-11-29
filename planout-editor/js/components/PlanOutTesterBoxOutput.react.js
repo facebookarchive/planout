@@ -47,9 +47,11 @@ var PlanOutTesterBoxOutput = React.createClass({
       } else {
         var n = 0;
         var rows = this.props.errors.map(function(row) {
-          <tr key={"error-row-" + n++}>
-            <td>{renderErrorMessage(row.message)}</td>
-          </tr>
+          return (
+            <tr key={"error-row-" + n++}>
+              <td>{renderErrorMessage(row.message)}</td>
+            </tr>
+          )
         }.bind(this));
         outputObject = (
           <div>

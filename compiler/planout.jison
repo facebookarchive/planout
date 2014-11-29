@@ -69,7 +69,7 @@
 
 start
   : rules_list
-    { $$ = {"op": "seq", "seq": $1}; console.log(JSON.stringify($$)); return $$; }
+    { $$ = {"op": "seq", "seq": $1}; return $$; }
   ;
 
 rules_list

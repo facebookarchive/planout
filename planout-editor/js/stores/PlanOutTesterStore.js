@@ -7,7 +7,7 @@
 
 var _ = require('underscore');
 var EventEmitter = require('events').EventEmitter;
-var merge = require('react/lib/merge');
+var assign = require('object-assign');
 
 var PlanOutAsyncRequests = require('../utils/PlanOutAsyncRequests');
 var PlanOutEditorDispatcher = require('../dispatcher/PlanOutEditorDispatcher');
@@ -78,7 +78,7 @@ function _createTest() {
  *     updated.
  */
 function _update(/*string*/ id, /*object*/ updates) {
-  _tests[id] = merge(_tests[id], updates);
+  _tests[id] = assign({}, _tests[id], updates);
 }
 
 /**
@@ -92,7 +92,7 @@ function _destroy(/*string*/ id) {
 
 function _refreshTest(/*string*/ id) {
   if (PlanOutExperimentStore.doesCompile()) {
-    var request = merge(
+    var request = assign({},
       _tests[id],
       {compiled_code: PlanOutExperimentStore.getJSON()}
     );
@@ -110,7 +110,7 @@ function _getTestArray() /*array*/ {
     return _test_ids.map(function(id) {return _tests[id];});
 }
 
-var PlanOutTesterStore = merge(EventEmitter.prototype, {
+var PlanOutTesterStore = assign({}, EventEmitter.prototype, {
 
   getAllTests: function() /*array*/ {
     return _getTestArray();

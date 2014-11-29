@@ -10,7 +10,7 @@ var PlanOutTesterPanel = require('./components/PlanOutTesterPanel.react');
 var PlanOutScriptPanel = require('./components/PlanOutScriptPanel.react');
 var PlanOutEditorButtons = require('./components/PlanOutEditorButtons.react');
 
-React.renderComponent(
+React.render(
       <div className="container">
       <div className="page-header">
         <h1>PlanOut Editor</h1>
