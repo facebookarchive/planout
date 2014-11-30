@@ -3,7 +3,7 @@ id: namespaces
 title: Namespaces
 layout: docs
 permalink: /docs/namespaces.html
-prev: extending-logging.html
+prev: planout-language-reference
 next: simple-namespaces.html
 ---
 

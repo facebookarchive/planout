@@ -5,7 +5,8 @@ id: home
 hero: true
 ---
 
-PlanOut is a framework for online field experiments. It was created to make it easy to run and iterate on sophisticated experiments in a statistically sound manner
+PlanOut is a framework for online field experiments. It was created to make it
+easy to run and iterate on sophisticated experiments in a statistically sound manner
 while satisfying the constraints of deployed Internet services.
 
 Developers implement experiments using PlanOut by providing a high-level
@@ -42,12 +43,12 @@ logged.
 
 The PlanOut framework includes:
 
-  * Extensible classes for [implementing](docs/getting-started.html) and [testing](docs/testing.html) experiments, which [automatically log](logging.html)
+  * Extensible classes for [implementing](docs/getting-started.html) and [testing](docs/testing.html) experiments, which [automatically log](docs/logging.html)
   important data.
 
-  * A system for managing and deploying multiple mutually exclusive experiments, called [namespaces](namespaces.html)
+  * A system for managing and deploying multiple mutually exclusive experiments, called [namespaces](docs/namespaces.html)
 
-  * The [PlanOut language](interpreter.html), which lets you define,
+  * The [PlanOut language](docs/planout-language.html), which lets you define,
   serialize, store, and execute experiment definitions in a platform-independent way.
 
 ### Who is PlanOut for?
