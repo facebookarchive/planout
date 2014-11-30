@@ -84,7 +84,7 @@ class Interpreter(object):
     def evaluate(self, planout_code):
         """Recursively evaluate PlanOut interpreter code"""
         # if the object is a PlanOut operator, execute it it.
-        if Operators.isOperator(planout_code):
+        if type(planout_code) is dict and 'op' in planout_code:
             return Operators.operatorInstance(planout_code).execute(self)
         # if the object is a list, iterate over the list and evaluate each
         # element
@@ -92,33 +92,3 @@ class Interpreter(object):
             return [self.evaluate(i) for i in planout_code]
         else:
             return planout_code  # data is a literal
-
-
-class Validator():
-
-    """
-    Inspects and validates serialized PlanOut experiment definitions.
-    This can be used by management systems for validating JSON scripts
-    and printing them in human readable "pretty" format.
-    """
-
-    def __init__(self, serialization):
-        self._serialization = serialization
-
-    def validate(self):
-        """validate PlanOut serialization"""
-        config = self._serialization
-        return Operators.validateOperator(config)
-
-    def pretty(self):
-        """pretty print PlanOut serialization as PlanOut language code"""
-        config = self._serialization
-        return Operators.operatorInstance(config).pretty()
-
-    def get_variables(self):
-        """get all variables set by PlanOut script"""
-        pass
-
-    def get_input_variables(self):
-        """get all variables used not defined by the PlanOut script"""
-        pass

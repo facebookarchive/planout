@@ -53,24 +53,13 @@ class Operators():
 
     @staticmethod
     def isOperator(op):
-        return \
-            type(op) is dict and "op" in op and op["op"] in Operators.operators
+        return type(op) is dict and "op" in op
 
     @staticmethod
     def operatorInstance(params):
-        return Operators.operators[params['op']](**params)
-
-    @staticmethod
-    def validateOperator(params):
-        if type(params) is dict and 'op' in params:
-            if params['op'] in Operators.operators:
-                return Operators.operatorInstance(params)._validate()
-            else:
-                # this should probably throw an exception
-                print 'invalid operator %s' % params['op']
-                return False
-        else:
-            return True  # literals are always valid
+        op = params['op']
+        assert (op in Operators.operators), "Unknown operator: %s" % op
+        return Operators.operators[op](**params)
 
     @staticmethod
     def prettyParamFormat(params):

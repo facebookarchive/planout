@@ -22,7 +22,7 @@ React.render(
       <br/>
       <PlanOutEditorButtons/>
       <br/>
-      <p><a href="https://facebook.github.io/planout/docs/interpreter.html">
+      <p><a href="http://facebook.github.io/planout/docs/planout-language.html">
         Learn more about the PlanOut language
       </a></p>
     </div>,

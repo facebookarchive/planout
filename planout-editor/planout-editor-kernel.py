@@ -22,8 +22,8 @@ def testPlanOutScript(script, inputs, overrides=None, assertions=None):
   try:
     results = dict(i.get_params()) # executes experiment
   except Exception as err:
-    message = "Error running experiment: %s" % traceback.format_exc()
-    # message = "Error running experiment: %s" % err
+    #message = "Error running experiment: %s" % traceback.format_exc(0)
+    message = "Error running experiment:\n%s" % err
     payload['errors'] = [{
       "error_code": "runtime",
       "message": message

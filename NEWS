@@ -1,20 +1,46 @@
 * Noteworthy changes in release 0.5 (2014-11-23)
-- Full support for parameter overrides, which allow for testing of PlanOut experiments
-
-- Full support for programmatically controlling logging behavior
-
-- A SimpleInterpretedExperiment to make it easier to get up and running with the PlanOut language and interpreter.
+- A SimpleInterpretedExperiment to make it easier to get up and running with
+  the PlanOut language and interpreter.
 
 - PlanOut language:
-  - Standardized handling of undefined keys: indexing into a list or dictionary for an invalid index or key always yields null; nulls may be coalesced via the null coalescing operator, coalesce()
-  - A return() operator for determining whether the input units are "in the experiment" (and therefore logged). Calling "return;" or "return <value with positive truthiness>" sets in_experiment to True. Returning a value with negative truthiness sets in_experiment to False.
+  - Standardized handling of undefined keys: indexing into a list or dictionary
+    for an invalid index or key always yields null; nulls may be coalesced via
+    the null coalescing operator, coalesce()
+  - A return() operator for determining whether the input units are
+    "in the experiment" (and therefore logged). Calling "return;" or
+    "return <value with positive truthiness>" sets in_experiment to True.
+    Returning a value with negative truthiness sets in_experiment to False.
+
+- PlanOut interpreter:
+  - Convenience methods for extracting and checking typed operator arguments,
+    e.g., self.getArgInt('x') will retreive an argument named 'x'. If 'x' is
+    not given, or 'x' is not an integer, an error will be thrown. This improves
+    ease of debugging, and also provides a clear path for those who are
+    implementing the interpreter in strongly typed language.
+  - Improved argument checking for built-in operators.
 
 - PlanOut editor: the PlanOut editor is a reactive development environment and
 testing system for PlanOut-language experiments.
 
 - Breaking changes:
-  - Namespaces: when a unit is assigned to an experiment and in_experiment is set to False, the default experiment is executed.
-  - PlanOut language: the length() operator's argument is now 'value', as to allow for unnamed arguments to be passed in.
+  - Namespaces: when a unit is assigned to an experiment and in_experiment is
+    set to False, the default experiment is executed.
+  - PlanOut interpreter:
+    - The length() operator's argument is now 'value', as to allow for unnamed
+      arguments to be passed in.
+    - Min and max are now required arguments for randomInteger and randomFloat
+    - Deprecated validate() and options() methods
+    - Deprecated self.parameters for operators: self.args refers to arguments
+      passed into an operator. If an object is a subclass of SimpleOp, then
+      the arguments are pre-evaluated (and act just like self.parameters).
+
+
+* Noteworthy changes in release 0.4 (2014-10-29)
+- Full support for parameter overrides, which allow for testing of PlanOut
+  experiments
+- Alpha version of PlanOut editor
+- Bugfixes to how the PlanOut compiler handles indexing into arrays multiple
+times (e.g., a['b'][1][0])
 
 
 * Noteworthy changes in release 0.3 (2014-06-18) [alpha]

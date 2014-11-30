@@ -5,14 +5,8 @@ from .base import PlanOutOpSimple
 class PlanOutOpRandom(PlanOutOpSimple):
     LONG_SCALE = float(0xFFFFFFFFFFFFFFF)
 
-    def options(self):
-        return {
-            'unit': {'required': 1, 'description': 'unit to hash on'},
-            'salt': {'required': 0, 'description':
-                     'salt for hash. should generally be unique for each random variable'}}
-
     def getUnit(self, appended_unit=None):
-        unit = self.parameters['unit']
+        unit = self.getArgMixed('unit')
         if type(unit) is not list:
             unit = [unit]
         if appended_unit is not None:
@@ -20,9 +14,10 @@ class PlanOutOpRandom(PlanOutOpSimple):
         return unit
 
     def getHash(self, appended_unit=None):
-        full_salt = self.parameters.get('full_salt')
-        if full_salt is None:
-            salt = self.parameters['salt']
+        if 'full_salt' in self.args:
+            full_salt = self.getArgString('full_salt')  # do typechecking
+        else:
+            salt = self.getArgString('salt')
             full_salt = '%s.%s' % (self.mapper.experiment_salt, salt)
         unit_str = '.'.join(map(str, self.getUnit(appended_unit)))
         hash_str = '%s.%s' % (full_salt, unit_str)
@@ -35,50 +30,43 @@ class PlanOutOpRandom(PlanOutOpSimple):
 
 class RandomFloat(PlanOutOpRandom):
 
-    def options(self):
-        return {
-            'min': {'required': 1, 'description': 'min (float) value drawn'},
-            'max': {'required': 1, 'description': 'max (float) value being drawn'}}
-
     def simpleExecute(self):
-        min_val = self.parameters.get('min', 0)
-        max_val = self.parameters.get('max', 1)
+        min_val = self.getArgFloat('min')
+        max_val = self.getArgFloat('max')
+
         return self.getUniform(min_val, max_val)
 
 
 class RandomInteger(PlanOutOpRandom):
 
-    def options(self):
-        return {
-            'min': {'required': 1, 'description': 'min (int) value drawn'},
-            'max': {'required': 1, 'description': 'max (int) value being drawn'}}
-
     def simpleExecute(self):
-        min_val = self.parameters.get('min', 0)
-        max_val = self.parameters.get('max', 1)
+        min_val = self.getArgInt('min')
+        max_val = self.getArgInt('max')
+
         return min_val + self.getHash() % (max_val - min_val + 1)
 
 
 class BernoulliTrial(PlanOutOpRandom):
 
-    def options(self):
-        return {'p': {'required': 1, 'description': 'probability of drawing 1'}}
-
     def simpleExecute(self):
-        p = self.parameters['p']
+        p = self.getArgNumeric('p')
+        assert p >= 0 and p <= 1.0, \
+            '%s: p must be a number between 0.0 and 1.0, not %s!' \
+            % (self.__class__, p)
+
         rand_val = self.getUniform(0.0, 1.0)
         return 1 if rand_val <= p else 0
 
 
 class BernoulliFilter(PlanOutOpRandom):
 
-    def options(self):
-        return {
-            'p': {'required': 1, 'description': 'probability of retaining element'},
-            'choices': {'required': 1, 'description': 'elements being filtered'}}
-
     def simpleExecute(self):
-        p, values = self.parameters['p'], self.parameters['choices']
+        p = self.getArgNumeric('p')
+        values = self.getArgList('choices')
+        assert p >= 0 and p <= 1.0, \
+            '%s: p must be a number between 0.0 and 1.0, not %s!' \
+            % (self.__class__, p)
+
         if len(values) == 0:
             return []
         return [i for i in values if self.getUniform(0.0, 1.0, i) <= p]
@@ -86,11 +74,9 @@ class BernoulliFilter(PlanOutOpRandom):
 
 class UniformChoice(PlanOutOpRandom):
 
-    def options(self):
-        return {'choices': {'required': 1, 'description': 'elements to draw from'}}
-
     def simpleExecute(self):
-        choices = self.parameters['choices']
+        choices = self.getArgList('choices')
+
         if len(choices) == 0:
             return []
         rand_index = self.getHash() % len(choices)
@@ -99,15 +85,10 @@ class UniformChoice(PlanOutOpRandom):
 
 class WeightedChoice(PlanOutOpRandom):
 
-    def options(self):
-        return {
-            'choices': {'required': 1, 'description': 'elements to draw from'},
-            'weights': {'required': 1, 'description': 'probability of draw'}}
-
     def simpleExecute(self):
-        choices = self.parameters['choices']
-        weights = self.parameters['weights']
-        # eventually add weighted choice
+        choices = self.getArgList('choices')
+        weights = self.getArgList('weights')
+
         if len(choices) == 0:
             return []
         cum_weights = dict(enumerate(weights))
@@ -123,16 +104,18 @@ class WeightedChoice(PlanOutOpRandom):
 
 class Sample(PlanOutOpRandom):
 
-    def options(self):
-        return {
-            'choices': {'required': 1, 'description': 'choices to sample'},
-            'draws': {'required': 0, 'description': 'number of samples to draw'}}
-
     # implements Fisher-Yates shuffle
     def simpleExecute(self):
         # copy the list of choices so that we don't mutate it
-        choices = [x for x in self.parameters['choices']]
-        num_draws = self.parameters.get('draws', len(choices))
+        choices = [x for x in self.getArgList('choices')]
+        if 'draws' in self.args:
+            num_draws = self.getArgInt('draws')
+            assert num_draws <= len(choices), \
+                "%s: cannot make %s draws when only %s choices are available" \
+                % (self.__class__, num_draws, len(choices))
+        else:
+            num_draws = len(choices)
+
         for i in xrange(len(choices) - 1, 0, -1):
             j = self.getHash(i) % (i + 1)
             choices[i], choices[j] = choices[j], choices[i]

@@ -9,7 +9,6 @@ import unittest
 
 from planout.interpreter import (
     Interpreter,
-    Validator,
 )
 
 
@@ -18,8 +17,6 @@ class TestBasicOperators(unittest.TestCase):
     def runConfig(self, config, init={}):
         e = None
         e = Interpreter(config, 'test_salt', init)
-        is_valid = Validator(config).validate()
-        self.assertTrue(is_valid)
         return e.get_params()
 
     def run_config_single(self, config):
