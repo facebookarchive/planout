@@ -17,9 +17,9 @@ analyzing experiments.
 
 ### Why are you open sourcing PlanOut?
 We wanted to share our experiences with running and analyzing
-many large experiments at Facebook. This open source release accompanies
-[Designing and Deploying Online Field Experiments](https://www.facebook.com/download/255785951270811/planout.pdf) by Eytan Bakshy, Dean Eckles,
-and Michael S. Bernstein.
+many large experiments at Facebook. This open source release accompanies a
+research paper on running online experiments:
+[Designing and Deploying Online Field Experiments](https://www.facebook.com/download/255785951270811/planout.pdf).
 
 We hope that with this release, we will get others to get excited about running
 experiments, and do so in an effective and sound fashion.  We are always learning

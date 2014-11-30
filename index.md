@@ -42,7 +42,7 @@ logged.
 
 The PlanOut framework includes:
 
-  * Extensible classes for [implementing](getting-started.html) and [testing](testing.html) experiments, which [automatically log](logging.html)
+  * Extensible classes for [implementing](/docs/getting-started.html) and [testing](/docs/testing.html) experiments, which [automatically log](logging.html)
   important data.
 
   * A system for managing and deploying multiple mutually exclusive experiments, called [namespaces](namespaces.html)
