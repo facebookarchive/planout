@@ -101,8 +101,11 @@ if (specific_goal) {
 ```
 
 Overrides are one of the main ways to interact with a PlanOut script when using
-the PlanOut editor. Simply enter a JSON-formatted dictionary of parameters and
-values (as you would with `set_overrides()`) to interactively test your script.
+the [PlanOut editor](https://github.com/facebook/planout/tree/master/planout-editor).
+One can test the effect of different overrides by inputting in a JSON-formatted dictionary
+of overrides into the Playground unit on the left-hand side of the editor.
+
+![PlanOut Editor](../static/planout_editor.png "The PlanOut editor lets you interactively test assignment procedures written in the PlanOut language")
 
 
 
