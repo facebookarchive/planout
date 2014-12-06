@@ -1,7 +1,6 @@
 ## PlanOut Editor
 
-This is an app that lets you edit and test PlanOut code. It's built on Flux
-and React.
+The PlanOut editor lets you interactively edit and test PlanOut code.  It's built on Flux and React.
 
 ## Running
 
@@ -43,9 +42,3 @@ based on [Browserify](http://browserify.org/) and
 [Watchify](https://github.com/substack/watchify), and it transforms
 React's JSX syntax into standard JavaScript with
 [Reactify](https://github.com/andreypopp/reactify).
-
-
-## License
-This software will eventually be part of the main PlanOut distribution, and
-follows the license
-[given here](https://github.com/facebook/planout/blob/master/LICENSE).
