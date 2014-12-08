@@ -9,7 +9,8 @@
     "flux": "^2.0.0",
     "keymirror": "~0.1.0",
     "object-assign": "^1.0.0",
-    "react": "^0.12.0"
+    "react": "^0.12.0",
+    "watchify": ">=2.1.1"
   },
   "devDependencies": {
     "browserify": ">=2.36.0",
@@ -17,13 +18,12 @@
     "reactify": ">=0.4.0",
     "statics": ">=0.1.0",
     "uglify-js": ">=2.4.13",
-    "watchify": ">=0.4.1"
+    "watchify": ">=2.1.1"
   },
   "scripts": {
     "start": "STATIC_ROOT=./static watchify -o static/js/bundle.js -v -d .",
     "build": "STATIC_ROOT=./static NODE_ENV=production browserify . | uglifyjs -cm > static/js/bundle.min.js",
-    "collect-static": "collect-static . ./static",
-    "test": "jest"
+    "collect-static": "collect-static . ./static"
   },
   "author": "Eytan Bakshy",
   "license": "BSD",

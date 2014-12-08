@@ -25,6 +25,7 @@ React.render(
       <p><a href="http://facebook.github.io/planout/docs/planout-language.html">
         Learn more about the PlanOut language
       </a></p>
+      <p>Written by <a href="http://eytan.github.io/eytan">Eytan Bakshy</a></p>
     </div>,
   document.getElementById('planouteditor')
 );
