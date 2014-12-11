@@ -10,10 +10,14 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var Input = require('react-bootstrap/Input');
 
+var PlanOutTesterActions = require('../actions/PlanOutTesterActions');
+
 var PlanOutTesterBoxFormInput = React.createClass({
   propTypes: {
     defaultJSON: React.PropTypes.object,
-    id: React.PropTypes.string
+    fieldName: React.PropTypes.string.isRequired,
+    id: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string.isRequired
   },
 
   getInitialState: function() {
@@ -34,6 +38,12 @@ var PlanOutTesterBoxFormInput = React.createClass({
         json: JSON.parse(value),
         value: value
       });
+      var payload = {};
+      payload[this.props.fieldName] = JSON.parse(value);
+      PlanOutTesterActions.updateTester(
+        this.props.id,
+        payload
+      );
     } catch (e) {
       this.setState({
         isValidJSON: false,

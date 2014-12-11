@@ -47,7 +47,9 @@ var PlanOutTesterBoxForm = React.createClass({
       <PlanOutTesterBoxFormInput
         defaultJSON={this.props[prop]}
         label={label}
-        ref={prop} />
+        id={this.props.id}
+        ref={prop}
+        fieldName={prop}/>
     );
   },
 
@@ -77,7 +79,20 @@ var PlanOutTesterBoxForm = React.createClass({
   },
 
   _onChange: function(event, ref) {
+               /*
+    var payload = {};
+    payload[ref] = this.refs[ref].getJSON();
+    if (payload[ref]) {
+       PlanOutTesterActions.updateTester(
+         this.props.id,
+         payload
+       );
+    }
+    */
+
+    
     var itemData = this.extractItemData();
+    console.log(itemData);
     // should probably add more granular checks to make sure
     // input data is given. these checks may not be necessary
     // once we move to better form UI components
