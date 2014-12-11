@@ -30,7 +30,7 @@ var PlanOutTesterBoxForm = React.createClass({
   render: function() {
     return (
       <div>
-        <div className="input-group" onChange={this._onChange} onMouseMove={this._onChange}>
+        <div className="input-group">
           {this.renderInputItem("Inputs", "inputs")}
           {this.renderInputItem("Overrides", "overrides")}
           {
@@ -90,11 +90,7 @@ var PlanOutTesterBoxForm = React.createClass({
           assertions: itemData.assertions
         }
       );
-    } else {
-      // currently this results in "unknown error" when input field is missing
-      PlanOutTesterActions.updateTesterWithInvalidForm(
-        this.props.id, TesterStatusCodes.INVALID_FORM);
-    }
+    } 
   }
 });
 

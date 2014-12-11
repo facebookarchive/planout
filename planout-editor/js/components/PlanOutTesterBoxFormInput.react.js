@@ -43,12 +43,6 @@ var PlanOutTesterBoxFormInput = React.createClass({
     }
   },
 
-  _onMouseLeave: function() {
-    if (json) {
-      this.setState({value: JSON.stringify(this.state.json, null, ' ')});
-    }
-  },
-
   getJSON: function() {
     return this.state.json;
   },
@@ -64,9 +58,9 @@ var PlanOutTesterBoxFormInput = React.createClass({
        value={this.state.value}
        addonBefore={this.props.label}
        onChange={this._updateJSON}
-       bsStyle={this.state.json ? "success" : "warning"}
-       width={'100%'}
-       onMouseLeave={this._onMouseLeave}/>
+       bsStyle={this.state.json ? "success" : "error"}
+       help={this.state.json ? null : "Invalid JSON"}/>
+
     );
   }
 });
