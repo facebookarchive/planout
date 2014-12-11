@@ -51,6 +51,11 @@ var PlanOutTesterBoxFormInput = React.createClass({
     return this.state.isValidJSON;
   },
 
+  _onMouseLeave: function () {
+    if (this.state.json) {
+      this.setState({"value": JSON.stringify(this.state.json, null, " ")});
+    }
+  },
  
   render: function() {
     return (
@@ -59,8 +64,8 @@ var PlanOutTesterBoxFormInput = React.createClass({
        addonBefore={this.props.label}
        onChange={this._updateJSON}
        bsStyle={this.state.json ? "success" : "error"}
+       onBlur={this._onMouseLeave}
        help={this.state.json ? null : "Invalid JSON"}/>
-
     );
   }
 });
