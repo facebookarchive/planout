@@ -60,7 +60,7 @@ var PlanOutEditorButtons = React.createClass({
         <button type="button" className='btn btn-default'
          onClick={this._loadSampleData}
         >
-          Load sample data
+          Load sample experiment
         </button>
         &nbsp;&nbsp;
         <button type="button" className={buttonClass}

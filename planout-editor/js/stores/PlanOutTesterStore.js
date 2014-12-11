@@ -194,12 +194,7 @@ PlanOutTesterStore.dispatchToken =
       break;
 
     case ActionTypes.TESTER_USER_UPDATE_TEST:
-      var updateBlob = {
-        inputs: action.inputs,
-        overrides: action.overrides,
-        assertions: action.assertions
-      };
-      _update(action.id, updateBlob);
+      _update(action.id, action.fieldsToUpdate);
       PlanOutEditorDispatcher.waitFor([PlanOutExperimentStore.dispatchToken]);
       _refreshTest(action.id);
       break;
@@ -208,7 +203,7 @@ PlanOutTesterStore.dispatchToken =
     case ActionTypes.TESTER_SERVER_UPDATE_TEST:
       _update(action.id, {
         status: (action.errors && action.errors.length > 0) ?
-          TesterStatusCodes.FAILURE : TesterStatusCodes.SUCCESS,
+                  TesterStatusCodes.FAILURE : TesterStatusCodes.SUCCESS,
         errors: action.errors,
         results: action.results
       });

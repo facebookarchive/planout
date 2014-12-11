@@ -7,12 +7,15 @@
 
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
+var Input = require('react-bootstrap/Input');
 
 var PlanOutTesterActions = require('../actions/PlanOutTesterActions');
 
 var PlanOutEditorConstants = require('../constants/PlanOutEditorConstants');
 var TesterStatusCodes = PlanOutEditorConstants.TesterStatusCodes;
 var TesterBoxTypes = PlanOutEditorConstants.TesterBoxTypes;
+
+var PlanOutTesterBoxFormInput = require('./PlanOutTesterBoxFormInput.react');
 
 
 var PlanOutTesterBoxForm = React.createClass({
@@ -27,7 +30,7 @@ var PlanOutTesterBoxForm = React.createClass({
   render: function() {
     return (
       <div>
-        <div className="input-group">
+        <div className="input-group" onChange={this._onChange} onMouseMove={this._onChange}>
           {this.renderInputItem("Inputs", "inputs")}
           {this.renderInputItem("Overrides", "overrides")}
           {
@@ -38,26 +41,13 @@ var PlanOutTesterBoxForm = React.createClass({
       </div>
     );
   },
-/*
+
   renderInputItem: function(label, prop) {
     return (
-      <div className="input-group">
-      <span className="input-group-addon">{label}</span>
-      <input type="text" ref={prop} className="form-control"
-       defaultValue={JSON.stringify(this.props[prop])}
-       onChange={this._onChange}/>
-     </div>
-    );
-  },
-*/
-renderInputItem: function(label, prop) {
-    return (
-      <div className="input-group">
-      <span className="input-group-addon">{label}</span>
-      <input type="text" ref={prop} className="form-control"
-       defaultValue={JSON.stringify(this.props[prop])}
-       onChange={this._onChange}/>
-     </div>
+      <PlanOutTesterBoxFormInput
+        defaultJSON={this.props[prop]}
+        label={label}
+        ref={prop} />
     );
   },
 
@@ -66,28 +56,27 @@ renderInputItem: function(label, prop) {
   // containing each element: inputs, overrides, assertions
   // May be subbed out for other extract
   extractItemData: function() {
-    var rawBlob = {
-      inputs: this.refs.inputs.getDOMNode().value.trim(),
-      overrides: this.refs.overrides.getDOMNode().value.trim()
+    var jsonBlob = {
+      inputs: this.refs.inputs.getJSON(),
+      overrides: this.refs.overrides.getJSON()
     };
     if (this.props.type === TesterBoxTypes.TEST) {
-      rawBlob.assertions = this.refs.assertions.getDOMNode().value.trim();
+      jsonBlob.assertions = this.refs.assertions.getJSON();
     }
 
-    var jsonBlob = {};
-    for (var key in rawBlob) {
-      if (rawBlob[key] !== "" && rawBlob[key] !== "{}") {
-        try {
-          jsonBlob[key] = JSON.parse(rawBlob[key]);
-        } catch (e) {
-          return undefined;
-        }
+    for (var key in jsonBlob) {
+      if (jsonBlob[key] === null) {
+        return null;
       }
     }
     return jsonBlob;
   },
 
-  _onChange: function() {
+  _updateJSON: function(event, ref) {
+    this.refs[ref].updateJSON(event.target.value);
+  },
+
+  _onChange: function(event, ref) {
     var itemData = this.extractItemData();
     // should probably add more granular checks to make sure
     // input data is given. these checks may not be necessary
@@ -95,9 +84,11 @@ renderInputItem: function(label, prop) {
     if (itemData) {
       PlanOutTesterActions.updateTester(
         this.props.id,
-        itemData.inputs,
-        itemData.overrides,
-        itemData.assertions
+        {
+          inputs: itemData.inputs,
+          overrides: itemData.overrides,
+          assertions: itemData.assertions
+        }
       );
     } else {
       // currently this results in "unknown error" when input field is missing

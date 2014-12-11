@@ -44,22 +44,13 @@ var PlanOutTesterActions = {
 
   /**
    * @param  {string} id The ID of the tester item
-   * @param  {string} inputs Unvalidated JSON blob representing input units
-   * @param  {string} overrides Unvalidated JSON blob representing overrides
-   * @param  {string} assertions Unvalidated JSON blob representing assertions
+   * @param  {string} fields_to_update named valid JSON representing each field
    */
-  updateTester: function(
-      /*string*/ id,
-      /*string*/ inputs,
-      /*string*/ overrides,
-      /*string*/ assertions)
-  {
+  updateTester: function( /*string*/ id, /*object*/ fields_to_update) {
     PlanOutEditorDispatcher.handleViewAction({
       actionType: ActionTypes.TESTER_USER_UPDATE_TEST,
       id: id,
-      inputs: inputs,
-      overrides: overrides,
-      assertions: assertions
+      fieldsToUpdate: fields_to_update
     });
   },
 
