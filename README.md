@@ -29,7 +29,7 @@ The reference implementation for PlanOut is written in Python.  It includes:
   * An interactive Web-based editor and compiler for developing and testing
   PlanOut-language scripts.
 
-The `alpha/` directory contains implementations of PlanOuts to other languages. PHP, Hack, and Go-based implementations will be available in early 2015.
+The `alpha/` directory contains implementations of PlanOut to other languages. PHP, Hack, and Go-based implementations will be available in early 2015.
 
 ### Who is PlanOut for?
 PlanOut designed for researchers, students, and small businesses wanting to run experiments. It is built to be extensible, so that it may be adapted for use with large production environments.  The implementation here mirrors many of the key components of Facebook's Hack-based implementation of PlanOut which is used to conduct experiments with hundreds of millions of users.
