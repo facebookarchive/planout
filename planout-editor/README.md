@@ -30,6 +30,8 @@ and entering in the following into the command line.
 
 `npm install`
 
+If you don't already have watchify installed, you may have to type `npm install watchify` before entering `npm install`.
+
 Then, to build the project, run this command:
 
 `npm start`

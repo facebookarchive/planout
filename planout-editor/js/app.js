@@ -9,6 +9,8 @@ var React = require('react');
 var PlanOutTesterPanel = require('./components/PlanOutTesterPanel.react');
 var PlanOutScriptPanel = require('./components/PlanOutScriptPanel.react');
 var PlanOutEditorButtons = require('./components/PlanOutEditorButtons.react');
+var PlanOutExperimentActions = require('./actions/PlanOutExperimentActions');
+var DemoData = require('./utils/DemoData');
 
 React.render(
       <div className="container">
@@ -28,3 +30,5 @@ React.render(
     </div>,
   document.getElementById('planouteditor')
 );
+
+PlanOutExperimentActions.loadScript(DemoData.getDemoScript());
