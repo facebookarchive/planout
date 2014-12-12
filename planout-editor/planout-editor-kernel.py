@@ -5,20 +5,14 @@ import traceback
 import json
 import sys
 
-def testPlanOutScript(script, inputs, overrides=None, assertions=None):
+def testPlanOutScript(script, inputs={}, overrides=None, assertions=None):
   payload = {}
 
   # make sure experiment runs with the given inputs
-  if inputs:
-    i = Interpreter(script, 'demo_salt', inputs)
-    if overrides:
-      i.set_overrides(overrides)
-  else:
-    payload['errors'] = [{
-      "error_code": "no_inputs",
-      "message": "Missing inputs"
-    }]
-    return payload
+  i = Interpreter(script, 'demo_salt', inputs)
+  if overrides:
+    i.set_overrides(overrides)
+
   try:
     results = dict(i.get_params()) # executes experiment
   except Exception as err:

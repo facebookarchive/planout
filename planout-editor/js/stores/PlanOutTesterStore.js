@@ -36,6 +36,7 @@ function _createTestBox(testType) {
     var inferred_input_variables = PlanOutExperimentStore.getInputVariables();
 
     var input_dict = {};
+    /*
     if (inferred_input_variables.length > 0) {
       for(var i = 0; i < inferred_input_variables.length; i++) {
         input_dict[inferred_input_variables[i]] =
@@ -44,6 +45,7 @@ function _createTestBox(testType) {
     } else {
       input_dict = _.clone(DEFAULT_INPUTS);
     }
+    */
 
     // note that action.assertions may be undefined when you have a playground
     var id = 'test-' + Date.now();
@@ -90,12 +92,29 @@ function _destroy(/*string*/ id) {
   delete _tests[id];
 }
 
+function _getScrubbedInputs(/*string*/ id) {
+  var input_variables = PlanOutExperimentStore.getInputVariables();
+  var inputs = _tests[id].inputs || {};
+  for (var key in inputs) {
+    if (inputs[key] === null) {
+      delete inputs[key];
+    }
+  }
+  input_variables.forEach(function(key) {
+    if (!inputs.hasOwnProperty(key)) {
+      inputs[key] = null;
+    }
+  });
+  return inputs;
+}
+
 function _refreshTest(/*string*/ id) {
   if (PlanOutExperimentStore.doesCompile()) {
     var request = assign({},
       _tests[id],
       {compiled_code: PlanOutExperimentStore.getJSON()}
     );
+    _tests[id].inputs = _getScrubbedInputs(id);
     _tests[id].run(request);
   }
 }

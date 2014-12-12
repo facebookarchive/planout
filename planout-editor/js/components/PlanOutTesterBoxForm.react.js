@@ -45,7 +45,7 @@ var PlanOutTesterBoxForm = React.createClass({
   renderInputItem: function(label, prop) {
     return (
       <PlanOutTesterBoxFormInput
-        defaultJSON={this.props[prop]}
+        json={this.props[prop]}
         label={label}
         id={this.props.id}
         ref={prop}
@@ -90,9 +90,8 @@ var PlanOutTesterBoxForm = React.createClass({
     }
     */
 
-    
+
     var itemData = this.extractItemData();
-    console.log(itemData);
     // should probably add more granular checks to make sure
     // input data is given. these checks may not be necessary
     // once we move to better form UI components
@@ -105,7 +104,7 @@ var PlanOutTesterBoxForm = React.createClass({
           assertions: itemData.assertions
         }
       );
-    } 
+    }
   }
 });
 

@@ -14,7 +14,7 @@ var PlanOutTesterActions = require('../actions/PlanOutTesterActions');
 
 var PlanOutTesterBoxFormInput = React.createClass({
   propTypes: {
-    defaultJSON: React.PropTypes.object,
+    json: React.PropTypes.object,
     fieldName: React.PropTypes.string.isRequired,
     id: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired
@@ -24,58 +24,68 @@ var PlanOutTesterBoxFormInput = React.createClass({
     // value can take on any value users types into the textarea
     // json only gets updated when this value is valid JSON
     return {
-      isValidJSON: true,
-      json: this.props.defaultJSON || {},
-      value: JSON.stringify(this.props.defaultJSON || {}, null, ' '),
+      isValid: true,
+      inFocusValue: JSON.stringify(this.props.json || {}, null, ' '),
+      inFocus: false
     };
   },
 
-  _updateJSON: function(event) {
-     var value = event.target.value;
-     try {
-      this.setState({
-        isValidJSON: true,
-        json: JSON.parse(value),
-        value: value
-      });
+  _onChange: function(event) {
+    var value = event.target.value;
+    try {
       var payload = {};
       payload[this.props.fieldName] = JSON.parse(value);
+      this.setState({isValid: true, inFocusValue: value});
       PlanOutTesterActions.updateTester(
-        this.props.id,
-        payload
+         this.props.id,
+         payload
       );
     } catch (e) {
-      this.setState({
-        isValidJSON: false,
-        json: null,
-        value: value
-      });
+      this.setState({isValid: false, inFocusValue: value});
     }
   },
 
-  getJSON: function() {
-    return this.state.json;
-  },
-
-  getIsCurrentlyValidJSON: function() {
-    return this.state.isValidJSON;
-  },
-
-  _onMouseLeave: function () {
-    if (this.state.json) {
-      this.setState({"value": JSON.stringify(this.state.json, null, " ")});
+  getDisplayedValue: function() {
+    if (this.state.inFocus) {
+      return this.state.inFocusValue;
     }
+    if (!this.state.isValid) {
+      return this.state.inFocusValue;
+    }
+    return JSON.stringify(this.props.json, null, " ");
   },
- 
+
+  _onBlur: function () {
+    var payload = {inFocus: false};
+    if (this.state.isValid) {
+      payload.inFocusValue = JSON.stringify(this.props.json, null, " ");
+    }
+    this.setState(payload);
+  },
+
+  _onFocus: function () {
+    var payload = {inFocus: true};
+    if (this.state.isValid) {
+      payload.inFocusValue = JSON.stringify(this.props.json, null, " ");
+    }
+    this.setState(payload);
+  },
+
+  jsonHeight: function() {
+    return 20 + 20 * ((this.getDisplayedValue() || '').split('\n').length);
+  },
+
   render: function() {
     return (
-      <Input type="textarea" 
-       value={this.state.value}
+      <Input type="textarea"
+       value={this.getDisplayedValue()}
        addonBefore={this.props.label}
-       onChange={this._updateJSON}
-       bsStyle={this.state.json ? "success" : "error"}
-       onBlur={this._onMouseLeave}
-       help={this.state.json ? null : "Invalid JSON"}/>
+       onChange={this._onChange}
+       bsStyle={this.state.isValid ? "success" : "error"}
+       onBlur={this._onBlur}
+       onFocus={this._onFocus}
+       help={this.state.isValid ? null : "Invalid JSON"}
+       style={{height: this.jsonHeight()}}/>
     );
   }
 });

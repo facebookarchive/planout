@@ -88,6 +88,7 @@ var PlanOutScriptPanel = React.createClass({
       <textarea
         id="qe_planout_source" ref="qe_planout_source"
         name="qe_planout_source"
+        spellCheck="false"
         value={this.state.script}
         onChange={this._onCodeChange}
       />
