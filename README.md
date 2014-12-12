@@ -92,5 +92,6 @@ Learn more about PlanOut by [reading the PlanOut paper](http://www-personal.umic
 	Booktitle = {Proceedings of the 23rd ACM conference on the World Wide Web},
 	Organization = {ACM},
 	Title = {Designing and Deploying Online Field Experiments},
-	Year = {2014}}
+	Year = {2014}
+}
 ```
