@@ -19,7 +19,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-    font-weight: bold;
+    font-weight: "bold";
     line-height: 1.0em;
 }
 
@@ -337,6 +337,7 @@ header.topbar nav ul li a {
 
 header.topbar nav ul li a.active {
     color: #cd4e34;
+    font-weight: 12;
 }
 
 header.hero {

@@ -61,9 +61,11 @@ millions of people.
 
 
 ### Learn more
-Learn more about PlanOut and experimentation practices at Facebook by reading the PlanOut paper, [Designing and Deploying Online Field Experiments](https://www.facebook.com/download/255785951270811/planout.pdf).
+Continue on to the [documentation page](docs/getting-started.html) or try out the
+interactive [PlanOut editor](planout-editor.herokuapp.com).
+For an in-depth look at how we use PlanOut at Facebook, see our paper, [Designing and Deploying Online Field Experiments](http://arxiv.org/pdf/1409.3174v1.pdf).
 
-If you are publishing research using PlanOut, here is some bibtex for you:
+If you are publishing research using PlanOut, please consider referencing our work,
 
 ```
 @inproceedings{bakshy2014www,
@@ -71,5 +73,6 @@ If you are publishing research using PlanOut, here is some bibtex for you:
 	Booktitle = {Proceedings of the 23rd ACM conference on the World Wide Web},
 	Organization = {ACM},
 	Title = {Designing and Deploying Online Field Experiments},
-	Year = {2014}}
+	Year = {2014}
+}
 ```
