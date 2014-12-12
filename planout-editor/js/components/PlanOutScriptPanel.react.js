@@ -70,11 +70,11 @@ var PlanOutScriptPanel = React.createClass({
   renderScriptStatus: function() {
     return (
       <dl className="dl">
-        <dt>Compilation status</dt>
+        <dt className="fields">Compilation status</dt>
         <dd>{this.renderCompileStatus()}</dd>
-        <dt>Input units</dt>
+        <dt className="fields">Input units</dt>
         <dd>{this.state.inputVariables.join(', ')}</dd>
-        <dt>Parameters</dt>
+        <dt className="fields">Parameters</dt>
         <dd>{this.state.params.join(', ')}</dd>
       </dl>
     );

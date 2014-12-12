@@ -35,3 +35,8 @@ textarea {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+dt.fields {
+  padding-bottom: 1px;
+  padding-top: 12px;
+}

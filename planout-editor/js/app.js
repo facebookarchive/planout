@@ -13,7 +13,7 @@ var PlanOutEditorButtons = require('./components/PlanOutEditorButtons.react');
 React.render(
       <div className="container">
       <div className="page-header">
-        <h1>PlanOut Editor</h1>
+        <h1>PlanOut Experiment Editor</h1>
       </div>
       <div className="row">
         <div className="col-md-5"><PlanOutScriptPanel/></div>
