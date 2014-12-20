@@ -125,7 +125,7 @@ class Assignment
   end
 
   def get(var, default = nil)
-    @data[var] || default
+    @data[var.to_sym] || default
   end
 
   # in python this would be defined as __setattr__ or __setitem__
@@ -133,9 +133,9 @@ class Assignment
   def set(name, value)
     if value.is_a? Operator
       value.args[:salt] = name if !value.args.has_key?(:salt)
-      @data[name] = value.execute(self)
+      @data[name.to_sym] = value.execute(self)
     else
-      @data[name] = value
+      @data[name.to_sym] = value
     end
   end
 
@@ -192,7 +192,7 @@ class Experiment
   end
 
   def salt
-    @_salt ? @_salt : @name
+    @_salt || @name
   end
 
   def auto_exposure_log=(value)
@@ -260,7 +260,6 @@ class Experiment
     }
 
     d.merge!(extras)
-    d
   end
 end
 
@@ -277,41 +276,6 @@ class SimpleExperiment < Experiment
     @logger.info(JSON.dump(data))
   end
 end
-
-class VotingExperiment < SimpleExperiment
-  def setup
-  #  self.salt = "VotingExperiment"
-  end
-
-  # all assign() methods take params and an inputs array
-  def assign(params, **inputs)
-    userid = inputs[:userid]
-    params[:button_color] = UniformChoice.new({
-      choices: ['ff0000', '#00ff00'],
-      unit: userid
-    })
-
-    params[:button_text] = UniformChoice.new({
-      choices: ["I'm voting", "I'm a voter"],
-      unit: userid,
-      salt:'x'
-    })
-  end
-end
-
-my_exp = VotingExperiment.new(userid:14)
-my_button_color = my_exp.get(:button_color)
-button_text = my_exp.get(:button_text)
-puts "button color is #{my_button_color} and button text is #{button_text}."
-
-(14..16).each do |i|
-  my_exp = VotingExperiment.new(userid:i)
-  #my_exp.auto_exposure_log = false
-  # toggling the above disables or re-enables auto-logging
-  puts "\ngetting assignment for user #{i} note: first time triggers a log event"
-  puts "button color is #{my_exp.get(:button_color)} and button text is #{my_exp.get(:button_text)}"
-end
-
 
 # ### this is just a proof of concept for Assignment
 # (1..10).each do |userid|
