@@ -34,6 +34,9 @@ logged data: {"name":"VotingExperiment","time":1404944726,"salt":"VotingExperime
 
 button color is ff0000 and button text is I'm a voter.
 ```
+## Examples
+
+For examples please refer to the `examples` directory.
 
 ## Running the tests
 Make sure you're in the ruby implementation directory of PlanOut and run `rake` or `rake test` to run the entire test suite.
