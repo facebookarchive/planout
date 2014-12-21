@@ -1,3 +1,6 @@
+# PlanOut
+[![Gem Version](https://badge.fury.io/rb/planout.svg)](http://badge.fury.io/rb/planout)
+
 ## Overview
 This is a rough implementation of the Experiment / logging infrasture for running PlanOut experiments, with all the random assignment operators available in Python. This port is nearly a line-by-line port, and produces assignments that are completely consistent with those produced by the Python reference implementation.
 
