@@ -4,4 +4,4 @@ rvm:
   - 2.1.1
 env:
   - TEST_DIR=alpha/ruby
-script: cd $TEST_DIR && rake
+script: cd $TEST_DIR && bundle && rake
