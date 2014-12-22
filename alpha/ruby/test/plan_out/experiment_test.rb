@@ -1,7 +1,7 @@
 require_relative '../test_helper'
-require_relative '../../examples/planout/voting_experiment'
+require_relative '../../examples/plan_out/voting_experiment'
 
-module Planout
+module PlanOut
   class ExperimentTest < Minitest::Test
     def setup
       @voting_experiment = VotingExperiment.new(userid: 14)
@@ -15,18 +15,18 @@ module Planout
       assert_equal(1, @voting_experiment.get(:missing_key, 1))
       assert_equal('ff0000', @voting_experiment2.get(:button_color))
       assert_equal("I'm voting", @voting_experiment.get(:button_text))
-      assert_equal("I'm a voter", @voting_experiment2.get(:button_text))
+      assert_equal("I'm voting", @voting_experiment2.get(:button_text))
     end
 
     def test_get_params
       assert_equal({ button_color: 'ff0000', button_text: "I'm voting" }, @voting_experiment.get_params)
-      assert_equal({ button_color: 'ff0000', button_text: "I'm a voter" }, @voting_experiment2.get_params)
+      assert_equal({ button_color: 'ff0000', button_text: "I'm voting" }, @voting_experiment2.get_params)
     end
 
     def test_as_blob
       result = @voting_experiment.as_blob
-      assert_equal('Planout::VotingExperiment', result[:name])
-      assert_equal('Planout::VotingExperiment', result[:salt])
+      assert_equal('PlanOut::VotingExperiment', result[:name])
+      assert_equal('PlanOut::VotingExperiment', result[:salt])
       assert_equal({ userid: 14 }, result[:inputs])
     end
   end

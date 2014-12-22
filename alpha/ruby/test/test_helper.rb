@@ -1,2 +1,2 @@
 require 'minitest/autorun'
-require_relative '../lib/planout'
+require_relative '../lib/plan_out'

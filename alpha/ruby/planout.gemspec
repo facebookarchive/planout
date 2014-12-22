@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'planout/version'
+require 'plan_out/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "planout"
-  spec.version       = Planout::VERSION
+  spec.version       = PlanOut::VERSION
   spec.authors       = ["Eytan Bakshy", "Mohnish Thallavajhula"]
   spec.email         = ["ebakshy@gmail.com", "i@mohni.sh"]
   spec.summary       = %q{PlanOut is a framework and programming language for online field experimentation.}

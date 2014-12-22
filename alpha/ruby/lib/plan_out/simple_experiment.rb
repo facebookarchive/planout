@@ -1,6 +1,6 @@
 require_relative 'experiment'
 
-module Planout
+module PlanOut
   class SimpleExperiment < Experiment
     def configure_logger
       @logger = Logger.new(STDOUT)

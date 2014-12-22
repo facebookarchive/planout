@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-module Planout
+module PlanOut
   class AssignmentTest < Minitest::Test
     def setup
       @assignment = Assignment.new('mtsalt')

@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-module Planout
+module PlanOut
   class OperatorTest < Minitest::Test
     def setup
       @operator = Operator.new({ foo: 'bar' })

@@ -1,6 +1,6 @@
-require_relative '../../lib/planout/simple_experiment'
+require_relative '../../lib/plan_out/simple_experiment'
 
-module Planout
+module PlanOut
   class VotingExperiment < SimpleExperiment
     def setup; end
 

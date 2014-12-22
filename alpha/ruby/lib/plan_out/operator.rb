@@ -1,6 +1,6 @@
 require 'digest/sha1'
 
-module Planout
+module PlanOut
   class Operator
     attr_accessor :args
     def initialize(parameters)

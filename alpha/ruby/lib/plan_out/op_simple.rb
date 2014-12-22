@@ -1,6 +1,6 @@
 require_relative 'operator'
 
-module Planout
+module PlanOut
   class OpSimple < Operator
     def execute(mapper)
       @mapper = mapper

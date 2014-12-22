@@ -1,8 +1,8 @@
 require_relative 'op_simple'
 
-module Planout
+module PlanOut
   class OpRandom < OpSimple
-    LongScale = Float(0xFFFFFFFFFFFFFFF)
+    LONG_SCALE = Float(0xFFFFFFFFFFFFFFF)
 
     def get_unit(appended_unit = nil)
       unit = @parameters[:unit]
@@ -21,7 +21,7 @@ module Planout
     end
 
     def get_uniform(min_val = 0.0, max_val = 1.0, appended_unit = nil)
-      zero_to_one = self.get_hash(appended_unit)/LongScale
+      zero_to_one = self.get_hash(appended_unit)/LONG_SCALE
       min_val + (max_val-min_val) * zero_to_one
     end
   end

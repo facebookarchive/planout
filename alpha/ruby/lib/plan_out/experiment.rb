@@ -1,7 +1,7 @@
 require 'logger'
 require 'json'
 
-module Planout
+module PlanOut
   class Experiment
     attr_accessor :auto_exposure_log
 

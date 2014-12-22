@@ -1,6 +1,6 @@
 require_relative 'op_random'
 
-module Planout
+module PlanOut
   class UniformChoice < OpRandom
     def simple_execute
       choices = @parameters[:choices]

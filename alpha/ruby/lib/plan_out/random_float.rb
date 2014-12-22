@@ -1,11 +1,11 @@
 require_relative 'op_random'
 
-module Planout
-  class RandomInteger < OpRandom
+module PlanOut
+  class RandomFloat < OpRandom
     def simple_execute
       min_val = @parameters.fetch(:min, 0)
       max_val = @parameters.fetch(:max, 1)
-      min_val + get_hash() % (max_val - min_val + 1)
+      get_uniform(min_val, max_val)
     end
   end
 end

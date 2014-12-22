@@ -1,6 +1,6 @@
 require_relative 'op_random'
 
-module Planout
+module PlanOut
   class BernoulliTrial < OpRandom
     def simple_execute
       p = @parameters[:p]
