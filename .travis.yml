@@ -1,0 +1,7 @@
+language: ruby
+rvm:
+  - 2.0.0
+  - 2.1.1
+env:
+  - TEST_DIR=alpha/ruby
+script: cd $TEST_DIR && rake
