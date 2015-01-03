@@ -37,7 +37,7 @@ Then, to build the project, run this command:
 `npm start`
 
 This will perform an initial build and start a watcher process that will
-continuously update the bundle.js file with any changes you wish to make.
+continuously update the main application file, `bundle.js`, with any changes you make.  This way, you can test your changes to the editor by simply saving your code and hitting refresh in your Web browser.
 
 This watcher is
 based on [Browserify](http://browserify.org/) and
