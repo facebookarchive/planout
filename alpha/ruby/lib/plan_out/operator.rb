@@ -1,6 +1,18 @@
-require_relative 'operator'
+require 'digest/sha1'
 
-module Planout
+module PlanOut
+  class Operator
+    attr_accessor :args
+
+    def initialize(parameters)
+      @args = parameters
+    end
+
+    def execute(mapper)
+      mapper.experiment_salt
+    end
+  end
+
   class OpSimple < Operator
     def execute(mapper)
       @mapper = mapper

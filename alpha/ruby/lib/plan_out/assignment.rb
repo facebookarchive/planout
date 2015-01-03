@@ -1,4 +1,4 @@
-module Planout
+module PlanOut
   class Assignment
     attr_accessor :experiment_salt, :data
 
