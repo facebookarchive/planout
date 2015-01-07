@@ -156,7 +156,7 @@ class SimpleNamespace(Namespace):
     def get_segment(self):
         # randomly assign primary unit to a segment
         a = Assignment(self.name)
-        a.segment = RandomInteger(min=0, max=self.num_segments,
+        a.segment = RandomInteger(min=0, max=self.num_segments - 1,
                                   unit=itemgetter(*self.primary_unit)(self.inputs))
         return a.segment
 
