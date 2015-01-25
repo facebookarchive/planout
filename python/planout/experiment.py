@@ -98,6 +98,7 @@ class Experiment(object):
     @salt.setter
     def salt(self, value):
         self._salt = value
+        self._assignment.experiment_salt = value
 
     @property
     def name(self):
