@@ -107,6 +107,7 @@ class Experiment(object):
     @name.setter
     def name(self, value):
         self._name = re.sub(r'\s+', '-', value)
+        self._assignment.experiment_salt = self.salt
 
     @abstractmethod
     def assign(params, **kwargs):
