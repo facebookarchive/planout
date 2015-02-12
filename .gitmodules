@@ -1,0 +1,3 @@
+[submodule "php"]
+	path = php
+	url = git@github.com:vimeo/ABLincoln.git
