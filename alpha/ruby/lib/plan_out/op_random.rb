@@ -57,7 +57,7 @@ module PlanOut
 
       return [] if choices.length() == 0
 
-      cum_weights = choices.zip(weights)
+      cum_weights = Hash[choices.zip(weights)]
       cum_sum = 0.0
 
       cum_weights.each do |choice, weight|
