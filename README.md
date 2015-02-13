@@ -29,7 +29,9 @@ The reference implementation for PlanOut is written in Python.  It includes:
   * An interactive Web-based editor and compiler for developing and testing
   PlanOut-language scripts.
 
-The `alpha/` directory contains implementations of PlanOut to other languages. PHP, Hack, and Go-based implementations will be available in early 2015.
+A production-ready version of PlanOut is also available for PHP, and can found in the `php/` directory.
+
+The `alpha/` directory contains implementations of PlanOut to other languages. Hack and Go-based implementations will be available in early 2015.
 
 ### Who is PlanOut for?
 PlanOut designed for researchers, students, and small businesses wanting to run experiments. It is built to be extensible, so that it may be adapted for use with large production environments.  The implementation here mirrors many of the key components of Facebook's Hack-based implementation of PlanOut which is used to conduct experiments with hundreds of millions of users.
@@ -71,6 +73,8 @@ Join now! #ff0000
 
 The ``SimpleExperiment`` class will automatically concatenate the name of the experiment, ``FirstExperiment``, the variable name, and the input data (``userid``) and hash that string to perform the random assignment. Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
 
+For more information on using PlanOut with PHP, see the README for Vimeo's [port of PlanOut to PHP](https://github.com/vimeo/ABLincoln), ABLincoln.
+
 ### Installation
 You can immediately install PlanOut using `pip` with:
 ```
@@ -84,7 +88,7 @@ sudo python setup.py install
 ```
 
 ### Learn more
-Learn more about PlanOut visiting the [PlanOut website](http://facebook.github.io/planout/) or by [reading the PlanOut paper](http://www-personal.umich.edu/~ebakshy/planout.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:
+Learn more about PlanOut visiting the [PlanOut website](http://facebook.github.io/planout/) or by [reading the PlanOut paper](http://arxiv.org/pdf/1409.3174v1.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:
 ``` bibtex
 @inproceedings{bakshy2014www,
 	Author = {Bakshy, E. and Eckles, D. and Bernstein, M.S.},
