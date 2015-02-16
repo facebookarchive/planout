@@ -57,18 +57,19 @@ module PlanOut
 
       return [] if choices.length() == 0
 
-      cum_weights = choices.zip(weights)
+      cum_weights = Array.new(weights.length)
       cum_sum = 0.0
 
-      cum_weights.each do |choice, weight|
+      weights.each_with_index do |weight, index|
         cum_sum += weight
-        cum_weights[choice] = cum_sum
+        cum_weights[index] = cum_sum
       end
 
       stop_value = get_uniform(0.0, cum_sum)
 
-      cum_weights.each do |choice, cum_weight|
-        choice if stop_value <= cum_weight
+      i = 0
+      cum_weights.each_with_index do |cum_weight, index|
+        return choices[index] if stop_value <= cum_weight
       end
     end
   end
