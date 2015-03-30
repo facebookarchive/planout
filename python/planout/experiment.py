@@ -98,7 +98,7 @@ class Experiment(object):
     @salt.setter
     def salt(self, value):
         self._salt = value
-        if self._assignment:
+        if hasattr(self, '_assignment'):
             self._assignment.experiment_salt = value
 
     @property
@@ -108,7 +108,7 @@ class Experiment(object):
     @name.setter
     def name(self, value):
         self._name = re.sub(r'\s+', '-', value)
-        if self._assignment:
+        if hasattr(self, '_assignment'):
             self._assignment.experiment_salt = self.salt
 
     @abstractmethod
