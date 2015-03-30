@@ -12,6 +12,7 @@ import json
 import inspect
 import hashlib
 from abc import ABCMeta, abstractmethod
+import six
 import __main__ as main
 
 from .assignment import Assignment
@@ -137,6 +138,8 @@ class Experiment(object):
             # src doesn't count first line of code, which includes function
             # name
             src = ''.join(inspect.getsourcelines(self.assign)[0][1:])
+            if not isinstance(src, six.binary_type):
+                src = src.encode("ascii")
             return hashlib.sha1(src).hexdigest()[:8]
         # if we're running in an interpreter, don't worry about it
         else:
@@ -315,5 +318,8 @@ class SimpleInterpretedExperiment(SimpleExperiment):
     def checksum(self):
         # self.script must be a dictionary
         assert hasattr(self, 'script') and type(self.script) == dict
+        src = json.dumps(self.script)
 
-        return hashlib.sha1(json.dumps(self.script)).hexdigest()[:8]
+        if not isinstance(src, six.binary_type):
+            src = src.encode("ascii")
+        return hashlib.sha1(src).hexdigest()[:8]

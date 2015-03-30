@@ -1,3 +1,5 @@
+import six
+
 from .base import (
     PlanOutOp,
     PlanOutOpSimple,
@@ -177,7 +179,7 @@ class Or(PlanOutOp):
 class Product(PlanOutOpCommutative):
 
     def commutativeExecute(self, values):
-        return reduce(lambda x, y: x * y, values)
+        return six.moves.reduce(lambda x, y: x * y, values)
 
     def pretty(self):
         values = Operators.strip_array(self.getArgList('values'))

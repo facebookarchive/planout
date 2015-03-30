@@ -10,6 +10,9 @@ setup(
         'planout.ops',
         'planout.test'
     ],
+    requires=[
+        'six'
+    ],
     url='http://pypi.python.org/pypi/PlanOut/',
     license='LICENSE',
     description='PlanOut is a framework for online field experimentation.',
