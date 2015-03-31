@@ -65,7 +65,7 @@ class PlanOutOp(object):
     def getArgList(self, name):
         arg = self.getArgMixed(name)
         assert isinstance(arg, (list, tuple)), \
-            "%s: %s must be a list." % (self.__class__, name) + str(type(arg))
+            "%s: %s must be a list." % (self.__class__, name)
         return arg
 
     def getArgMap(self, name):
