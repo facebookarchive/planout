@@ -98,7 +98,8 @@ class Experiment(object):
     @salt.setter
     def salt(self, value):
         self._salt = value
-        self._assignment.experiment_salt = value
+        if hasattr(self, '_assignment'):
+            self._assignment.experiment_salt = value
 
     @property
     def name(self):
@@ -107,7 +108,8 @@ class Experiment(object):
     @name.setter
     def name(self, value):
         self._name = re.sub(r'\s+', '-', value)
-        self._assignment.experiment_salt = self.salt
+        if hasattr(self, '_assignment'):
+            self._assignment.experiment_salt = self.salt
 
     @abstractmethod
     def assign(params, **kwargs):
