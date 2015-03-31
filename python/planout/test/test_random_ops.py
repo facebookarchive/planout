@@ -8,6 +8,7 @@
 from collections import Counter
 import unittest
 from math import sqrt
+import six
 
 from planout.ops.random import *
 from planout.assignment import Assignment
@@ -39,7 +40,7 @@ class TestRandomOperators(unittest.TestCase):
     def distributionTester(self, func, value_mass, N=1000):
         """Make sure an experiment object generates the desired frequencies"""
         # run N trials of f() with input i
-        xs = [func(i=i).get('x') for i in xrange(N)]
+        xs = [func(i=i).get('x') for i in six.moves.range(N)]
         value_density = TestRandomOperators.valueMassToDensity(value_mass)
 
         # test outcome frequencies against expected density
@@ -170,7 +171,7 @@ class TestRandomOperators(unittest.TestCase):
             value_density = TestRandomOperators.valueMassToDensity(value_mass)
 
             # compute N trials
-            xs_list = [func(i=i).get('x') for i in xrange(N)]
+            xs_list = [func(i=i).get('x') for i in six.moves.range(N)]
 
             # each xs is a row of the transpose of xs_list.
             # this is expected to have the same distribution as value_density

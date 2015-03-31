@@ -6,6 +6,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 
 import unittest
+import six
 
 from planout.interpreter import (
     Interpreter,
@@ -122,7 +123,7 @@ class TestBasicOperators(unittest.TestCase):
         self.assertEquals(x, 43)
 
     def test_length(self):
-        arr = range(5)
+        arr = list(range(5))
         length_test = self.run_config_single({'op': 'length', 'value': arr})
         self.assertEquals(len(arr), length_test)
         length_test = self.run_config_single({'op': 'length', 'value': []})
@@ -190,7 +191,7 @@ class TestBasicOperators(unittest.TestCase):
         self.assertEquals(sum(arr), sum_test)
 
         product_test = self.run_config_single({'op': 'product', 'values': arr})
-        self.assertEquals(reduce(lambda x, y: x * y, arr), product_test)
+        self.assertEquals(six.moves.reduce(lambda x, y: x * y, arr), product_test)
 
     def test_binary_ops(self):
         eq = self.run_config_single({'op': 'equals', 'left': 1, 'right': 2})

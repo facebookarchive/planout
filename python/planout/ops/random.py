@@ -1,4 +1,5 @@
 import hashlib
+import six
 from .base import PlanOutOpSimple
 
 
@@ -21,6 +22,8 @@ class PlanOutOpRandom(PlanOutOpSimple):
             full_salt = '%s.%s' % (self.mapper.experiment_salt, salt)
         unit_str = '.'.join(map(str, self.getUnit(appended_unit)))
         hash_str = '%s.%s' % (full_salt, unit_str)
+        if not isinstance(hash_str, six.binary_type):
+            hash_str = hash_str.encode("ascii")
         return int(hashlib.sha1(hash_str).hexdigest()[:15], 16)
 
     def getUniform(self, min_val=0.0, max_val=1.0, appended_unit=None):
@@ -116,7 +119,7 @@ class Sample(PlanOutOpRandom):
         else:
             num_draws = len(choices)
 
-        for i in xrange(len(choices) - 1, 0, -1):
+        for i in six.moves.range(len(choices) - 1, 0, -1):
             j = self.getHash(i) % (i + 1)
             choices[i], choices[j] = choices[j], choices[i]
         return choices[:num_draws]

@@ -7,6 +7,7 @@
 
 import logging
 from abc import ABCMeta, abstractmethod
+import six
 
 from .utils import Operators
 
@@ -39,25 +40,25 @@ class PlanOutOp(object):
 
     def getArgInt(self, name):
         arg = self.getArgMixed(name)
-        assert isinstance(arg, (int, long)), \
+        assert isinstance(arg, six.integer_types), \
             "%s: %s must be an int." % (self.__class__, name)
         return arg
 
     def getArgFloat(self, name):
         arg = self.getArgMixed(name)
-        assert isinstance(arg, (int, long, float)), \
+        assert isinstance(arg, (six.integer_types, float)), \
             "%s: %s must be a number." % (self.__class__, name)
         return float(arg)
 
     def getArgString(self, name):
         arg = self.getArgMixed(name)
-        assert isinstance(arg, (str, unicode)), \
+        assert isinstance(arg, six.string_types), \
             "%s: %s must be a string." % (self.__class__, name)
         return arg
 
     def getArgNumeric(self, name):
         arg = self.getArgMixed(name)
-        assert isinstance(arg, (int, float, long)), \
+        assert isinstance(arg, (six.integer_types, float)), \
             "%s: %s must be a numeric." % (self.__class__, name)
         return arg
 
