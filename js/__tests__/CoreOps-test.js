@@ -11,6 +11,15 @@ describe ("Test basic operators", function() {
 	it('should set appropriately', function() {
 		var c = {'op': 'set', 'value': 'x_val', 'var': 'x'}
 		var d = runConfig(c);
-		expect(d).toBe({ 'x': 'x_val'});
+		expect(d).toEqual({ 'x': 'x_val'});
 	});
+
+	/*it('should work with seq', function() {
+		var config = {'op': 'seq', 'seq': [
+            {'op': 'set', 'value': 'x_val', 'var': 'x'},
+            {'op': 'set', 'value': 'y_val', 'var': 'y'}
+        ]};
+        var d = runConfig(config)
+        expect(d).toEqual({'x': 'x_val', 'y': 'y_val'});
+	});*/
 });

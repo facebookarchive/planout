@@ -24,7 +24,7 @@
       "json",
       "es6"
     ],
-    "unmockedModulePathPatterns": ["es6/"]
+    "unmockedModulePathPatterns": ["es6/", "node_modules/"]
   },
   "scripts": {
     "test": "jest"

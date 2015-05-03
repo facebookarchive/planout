@@ -1,5 +1,5 @@
 import _ from "underscore";
-import PlanOutOpRandom from "/Users/garidor1/Desktop/planout/js/es6/ops/random";
+import { PlanOutOpRandom } from "/Users/garidor1/Desktop/planout/js/es6/ops/random";
 
 class Assignment {
 	constructor(experiment_salt, overrides) {
@@ -30,7 +30,6 @@ class Assignment {
 
 	set(name, value) {
 
-        console.log("HEREEE");
 		if (name === '_data' || name === '_overrides' || name === 'experiment_salt') {
 			this.dict[name] = value;
             return;
@@ -38,14 +37,12 @@ class Assignment {
 		if (this._overrides[name]) {
             return;
         }
-
         if (value instanceof PlanOutOpRandom) {
         	if (!value.args.salt) {
         		value.args.salt = name;
         	}
         	this._data[name] = value.execute(this);
         } else {
-            console.log("HEE");
             this._data[name] = value;
         }
      }
@@ -57,6 +54,10 @@ class Assignment {
      		return this._data[name];
      	}
      }
+
+    get_params() {
+        return this._data;
+    }
 
     del(name) {
     	delete this._data[name];

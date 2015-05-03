@@ -48,6 +48,7 @@ var operatorInstance = function (params) {
 	if (!operators[op]) {
 		throw `Unknown Operator {op}`;
 	}
+	
 	return new operators[op](params);
 }
 

@@ -16,7 +16,9 @@ class Get extends PlanOutOp {
 
 class Seq extends PlanOutOp {
 	execute(mapper) {
-		_.each(this.thisArgList('seq'), function(op) {
+		console.log('sup');
+		console.log(this.getArgList('seq'));
+		_.each(this.getArgList('seq'), function(op) {
 			mapper.evaluate(op);
 		});
 	}
@@ -50,7 +52,6 @@ class Set extends PlanOutOp {
 		if (variable == "experiment_salt") {
 			mapper.experiment_salt = value;
 		}
-		console.log(mapper);
 		mapper.set(variable, mapper.evaluate(value));
 	}
 }

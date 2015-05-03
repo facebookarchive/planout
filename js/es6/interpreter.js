@@ -53,11 +53,11 @@ class Interpreter {
 			}
 			this._evaluated = true;
 		}
-		return this._env;
+		return this._env.get_params();
 	}
 
 	set(name, value) {
-		this._env[name] = value;
+		this._env.set(name, value);
 		return this;
 	}
 
