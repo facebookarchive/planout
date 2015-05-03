@@ -9,7 +9,6 @@ class Assignment {
 		this.experiment_salt = experiment_salt;
 		this._overrides = _.clone(overrides);
 		this._data = _.clone(overrides);
-		this.dict = {}
 	}
 
 	evaluate(value) {
@@ -30,10 +29,17 @@ class Assignment {
 
 	set(name, value) {
 
-		if (name === '_data' || name === '_overrides' || name === 'experiment_salt') {
-			this.dict[name] = value;
+		if (name === '_data') {
+            this._data = value;
             return;
-		}
+        } else if (name === '_overrides') {
+            this._overrides = value;
+            return;
+        } else if (name === 'experiment_salt') {
+            this.experiment_salt = value;
+            return;
+        }
+ 
 		if (this._overrides[name]) {
             return;
         }
@@ -48,8 +54,12 @@ class Assignment {
      }
 
      get(name) {
-     	if (name === '_data' || name === '_overrides' || name === 'experiment_salt') {
-     		return this.dict[name];
+     	if (name === '_data') {
+            return this._data;
+        } else if( name === '_overrides') {
+            return this._overrides;
+        } else if ( name === 'experiment_salt') {
+            return this.experiment_salt;
      	} else {
      		return this._data[name];
      	}

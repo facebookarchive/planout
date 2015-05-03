@@ -6,6 +6,7 @@ var initFactory = function() {
 		'literal': core.Literal,
 		'get': core.Get,
 		'set': core.Set,
+		'seq': core.Seq,
 		'return': core.Return,
 		'index': core.Index,
 		'array': core.Arr,
@@ -25,6 +26,7 @@ var initFactory = function() {
 		"max": core.Max,
 		"length": core.Length,
 		"coalesce": core.Coalesce,
+		"cond": core.Cond,
 		"product": core.Product,
 		"sum": core.Sum,
 		"randomFloat": random.RandomFloat,
@@ -53,8 +55,10 @@ var operatorInstance = function (params) {
 }
 
 
-var StopPlanOutException = function(in_experiment) {
-	return in_experiment;
+class StopPlanOutException {
+	constructor(in_experiment) {
+		this.in_experiment = in_experiment;
+	}
 }
 
 export { initFactory, isOperator, operatorInstance, StopPlanOutException }

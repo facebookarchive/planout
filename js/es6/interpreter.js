@@ -13,7 +13,7 @@ class Interpreter {
 		}
 		this.experiment_salt = this._experiment_salt = experiment_salt;
 		this._evaluated = false;
-		this._in_experiment = true;
+		this._in_experiment = false;
 		this._inputs = _.clone(inputs);
 	}
 
@@ -35,7 +35,7 @@ class Interpreter {
 		if (!input_val) {
 			input_val = default_val;
 		}
-		env_val = this._env[name];
+		env_val = this._env.get(name);
 		if (env_val) { 
 			return env_val;
 		}
@@ -48,7 +48,7 @@ class Interpreter {
 				this.evaluate(this._serialization);
 			} catch(err) {
 				if (err instanceof StopPlanOutException) {
-					this._in_experiment = err;
+					this._in_experiment = err.in_experiment;
 				}
 			}
 			this._evaluated = true;

@@ -16,8 +16,6 @@ class Get extends PlanOutOp {
 
 class Seq extends PlanOutOp {
 	execute(mapper) {
-		console.log('sup');
-		console.log(this.getArgList('seq'));
 		_.each(this.getArgList('seq'), function(op) {
 			mapper.evaluate(op);
 		});
@@ -44,7 +42,7 @@ class Set extends PlanOutOp {
 		if (mapper.has_override(variable)) {
 			return;
 		}
-		//add check if this is an op
+		
 		if (isOperator(value) && !value.salt) {
 			value.salt = variable;
 		}
@@ -84,7 +82,7 @@ class Index extends PlanOutOpSimple {
 			if (index >=0 && index < base.length) {
 				return base[index];
 			} else {
-				return null;
+				return undefined;
 			}
 		} else {
 			return base[index];
@@ -94,9 +92,10 @@ class Index extends PlanOutOpSimple {
 
 class Cond extends PlanOutOp {
 	execute(mapper) {
-		for (let i in this.getArgList('cond')) {
-			var if_clause = i['if'];
-			var then_clause = i['then'];
+		let list = this.getArgList('cond');
+		for (let i in list) {
+			var if_clause = list[i]['if'];
+			var then_clause = list[i]['then'];
 			if (mapper.evaluate(if_clause)) {
 				return mapper.evaluate(then_clause);
 			}
@@ -107,38 +106,36 @@ class Cond extends PlanOutOp {
 
 class And extends PlanOutOp {
 	execute(mapper) {
-		for (let clause in this.getArgList('values')) {
-			if (!mapper.evaluate(clause)) {
-				return false;
-			}
-		}
-		return true;
+		return _.reduce(this.getArgList('values'), function(ret, clause) {
+			if (!ret) { return ret; }
+
+			return Boolean(mapper.evaluate(clause));
+		}, true);
 	}
 }
 
 class Or extends PlanOutOp {
 	execute(mapper) {
-		for (let clause in this.getArgList('values')) {
-			if (mapper.evaluate(clause)) {
-				return true;
-			}
-		}
-		return false;
+		return _.reduce(this.getArgList('values'), function(ret, clause) {
+			if (ret) { return ret; }
+
+			return Boolean(mapper.evaluate(clause));
+		}, false);
 	}
 }
 
 class Product extends PlanOutOpCommutative {
 	commutativeExecute(values) {
-		return _.reduce(values, function(value) {
-			return values * value;
+		return _.reduce(values, function(memo, value) {
+			return memo * value;
 		}, 1);
 	}
 }
 
 class Sum extends PlanOutOpCommutative {
 	commutativeExecute(values) {
-		return _.reduce(values, function(value) {
-			return values + value;
+		return _.reduce(values, function(memo, value) {
+			return memo + value;
 		}, 0);
 	}
 }
@@ -149,7 +146,7 @@ class Equals extends PlanOutOpBinary {
 	}
 
 	binaryExecute(left, right) {
-		return left == right;
+		return left === right;
 	}
 }
 
@@ -217,13 +214,13 @@ class Negative extends PlanOutOpUnary {
 
 class Min extends PlanOutOpCommutative {
 	commutativeExecute(values) {
-		return Math.min(values);
+		return Math.min.apply(null, values);
 	}
 }
 
 class Max extends PlanOutOpCommutative {
 	commutativeExecute(values) {
-		return Math.max(values);
+		return Math.max.apply(null, values);
 	}
 }
 

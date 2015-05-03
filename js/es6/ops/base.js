@@ -13,9 +13,8 @@ class PlanOutOp {
 	}
 
 	getArgMixed(name) {
-		if (!this.args[name]) {
-			throw ("Missing argument" + name);
-			return
+		if (this.args[name] === undefined) {
+			throw ("Missing argument " + name);
 		}
 		return this.args[name];
 	}
@@ -66,10 +65,10 @@ class PlanOutOpSimple extends PlanOutOp {
 
 	execute(mapper) {
 		this.mapper = mapper;
-		var param_names = Object.keys(this.args);
-		for (let param of param_names) {
-			this.args[param] = mapper.evaluate(this.args[param]);
-		}
+		var self = this;
+		Object.keys(this.args).forEach(function (key) {
+  			self.args[key] = mapper.evaluate(self.args[key]);
+		});
 		return this.simpleExecute();
 	}
 }
@@ -82,12 +81,13 @@ class PlanOutOpUnary extends PlanOutOpSimple {
 		return this.args.op;
 	}
 	unaryExecute(value) {
-		console.log("TODO");
+		throw "implement this";
 	}
 }
 
 class PlanOutOpBinary extends PlanOutOpSimple {
 	simpleExecute() { 
+		var left = this.getArgMixed('left');
 		return this.binaryExecute(this.getArgMixed('left'), this.getArgMixed('right'));
 	}
 
@@ -96,7 +96,7 @@ class PlanOutOpBinary extends PlanOutOpSimple {
 	}
 
 	binaryExecute(left, right) {
-		console.log("TODO");
+		throw "implement this";
 	}
 }
 
@@ -110,7 +110,7 @@ class PlanOutOpCommutative extends PlanOutOpSimple {
 	}
 
 	commutativeExecute(values) {
-		console.log("IMPLEMENT");
+		throw "implement this";
 	}
 }
 

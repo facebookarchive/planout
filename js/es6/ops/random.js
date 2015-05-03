@@ -1,6 +1,7 @@
 import { PlanOutOpSimple } from "/Users/garidor1/Desktop/planout/js/es6/ops/base";
 import sha1 from "js-sha1";
 import _ from "underscore";
+import BigNumber from "bignumber.js"
 
 class PlanOutOpRandom extends PlanOutOpSimple {
 
@@ -27,33 +28,34 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 		return min_val + (max_val - min_val) * zero_to_one;
 	}
 
-	//move this somewhere else
-	hexEncode (str){
-	    var hex, i;
-
-	    var result = "";
-	    for (i=0; i<str.length; i++) {
-	        hex = str.charCodeAt(i).toString(16);
-	        result += ("000"+hex).slice(-4);
-	    }
-
-	    return result
-	}
-
 	getHash(appended_unit) {
 		var full_salt;
 		if (this.args.full_salt) {
 			full_salt = this.getArgString('full_salt');
 		} else {
 			var salt = this.getArgString('salt');
-			full_salt = this.mapper.experiment_salt + "." + salt;
+			full_salt = this.mapper.get('experiment_salt') + "." + salt;
 		}
+
 
 		var unit_str = _.map(this.getUnit(appended_unit), element =>
 			String(element)
 		).join('.');
 		var hash_str = full_salt + "." + unit_str;
-		return parseInt(hexEncode(sha1(hash_str)).substr(0, 15), 16);
+		var hash = sha1(hash_str);
+		//return this.hashCode(hash_str);
+		//console.log(intHash)
+		//var big = new BigNumber(hash.substr(0, 15));
+		//return big;
+		return int(hash.substr(0, 15));
+	}
+
+	hashCode(str) {
+		var ret = 0;
+  		for(i = 0, len = str.length; i < len; i++) {
+   			ret = (31 * ret + str.charCodeAt(i)) << 1;
+  		}
+  		return ret;
 	}
 
 }
@@ -82,8 +84,7 @@ class BernoulliTrial extends PlanOutOpRandom {
 	simpleExecute() {
 		var p = this.getArgNumber('p');
 		if (p < 0 || p > 1) {
-			console.log("TESTING");
-			return;
+			throw "Invalid probability";
 		}
 		if (this.getUniform(0.0, 1.0) <= p) {
 			return 1;
@@ -98,8 +99,7 @@ class BernoulliFilter extends PlanOutOpRandom {
 		var p = this.getArgNumber('p');
 		var values = this.getArgList('choices');
 		if (p < 0 || p > 1) {
-			console.log("TESTING");
-			return;
+			throw "Invalid probability";
 		}
 		if (values.length == 0) {
 			return [];
@@ -121,6 +121,7 @@ class UniformChoice extends PlanOutOpRandom {
 			return [];
 		}
 		var rand_index = this.getHash() % choices.length;
+		//console.log(this.getHash());
 		return choices[rand_index];
 	}
 }
