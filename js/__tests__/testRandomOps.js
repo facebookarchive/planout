@@ -7,7 +7,6 @@ var z = 3.29;
 
 function assertProp(observed_p, expected_p, N) {
 	var se = z * Math.sqrt(expected_p * (1 - expected_p) / N);
-	console.log(observed_p);
 	expect(Math.abs(observed_p - expected_p) <= se).toBe(true);
 }
 

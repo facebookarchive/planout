@@ -7,7 +7,7 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 
 	constructor(args) {
 		super(args);
-		this.LONG_SCALE = parseFloat(0xFFFFFFFFFFFFFFF);
+		this.LONG_SCALE = parseFloat(0xFFFFFFFFFFFFF);
 	}
 
 	getUnit(appended_unit) {
@@ -47,7 +47,7 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 		//console.log(intHash)
 		//var big = new BigNumber(hash.substr(0, 15));
 		//return big;
-		return int(hash.substr(0, 15));
+		return parseInt(hash.substr(0, 13), 16);
 	}
 
 	hashCode(str) {
