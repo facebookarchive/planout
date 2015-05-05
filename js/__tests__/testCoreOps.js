@@ -1,5 +1,5 @@
 var Interpreter = require('/Users/garidor1/Desktop/planout/js/es6/interpreter');
-/*
+
 function runConfig(config, init={}) {
 	var interpreter = new Interpreter(config, 'test_salt', init);
 	return interpreter.get_params();
@@ -244,4 +244,4 @@ describe ("Test core operators", function() {
         expect(i.in_experiment()).toEqual(false);
 	});
 
-});*/
+});

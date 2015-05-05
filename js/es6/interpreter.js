@@ -72,11 +72,12 @@ class Interpreter {
 
 	has_override(name) {
 		overrides = this.get_overrides();
-		return overrides && overrides[name];
+		return overrides && overrides[name] !== undefined;
 	}
 
 	evaluate(planout_code) {
 		if (Object.prototype.toString.call( planout_code ) === '[object Object]' && planout_code.op) {
+			
 			return operatorInstance(planout_code).execute(this);
 		} else if (Object.prototype.toString.call( planout_code ) === '[object Array]') {
 			var self = this;

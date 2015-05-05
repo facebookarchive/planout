@@ -12,8 +12,7 @@
     "grunt-contrib-concat": "0.5.1",
     "babel-jest": "5.0.1",
     "jest-cli": "0.4.0",
-    "bignumber.js": "2.0.7",
-    "MD5": "1.2.1"
+    "long" : "2.2.3"
   },
   "jest": {
     "scriptPreprocessor": "node_modules/babel-jest",

@@ -1,7 +1,7 @@
 import { PlanOutOpSimple } from "/Users/garidor1/Desktop/planout/js/es6/ops/base";
 import sha1 from "js-sha1";
 import _ from "underscore";
-import BigNumber from "bignumber.js"
+import Long from "long"
 
 class PlanOutOpRandom extends PlanOutOpSimple {
 
@@ -25,7 +25,10 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 		min_val = typeof min_val !== 'undefined' ? min_val : 0.0;
 		max_val = typeof max_val !== 'undefined' ? max_val : 1.0;
 		var zero_to_one = this.getHash(appended_unit) / this.LONG_SCALE;
+
 		return min_val + (max_val - min_val) * zero_to_one;
+		//zero_to_one = zero_to_one.div(this.LONG_SCALE);
+		//return zero_to_one.multiply(max_val - min_val).add(min_val).toNumber();
 	}
 
 	getHash(appended_unit) {
@@ -43,19 +46,12 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 		).join('.');
 		var hash_str = full_salt + "." + unit_str;
 		var hash = sha1(hash_str);
-		//return this.hashCode(hash_str);
+		return parseInt(hash.substr(0, 13), 16);
 		//console.log(intHash)
 		//var big = new BigNumber(hash.substr(0, 15));
-		//return big;
-		return parseInt(hash.substr(0, 13), 16);
-	}
-
-	hashCode(str) {
-		var ret = 0;
-  		for(i = 0, len = str.length; i < len; i++) {
-   			ret = (31 * ret + str.charCodeAt(i)) << 1;
-  		}
-  		return ret;
+		//console.log(hash.substr(0, 7));
+		//return new Long(parseInt("0x" + hash.substr(0, 7), 16), parseInt("0x"+hash.substr(8,15), 16), true);
+		
 	}
 
 }
@@ -74,8 +70,8 @@ class RandomInteger extends PlanOutOpRandom {
 	simpleExecute() {
         var min_val = this.getArgNumber('min');
         var max_val = this.getArgNumber('max');
-
-        return min_val + this.getHash() % (max_val - min_val + 1);
+        return (this.getHash() + min_val) % (max_val - min_val + 1)
+        //return this.getHash().add(min_val).modulo(max_val - min_val + 1).toNumber();
      }
 }
 
@@ -134,18 +130,17 @@ class WeightedChoice extends PlanOutOpRandom {
 			return [];
 		}
 		var cum_sum = 0;
-		var cum_weights = _.map(weights, function(weight) {
+		var cum_weights = weights.map(function(weight) {
 			cum_sum += weight;
 			return cum_sum;
 		});
-
 		var stop_val = this.getUniform(0.0, cum_sum);
-		return _.reduce(cum_weights, function(ret_val, cur_val) {
+		return _.reduce(cum_weights, function(ret_val, cur_val, i) {
 			if (ret_val) {
 				return ret_val;
 			}
 			if (stop_val <= cur_val) {
-				return cur_val;
+				return choices[i];
 			}
 			return ret_val;
 		}, null);
@@ -173,7 +168,7 @@ class Sample extends PlanOutOpRandom {
 		} else {
 			num_draws = choices.length;
 		}
-		var shuffled_arr = shuffle(choices);
+		var shuffled_arr = this.shuffle(choices);
 		return shuffled_arr.slice(0, num_draws);
 	}
 }

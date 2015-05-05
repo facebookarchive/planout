@@ -28,7 +28,6 @@ class Assignment {
 	}
 
 	set(name, value) {
-
 		if (name === '_data') {
             this._data = value;
             return;

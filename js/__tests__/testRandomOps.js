@@ -50,6 +50,9 @@ function assertProbs(xs, value_density, N) {
 }
 
 function distributionTester(xs, value_mass, N) {
+	if (!N) {
+		N =10000;
+	}
 	value_density = valueMassToDensity(value_mass);
 
 	assertProbs(xs, value_density, parseFloat(N));
@@ -111,5 +114,73 @@ describe('Test randomization ops', function() {
 		}
 		distributionTester(uniformChoice(['a']), [{'a': 1}], N);
 		distributionTester(uniformChoice(['a', 'b']), [{'a': 1}, {'b': 1}], N);
+	});
+
+	it('works for weighted choice', function() {
+		var N = 10000;
+		function weightedChoice(choices) {
+			var xs = [];
+			var weights = choices.map(function(choice) { return choice[Object.keys(choice)[0]]});
+			var choices = choices.map(function(choice) { return Object.keys(choice)[0]; });
+			for (var i = 0; i < N; i++) {
+				var a = new Assignment(weights.join(', '));
+				a.set('x', new Random.WeightedChoice({ 'choices': choices, 'weights': weights, 'unit': i }));
+				xs[i] = a.get('x');
+			}
+			return xs;
+		}
+
+		var d = [{'a': 1}];
+		distributionTester(weightedChoice(d), d, N);
+		d = [{'a': 1}, {'b': 2}];
+		distributionTester(weightedChoice(d), d, N);
+		d = [{'a': 0}, {'b': 2}, {'c': 0}];
+		distributionTester(weightedChoice(d), d, N);
+
+		var da = [{'a': 1}, {'b': 2}, {'c': 0}, {'a': 2}];
+		var db = [{'a': 3}, {'b': 2}, {'c': 0}];
+        distributionTester(weightedChoice(da), db, N);
+	});
+
+	it('works for sample', function() {
+		var N = 100;
+		function sample(choices, draws) {
+			var xs = [];
+			for (var i = 0; i < N; i++) {
+				var a = new Assignment(choices.join(', '));
+				a.set('x', new Random.Sample({ 'choices': choices, 'draws': draws, 'unit': i }));
+				xs[i] = a.get('x');
+			}
+			return xs;
+		}
+
+		function listDistributionTester(xs_list, value_mass, N) {
+			var value_density = valueMassToDensity(value_mass);
+			var l = [];
+
+			/* bad equivalent to zip() from python */
+			xs_list.forEach(function(xs, i){
+				xs.forEach(function(x, j) {
+					if (!l[j]) {
+						l[j] = [x];
+					} else {
+						l[j].push(x);
+					}
+				});
+				if (i === xs_list.length-1) {
+					l.forEach(function(el) {
+						assertProbs(el, value_density, N);
+					});
+				}				
+			});
+		}
+
+		var a = [1, 2, 3];
+		var ret = [{1: 1}, {2: 1}, {3: 1}];
+		listDistributionTester(sample(a, 3), ret, N);
+		listDistributionTester(sample(a, 2), ret, N);
+		a = ['a', 'a', 'b'];
+		ret = [{'a': 2}, {'b': 1}];
+		listDistributionTester(sample(a, 3), ret, N);
 	});
 });
