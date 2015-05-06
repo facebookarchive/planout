@@ -64,9 +64,11 @@ class Arr extends PlanOutOp {
 
 class Coalesce extends PlanOutOp {
 	execute(mapper) {
-		for (let x of this.getArgList('values')) {
+		var values = this.getArgList('values');
+		for(var i = 0; i < values.length; i++) {
+			var x = values[i];
 			var eval_x = mapper.evaluate(x);
-			if (!eval_x) {
+			if (eval_x !== null && eval_x !== undefined) {
 				return eval_x;
 			}
 		}

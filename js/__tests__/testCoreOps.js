@@ -99,6 +99,17 @@ describe ("Test core operators", function() {
         expect(x).toEqual(30);
     });
 
+    it('should work with coalesce', function() {
+        var x = run_config_single({'op': 'coalesce', 'values': [null]});
+        expect(x).toEqual(null);
+
+        x = run_config_single({'op': 'coalesce', 'values': [null, 42, null]});
+        expect(x).toEqual(42);
+
+        x = run_config_single({'op': 'coalesce', 'values': [null, null, 43]});
+        expect(x).toEqual(43);
+    });
+
 	it('should work with length', function() {
 		var arr = [0, 1, 2, 3, 4, 5];
         var length_test = run_config_single({'op': 'length', 'value': arr});
