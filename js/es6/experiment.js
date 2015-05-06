@@ -1,4 +1,4 @@
-import Assignment from '/Users/garidor1/Desktop/planout/js/es6/assignment';
+import Assignment from './assignment';
 import _ from "underscore"
 
 class Experiment {

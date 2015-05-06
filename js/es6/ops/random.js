@@ -1,4 +1,4 @@
-import { PlanOutOpSimple } from "/Users/garidor1/Desktop/planout/js/es6/ops/base";
+import { PlanOutOpSimple } from "./base";
 import sha1 from "js-sha1";
 import _ from "underscore";
 import Long from "long"

@@ -1,5 +1,5 @@
 import _ from "underscore";
-import { PlanOutOpRandom } from "/Users/garidor1/Desktop/planout/js/es6/ops/random";
+import { PlanOutOpRandom } from "./ops/random";
 
 class Assignment {
 	constructor(experiment_salt, overrides) {

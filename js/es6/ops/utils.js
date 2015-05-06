@@ -1,5 +1,5 @@
-import * as core from '/Users/garidor1/Desktop/planout/js/es6/ops/core';
-import * as random from '/Users/garidor1/Desktop/planout/js/es6/ops/random';
+import * as core from './core';
+import * as random from './random';
 
 var initFactory = function() {
 	return {

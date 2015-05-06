@@ -1,5 +1,5 @@
-import Assignment from '/Users/garidor1/Desktop/planout/js/es6/assignment';
-import { initFactory, operatorInstance, StopPlanOutException } from '/Users/garidor1/Desktop/planout/js/es6/ops/utils';
+import Assignment from './assignment';
+import { initFactory, operatorInstance, StopPlanOutException } from './ops/utils';
 import _ from "underscore";
 import $ from 'jquery';
 

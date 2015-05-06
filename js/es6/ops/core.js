@@ -1,6 +1,6 @@
-import {PlanOutOp, PlanOutOpSimple, PlanOutOpBinary, PlanOutOpUnary, PlanOutOpCommutative} from "/Users/garidor1/Desktop/planout/js/es6/ops/base";
+import {PlanOutOp, PlanOutOpSimple, PlanOutOpBinary, PlanOutOpUnary, PlanOutOpCommutative} from "./base";
 import _ from "underscore";
-import {isOperator, StopPlanOutException} from "/Users/garidor1/Desktop/planout/js/es6/ops/utils";
+import {isOperator, StopPlanOutException} from "./utils";
 
 class Literal extends PlanOutOp {
 	execute(mapper) {

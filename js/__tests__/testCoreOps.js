@@ -1,4 +1,4 @@
-var Interpreter = require('/Users/garidor1/Desktop/planout/js/es6/interpreter');
+var Interpreter = require('../es6/interpreter');
 
 function runConfig(config, init={}) {
 	var interpreter = new Interpreter(config, 'test_salt', init);
