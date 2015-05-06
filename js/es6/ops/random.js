@@ -1,5 +1,5 @@
 import { PlanOutOpSimple } from "./base";
-import sha1 from "js-sha1";
+import sha1 from "sha1";
 import _ from "underscore";
 import Long from "long"
 
