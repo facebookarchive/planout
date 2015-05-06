@@ -21,6 +21,7 @@ class Interpreter {
 		return this._in_experiment;
 	}
 
+
 	set_env(new_env) {
 		this._env = $.extend(true, {}, new_env);
 		return this;

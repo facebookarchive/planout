@@ -4,6 +4,7 @@ var UniformChoice = require('../es6/ops/random').UniformChoice;
 var tester_unit = '4';
 var tester_salt = 'test_salt';
 
+
 describe('Test the assignment module', function() {
 	it('Should set constants correctly', function() {
 		var a = new Assignment(tester_salt);

@@ -18,6 +18,7 @@ describe ("Test core operators", function() {
 		expect(d).toEqual({ 'x': 'x_val'});
 	});
 
+
 	it('should work with seq', function() {
 		var config = {'op': 'seq', 'seq': [
             {'op': 'set', 'value': 'x_val', 'var': 'x'},
@@ -28,8 +29,8 @@ describe ("Test core operators", function() {
 	});
 
 	it('should work with arr', function() {
-		var arr = [4, 5, 'a']
-        var a = run_config_single({'op': 'array', 'values': arr})
+		var arr = [4, 5, 'a'];
+        var a = run_config_single({'op': 'array', 'values': arr});
         expect(arr).toEqual(a);
 	});
 

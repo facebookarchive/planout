@@ -18,6 +18,7 @@ class Experiment {
 		this._assigned = false;	
 	}
 
+
 	require_assignment() {
 		if (!this._assigned) {
 			this._assign();

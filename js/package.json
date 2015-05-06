@@ -3,15 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "underscore": "1.8.3",
-    "grunt": "~0.4.1",
-    "grunt-cli": "0.1.13",
-    "grunt-babel": "5.0.0",
     "sha1": "1.1.0",
     "jquery": "2.1.4",
-    "grunt-browserify": "3.7.0",
-    "grunt-contrib-concat": "0.5.1",
-    "babel-jest": "5.0.1",
-    "jest-cli": "0.4.0",
     "bignumber.js": "2.0.7"
   },
   "jest": {
@@ -31,6 +24,12 @@
     "test": "jest"
   },
   "devDependencies": {
-    "jest-cli": "~0.4.0"
+    "babel-jest": "5.0.1",
+    "jest-cli": "~0.4.0",
+    "grunt": "~0.4.1",
+    "grunt-cli": "0.1.13",
+    "grunt-babel": "5.0.0",
+    "grunt-browserify": "3.7.0",
+    "grunt-contrib-uglify": "0.9.1"
   }
 }

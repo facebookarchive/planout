@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 	require('load-grunt-tasks')(grunt); 
 	grunt.loadNpmTasks('grunt-contrib-jasmine');
 	grunt.loadNpmTasks('grunt-browserify');
-	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 
 	grunt.initConfig({
 	  "babel": { //es6 -> es5
@@ -31,13 +31,15 @@ module.exports = function(grunt) {
 	        }
 	      }
 	  },
-	  "concat": {
-	  	"js": {
-	  		src: ['es5/*.js', 'es5/ops/*.js'],
-	  		dest: 'planout.js'
+	  "uglify": {
+	  	dist: {
+	  		files: {
+	  			'planout.min.js' : ['es5/assignment.js', 'es5/interpreter.js', 'es5/experiment.js', 'es5/ops/random.js', 'es5/ops/core.js', 'es5/ops/base.js', 'es5/ops/utils.js']
+	  		}
 	  	}
 	  }
+
 	});
 	 
-	grunt.registerTask('default', ['babel', 'concat' ]);
+	grunt.registerTask('default', ['babel', 'browserify', 'uglify' ]);
 }

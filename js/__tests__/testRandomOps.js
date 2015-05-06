@@ -60,7 +60,7 @@ function distributionTester(xs, value_mass, N) {
 
 describe('Test randomization ops', function() {
 	it('salts correctly', function() {
-		/*var i = 20;
+		var i = 20;
 		var a = new Assignment("assign_salt_a");
 
 		a.set('x', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i}));
@@ -80,7 +80,7 @@ describe('Test randomization ops', function() {
 
        	a.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs2'}));
         b.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs2'}));
-        expect(a.get('f')).toEqual(b.get('f'));*/
+        expect(a.get('f')).toEqual(b.get('f'));
 
 	});
 

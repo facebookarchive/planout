@@ -39,6 +39,7 @@ var initFactory = function() {
 	};
 }
 
+
 var operators = initFactory();
 
 var isOperator = function(op) {

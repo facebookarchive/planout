@@ -204,6 +204,7 @@ class Not extends PlanOutOpUnary {
 	}
 }
 
+
 class Negative extends PlanOutOpUnary {
 	getUnaryString() {
 		return '-';

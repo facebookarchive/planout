@@ -4,8 +4,8 @@ var Experiment = require('../es6/experiment');
 
 var global_log = [];
 
-describe("Test the experiment module", function() {
 
+describe("Test the experiment module", function() {
 	var validate_log;
 	var experiment_tester;
 	beforeEach(function() {
