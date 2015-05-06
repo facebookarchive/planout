@@ -28,7 +28,7 @@ describe("Test the experiment module", function() {
 			var params = e.get_params();
 
 			expect(params['foo']).not.toBe(undefined);
-			expect(params['foo']).toEqual('a');
+			expect(params['foo']).toEqual('b');
 			expect(params['bar']).toEqual(42);
 
 			if (in_experiment) {

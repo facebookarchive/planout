@@ -17,7 +17,7 @@ describe('Test the assignment module', function() {
 		a.set('bar', new UniformChoice({'choices': choices, 'unit': tester_unit}));
 		a.set('baz', new UniformChoice({'choices': choices, 'unit': tester_unit}));
 
-		expect(a.get('foo')).toEqual('a');
+		expect(a.get('foo')).toEqual('b');
 		expect(a.get('bar')).toEqual('a');
 		expect(a.get('baz')).toEqual('a');
 	});

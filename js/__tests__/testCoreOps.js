@@ -1,5 +1,6 @@
 var Interpreter = require('../es6/interpreter');
 
+
 function runConfig(config, init={}) {
 	var interpreter = new Interpreter(config, 'test_salt', init);
 	return interpreter.get_params();
@@ -254,5 +255,4 @@ describe ("Test core operators", function() {
         expect(i.get_params()).toEqual({ 'x': 2});
         expect(i.in_experiment()).toEqual(false);
 	});
-
 });
