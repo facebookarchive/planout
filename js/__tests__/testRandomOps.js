@@ -1,5 +1,5 @@
-var Assignment = require('/Users/garidor1/Desktop/planout/js/es6/assignment');
-var Random = require('/Users/garidor1/Desktop/planout/js/es6/ops/random');
+var Assignment = require('../es6/assignment');
+var Random = require('../es6/ops/random');
 
 
 var z = 3.29;
