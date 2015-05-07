@@ -1,6 +1,6 @@
 import Assignment from './assignment';
 import { initFactory, operatorInstance, StopPlanOutException } from './ops/utils';
-import { clone } from "./lib/utils";
+import { shallowCopy, deepCopy, isObject, isArray } from "./lib/utils";
 
 class Interpreter {
 	constructor(serialization, experiment_salt='global_salt', inputs={}, environment) {
@@ -13,7 +13,7 @@ class Interpreter {
 		this.experiment_salt = this._experiment_salt = experiment_salt;
 		this._evaluated = false;
 		this._in_experiment = false;
-		this._inputs = clone(inputs);
+		this._inputs = shallowCopy(inputs);
 	}
 
 	in_experiment() {
@@ -21,7 +21,7 @@ class Interpreter {
 	}
 
 	set_env(new_env) {
-		this._env = clone(true, {}, new_env);
+		this._env = deepCopy(new_env);
 		return this;
 	}
 
@@ -75,10 +75,10 @@ class Interpreter {
 	}
 
 	evaluate(planout_code) {
-		if (Object.prototype.toString.call( planout_code ) === '[object Object]' && planout_code.op) {
+		if (isObject(planout_code) && planout_code.op) {
 			
 			return operatorInstance(planout_code).execute(this);
-		} else if (Object.prototype.toString.call( planout_code ) === '[object Array]') {
+		} else if (isArray(planout_code)) {
 			var self = this;
 			return planout_code.map(function(obj) {
 				return self.evaluate(obj);

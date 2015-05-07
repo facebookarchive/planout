@@ -1,6 +1,5 @@
 import Assignment from './assignment';
 import { clone, extend } from './lib/utils';
-import _ from 'underscore';
 
 class Experiment {
 	constructor(inputs) {
@@ -98,7 +97,7 @@ class Experiment {
 			'inputs': this.inputs,
 			'params': this._assignment.get_params()
 		};
-		_.extend(d, extras);
+		extend(d, extras);
     return d;
 	}
 

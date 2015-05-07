@@ -1,6 +1,5 @@
-import _ from "underscore";
 import { PlanOutOpRandom } from "./ops/random";
-import { clone } from "./lib/utils";
+import { shallowCopy } from "./lib/utils";
 
 class Assignment {
 	constructor(experiment_salt, overrides) {
@@ -8,8 +7,8 @@ class Assignment {
       overrides = {};
     }
 		this.experiment_salt = experiment_salt;
-		this._overrides = _.clone(overrides);
-		this._data = _.clone(overrides);
+		this._overrides = shallowCopy(overrides);
+		this._data = shallowCopy(overrides);
 	}
 
 	evaluate(value) {
@@ -21,7 +20,7 @@ class Assignment {
 	}
 
 	set_overrides(overrides) {
-		this._overrides = _.clone(overrides);
+		this._overrides = shallowCopy(overrides);
 		var self = this;
 		Object.keys(this._overrides).forEach(function(override_key) {
 			self._data[override_key] = self._overrides[override_key];

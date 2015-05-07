@@ -1,5 +1,4 @@
 import {PlanOutOp, PlanOutOpSimple, PlanOutOpBinary, PlanOutOpUnary, PlanOutOpCommutative} from "./base";
-import _ from "underscore";
 import {isOperator, StopPlanOutException} from "./utils";
 
 class Literal extends PlanOutOp {
@@ -16,7 +15,7 @@ class Get extends PlanOutOp {
 
 class Seq extends PlanOutOp {
 	execute(mapper) {
-		_.each(this.getArgList('seq'), function(op) {
+		this.getArgList('seq').forEach(function(op) {
 			mapper.evaluate(op);
 		});
 	}
@@ -56,7 +55,7 @@ class Set extends PlanOutOp {
 
 class Arr extends PlanOutOp {
 	execute(mapper) {
-		return _.map(this.getArgList('values'), function(value) {
+		return this.getArgList('values').map(function(value) {
 			return mapper.evaluate(value);
 		});
 	}
@@ -108,7 +107,7 @@ class Cond extends PlanOutOp {
 
 class And extends PlanOutOp {
 	execute(mapper) {
-		return _.reduce(this.getArgList('values'), function(ret, clause) {
+		return this.getArgList('values').reduce(function(ret, clause) {
 			if (!ret) { return ret; }
 
 			return Boolean(mapper.evaluate(clause));
@@ -118,7 +117,7 @@ class And extends PlanOutOp {
 
 class Or extends PlanOutOp {
 	execute(mapper) {
-		return _.reduce(this.getArgList('values'), function(ret, clause) {
+		return this.getArgList('values').reduce(function(ret, clause) {
 			if (ret) { return ret; }
 
 			return Boolean(mapper.evaluate(clause));
@@ -128,7 +127,7 @@ class Or extends PlanOutOp {
 
 class Product extends PlanOutOpCommutative {
 	commutativeExecute(values) {
-		return _.reduce(values, function(memo, value) {
+		return values.reduce(function(memo, value) {
 			return memo * value;
 		}, 1);
 	}
@@ -136,7 +135,7 @@ class Product extends PlanOutOpCommutative {
 
 class Sum extends PlanOutOpCommutative {
 	commutativeExecute(values) {
-		return _.reduce(values, function(memo, value) {
+		return values.reduce(function(memo, value) {
 			return memo + value;
 		}, 0);
 	}

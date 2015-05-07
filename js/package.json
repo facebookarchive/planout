@@ -2,7 +2,6 @@
   "name": "planoutJS",
   "version": "0.0.1",
   "dependencies": {
-    "underscore": "1.8.3",
     "sha1": "1.1.0",
     "bignumber.js": "2.0.7"
   },

@@ -1,6 +1,6 @@
 import { PlanOutOpSimple } from "./base";
 import sha1 from "sha1";
-import _ from "underscore";
+import { shallowCopy } from "../lib/utils";
 import BigNumber from "bignumber.js";
 
 class PlanOutOpRandom extends PlanOutOpSimple {
@@ -38,7 +38,7 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 		}
 
 
-		var unit_str = _.map(this.getUnit(appended_unit), element =>
+		var unit_str = this.getUnit(appended_unit).map(element =>
 			String(element)
 		).join('.');
 		var hash_str = full_salt + "." + unit_str;
@@ -125,7 +125,7 @@ class WeightedChoice extends PlanOutOpRandom {
 			return cum_sum;
 		});
 		var stop_val = this.getUniform(0.0, cum_sum);
-		return _.reduce(cum_weights, function(ret_val, cur_val, i) {
+		return cum_weights.reduce(function(ret_val, cur_val, i) {
 			if (ret_val) {
 				return ret_val;
 			}
@@ -152,7 +152,7 @@ class Sample extends PlanOutOpRandom {
 	}
 
 	simpleExecute() {
-		var choices = _.clone(this.getArgList('choices'));
+		var choices = shallowCopy(this.getArgList('choices'));
 		var num_draws = 0;
 		if (this.args.draws) {
 			num_draws = this.args.draws;
