@@ -1,7 +1,7 @@
 import Assignment from './assignment';
 import { initFactory, operatorInstance, StopPlanOutException } from './ops/utils';
-import _ from "underscore";
-import $ from 'jquery';
+//import _ from "underscore";
+//import $ from 'jquery';
 
 class Interpreter {
 	constructor(serialization, experiment_salt='global_salt', inputs={}, environment) {
@@ -20,7 +20,6 @@ class Interpreter {
 	in_experiment() {
 		return this._in_experiment;
 	}
-
 
 	set_env(new_env) {
 		this._env = $.extend(true, {}, new_env);

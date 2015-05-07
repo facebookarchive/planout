@@ -1,13 +1,13 @@
 import { PlanOutOpSimple } from "./base";
 import sha1 from "sha1";
-import _ from "underscore";
+//import _ from "underscore";
 import BigNumber from "bignumber.js";
 
 class PlanOutOpRandom extends PlanOutOpSimple {
 
 	constructor(args) {
 		super(args);
-		this.LONG_SCALE = new BigNumber("0xFFFFFFFFFFFFFFF", 16);
+		this.LONG_SCALE = new BigNumber("FFFFFFFFFFFFFFF", 16);
 	}
 
 	getUnit(appended_unit) {
@@ -50,22 +50,19 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 
 class RandomFloat extends PlanOutOpRandom {
 
-    simpleExecute() {
-        var min_val = this.getArgNumber('min');
-        var max_val = this.getArgNumber('max');
-
-        return this.getUniform(min_val, max_val);
-    }
+  simpleExecute() {
+    var min_val = this.getArgNumber('min');
+    var max_val = this.getArgNumber('max');
+    return this.getUniform(min_val, max_val);
+  }
 }
 
 class RandomInteger extends PlanOutOpRandom {
 	simpleExecute() {
-        var min_val = this.getArgNumber('min');
-        var max_val = this.getArgNumber('max');
-        return this.getHash().plus(min_val).modulo(max_val - min_val + 1).toNumber();
-        //return (this.getHash() + min_val) % (max_val - min_val + 1)
-        //return this.getHash().add(min_val).modulo(max_val - min_val + 1).toNumber();
-     }
+  	var min_val = this.getArgNumber('min');
+    var max_val = this.getArgNumber('max');
+    return this.getHash().plus(min_val).modulo(max_val - min_val + 1).toNumber();;
+   }
 }
 
 class BernoulliTrial extends PlanOutOpRandom {
