@@ -1,6 +1,6 @@
 import Assignment from './assignment';
 import { initFactory, operatorInstance, StopPlanOutException } from './ops/utils';
-import { shallowCopy, deepCopy, isObject, isArray } from "./lib/utils";
+import { shallowCopy, deepCopy, isObject, isArray, map } from "./lib/utils";
 
 class Interpreter {
 	constructor(serialization, experiment_salt='global_salt', inputs={}, environment) {
@@ -80,7 +80,7 @@ class Interpreter {
 			return operatorInstance(planout_code).execute(this);
 		} else if (isArray(planout_code)) {
 			var self = this;
-			return planout_code.map(function(obj) {
+			return map(planout_code, function(obj) {
 				return self.evaluate(obj);
 			});
 		} else {

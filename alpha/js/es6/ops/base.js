@@ -1,3 +1,5 @@
+import { forEach } from "../lib/utils";
+
 class PlanOutOp {
 
 	constructor(args) {
@@ -67,7 +69,7 @@ class PlanOutOpSimple extends PlanOutOp {
 	execute(mapper) {
 		this.mapper = mapper;
 		var self = this;
-		Object.keys(this.args).forEach(function (key) {
+		forEach(Object.keys(this.args), function (key) {
   			self.args[key] = mapper.evaluate(self.args[key]);
 		});
 		return this.simpleExecute();

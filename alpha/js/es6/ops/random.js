@@ -1,6 +1,6 @@
 import { PlanOutOpSimple } from "./base";
 import sha1 from "sha1";
-import { shallowCopy } from "../lib/utils";
+import { shallowCopy, reduce } from "../lib/utils";
 import BigNumber from "bignumber.js";
 
 class PlanOutOpRandom extends PlanOutOpSimple {
@@ -125,7 +125,7 @@ class WeightedChoice extends PlanOutOpRandom {
 			return cum_sum;
 		});
 		var stop_val = this.getUniform(0.0, cum_sum);
-		return cum_weights.reduce(function(ret_val, cur_val, i) {
+		return reduce(cum_weights, function(ret_val, cur_val, i) {
 			if (ret_val) {
 				return ret_val;
 			}

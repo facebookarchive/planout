@@ -1,5 +1,5 @@
 import { PlanOutOpRandom } from "./ops/random";
-import { shallowCopy } from "./lib/utils";
+import { shallowCopy, forEach } from "./lib/utils";
 
 class Assignment {
 	constructor(experiment_salt, overrides) {
@@ -22,7 +22,7 @@ class Assignment {
 	set_overrides(overrides) {
 		this._overrides = shallowCopy(overrides);
 		var self = this;
-		Object.keys(this._overrides).forEach(function(override_key) {
+		forEach(Object.keys(this._overrides), function(override_key) {
 			self._data[override_key] = self._overrides[override_key];
 		});
 	}

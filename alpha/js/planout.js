@@ -97,7 +97,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._salt = null;
 			this._in_experiment = true;
 
-			this.name = 'EXPERIMENT';
+			this.name = this.getDefaultExperimentName();
 			this._auto_exposure_log = true;
 
 			this.setup();
@@ -107,6 +107,19 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 
 		_createClass(Experiment, [{
+			key: 'getDefaultExperimentName',
+
+			//helper function to return the class name of the current experiment class
+			value: function getDefaultExperimentName() {
+				if (_libUtils.isObject(this) && this.constructor && this !== this.window) {
+					var arr = this.constructor.toString().match(/function\s*(\w+)/);
+					if (arr && arr.length === 2) {
+						return arr[1];
+					}
+				}
+				return 'GenericExperiment';
+			}
+		}, {
 			key: 'require_assignment',
 			value: function require_assignment() {
 				if (!this._assigned) {
@@ -143,7 +156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._assignment.set_overrides(value);
 				var o = this._assignment.get_overrides();
 				var self = this;
-				Object.keys(o).forEach(function (key) {
+				_libUtils.forEach(Object.keys(o), function (key) {
 					if (self.inputs[key] !== undefined) {
 						self.inputs[key] = o[key];
 					}
@@ -395,7 +408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return _opsUtils.operatorInstance(planout_code).execute(this);
 				} else if (_libUtils.isArray(planout_code)) {
 					var self = this;
-					return planout_code.map(function (obj) {
+					return _libUtils.map(planout_code, function (obj) {
 						return self.evaluate(obj);
 					});
 				} else {
@@ -659,7 +672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return cum_sum;
 				});
 				var stop_val = this.getUniform(0, cum_sum);
-				return cum_weights.reduce(function (ret_val, cur_val, i) {
+				return _libUtils.reduce(cum_weights, function (ret_val, cur_val, i) {
 					if (ret_val) {
 						return ret_val;
 					}
@@ -739,6 +752,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(7);
 
+	var _libUtils = __webpack_require__(6);
+
 	var Literal = (function (_PlanOutOp) {
 		function Literal() {
 			_classCallCheck(this, Literal);
@@ -795,7 +810,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Seq, [{
 			key: "execute",
 			value: function execute(mapper) {
-				this.getArgList("seq").forEach(function (op) {
+				_libUtils.forEach(this.getArgList("seq"), function (op) {
 					mapper.evaluate(op);
 				});
 			}
@@ -878,7 +893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Arr, [{
 			key: "execute",
 			value: function execute(mapper) {
-				return this.getArgList("values").map(function (value) {
+				return _libUtils.map(this.getArgList("values"), function (value) {
 					return mapper.evaluate(value);
 				});
 			}
@@ -990,7 +1005,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(And, [{
 			key: "execute",
 			value: function execute(mapper) {
-				return this.getArgList("values").reduce(function (ret, clause) {
+				return _libUtils.reduce(this.getArgList("values"), function (ret, clause) {
 					if (!ret) {
 						return ret;
 					}
@@ -1017,7 +1032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Or, [{
 			key: "execute",
 			value: function execute(mapper) {
-				return this.getArgList("values").reduce(function (ret, clause) {
+				return _libUtils.reduce(this.getArgList("values"), function (ret, clause) {
 					if (ret) {
 						return ret;
 					}
@@ -1044,7 +1059,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Product, [{
 			key: "commutativeExecute",
 			value: function commutativeExecute(values) {
-				return values.reduce(function (memo, value) {
+				return _libUtils.reduce(values, function (memo, value) {
 					return memo * value;
 				}, 1);
 			}
@@ -1067,7 +1082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Sum, [{
 			key: "commutativeExecute",
 			value: function commutativeExecute(values) {
-				return values.reduce(function (memo, value) {
+				return _libUtils.reduce(values, function (memo, value) {
 					return memo + value;
 				}, 0);
 			}
@@ -1436,7 +1451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function set_overrides(overrides) {
 	      this._overrides = _libUtils.shallowCopy(overrides);
 	      var self = this;
-	      Object.keys(this._overrides).forEach(function (override_key) {
+	      _libUtils.forEach(Object.keys(this._overrides), function (override_key) {
 	        self._data[override_key] = self._overrides[override_key];
 	      });
 	    }
@@ -1537,10 +1552,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
-	var extendHelper = function extendHelper(obj) {
+	var isFunction = function isFunction(obj) {
+	  return typeof obj == 'function' || false;
+	};
+
+	//extend functionality from underscore
+
+	var keys = function keys(obj) {
+	  if (!isObject(obj)) return [];
+	  if (Object.keys) return Object.keys(obj);
+	  var keys = [];
+	  for (var key in obj) if (has(obj, key)) keys.push(key);
+
+	  if (hasEnumBug) collectNonEnumProps(obj, keys);
+
+	  return keys;
+	};
+
+	var allKeys = function allKeys(obj) {
 	  if (!isObject(obj)) return [];
 	  var keys = [];
 	  for (var key in obj) keys.push(key);
+
+	  if (hasEnumBug) collectNonEnumProps(obj, keys);
 
 	  return keys;
 	};
@@ -1562,14 +1596,169 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	};
 
-	var extend = extendHolder(extendHelper);
+	var identity = function identity(value) {
+	  return value;
+	};
+	var extend = extendHolder(allKeys);
+	var extendOwn = extendHolder(keys);
 
+	var isMatch = function isMatch(object, attrs) {
+	  var keys = keys(attrs),
+	      length = keys.length;
+	  if (object == null) return !length;
+	  var obj = Object(object);
+	  for (var i = 0; i < length; i++) {
+	    var key = keys[i];
+	    if (attrs[key] !== obj[key] || !(key in obj)) return false;
+	  }
+	  return true;
+	};
+
+	var matcher = function matcher(attrs) {
+	  attrs = extendOwn({}, attrs);
+	  return function (obj) {
+	    return isMatch(obj, attrs);
+	  };
+	};
+
+	var cb = function cb(value, context, argCount) {
+	  if (value == null) return identity;
+	  if (isFunction(value)) return optimizeCb(value, context, argCount);
+	  if (isObject(value)) return matcher(value);
+	  return property(value);
+	};
+
+	var optimizeCb = function optimizeCb(func, context, argCount) {
+	  if (context === void 0) return func;
+	  switch (argCount == null ? 3 : argCount) {
+	    case 1:
+	      return function (value) {
+	        return func.call(context, value);
+	      };
+	    case 2:
+	      return function (value, other) {
+	        return func.call(context, value, other);
+	      };
+	    case 3:
+	      return function (value, index, collection) {
+	        return func.call(context, value, index, collection);
+	      };
+	    case 4:
+	      return function (accumulator, value, index, collection) {
+	        return func.call(context, accumulator, value, index, collection);
+	      };
+	  }
+	  return function () {
+	    return func.apply(context, arguments);
+	  };
+	};
+
+	var forEach = function forEach(obj, iteratee, context) {
+	  iteratee = optimizeCb(iteratee, context);
+	  var i, length;
+	  if (isArrayLike(obj)) {
+	    for (i = 0, length = obj.length; i < length; i++) {
+	      iteratee(obj[i], i, obj);
+	    }
+	  } else {
+	    var keys = keys(obj);
+	    for (i = 0, length = keys.length; i < length; i++) {
+	      iteratee(obj[keys[i]], keys[i], obj);
+	    }
+	  }
+	  return obj;
+	};
+
+	var map = function map(obj, iteratee, context) {
+	  iteratee = cb(iteratee, context);
+	  var keys = !isArrayLike(obj) && keys(obj),
+	      length = (keys || obj).length,
+	      results = Array(length);
+	  for (var index = 0; index < length; index++) {
+	    var currentKey = keys ? keys[index] : index;
+	    results[index] = iteratee(obj[currentKey], currentKey, obj);
+	  }
+	  return results;
+	};
+
+	//reduce functionality from underscore
+	var reduce = function reduce(obj, iteratee, memo, context) {
+	  iteratee = optimizeCb(iteratee, context, 4);
+	  var keys = !isArrayLike(obj) && keys(obj),
+	      length = (keys || obj).length,
+	      index = 0;
+
+	  if (arguments.length < 3) {
+	    memo = obj[keys ? keys[index] : index];
+	    index += 1;
+	  }
+	  for (; index >= 0 && index < length; index++) {
+	    var currentKey = keys ? keys[index] : index;
+	    memo = iteratee(memo, obj[currentKey], currentKey, obj);
+	  }
+	  return memo;
+	};
+
+	//clone functionality from underscore
 	var shallowCopy = function shallowCopy(obj) {
 	  if (!isObject(obj)) return obj;
 	  return isArray(obj) ? obj.slice() : extend({}, obj);
 	};
 
-	exports['default'] = { deepCopy: deepCopy, shallowCopy: shallowCopy, extend: extend, isObject: isObject, isArray: isArray };
+	/* helper functions from underscore */
+	var property = function property(key) {
+	  return function (obj) {
+	    return obj == null ? void 0 : obj[key];
+	  };
+	};
+
+	var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+	var getLength = property('length');
+	var isArrayLike = function isArrayLike(collection) {
+	  var length = getLength(collection);
+	  return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
+	};
+
+	var has = function has(obj, key) {
+	  return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
+	};
+
+	/* All these are helper functions to deal with older versions of IE  :(*/
+	var hasEnumBug = !({ toString: null }).propertyIsEnumerable('toString');
+	var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+
+	function collectNonEnumProps(obj, keys) {
+	  var nonEnumIdx = nonEnumerableProps.length;
+	  var constructor = obj.constructor;
+	  var proto = isFunction(constructor) && constructor.prototype || Object.Prototype;
+
+	  var prop = 'constructor';
+	  if (has(obj, prop) && !contains(keys, prop)) keys.push(prop);
+
+	  while (nonEnumIdx--) {
+	    prop = nonEnumerableProps[nonEnumIdx];
+	    if (prop in obj && obj[prop] !== proto[prop] && !contains(keys, prop)) {
+	      keys.push(prop);
+	    }
+	  }
+	}
+	var contains = function contains(obj, item, fromIndex, guard) {
+	  if (!isArrayLike(obj)) obj = values(obj);
+	  if (typeof fromIndex != 'number' || guard) fromIndex = 0;
+	  return obj.indexOf(item) >= 0;
+	};
+
+	var vals = function vals(obj) {
+	  var keys = _.keys(obj);
+	  var length = keys.length;
+	  var values = Array(length);
+	  for (var i = 0; i < length; i++) {
+	    values[i] = obj[keys[i]];
+	  }
+	  return values;
+	};
+
+	exports['default'] = { deepCopy: deepCopy, map: map, reduce: reduce, forEach: forEach, shallowCopy: shallowCopy, extend: extend, isObject: isObject, isArray: isArray };
 	module.exports = exports['default'];
 
 /***/ },
@@ -1674,6 +1863,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	var _libUtils = __webpack_require__(6);
+
 	var PlanOutOp = (function () {
 		function PlanOutOp(args) {
 			_classCallCheck(this, PlanOutOp);
@@ -1768,7 +1959,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function execute(mapper) {
 				this.mapper = mapper;
 				var self = this;
-				Object.keys(this.args).forEach(function (key) {
+				_libUtils.forEach(Object.keys(this.args), function (key) {
 					self.args[key] = mapper.evaluate(self.args[key]);
 				});
 				return this.simpleExecute();

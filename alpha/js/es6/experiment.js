@@ -1,5 +1,5 @@
 import Assignment from './assignment';
-import { clone, extend, isObject } from './lib/utils';
+import { clone, extend, isObject, forEach } from './lib/utils';
 
 class Experiment {
 	constructor(inputs) {
@@ -61,7 +61,7 @@ class Experiment {
 		this._assignment.set_overrides(value);
 		var o = this._assignment.get_overrides();
 		var self = this;
-		Object.keys(o).forEach(function(key) {
+		forEach(Object.keys(o), function(key) {
 			if (self.inputs[key] !== undefined) {
 				self.inputs[key] = o[key];
 			}
