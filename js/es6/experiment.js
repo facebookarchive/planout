@@ -1,5 +1,6 @@
 import Assignment from './assignment';
-//import _ from "underscore"
+import { clone, extend } from './lib/utils';
+import _ from 'underscore';
 
 class Experiment {
 	constructor(inputs) {
@@ -98,7 +99,7 @@ class Experiment {
 			'params': this._assignment.get_params()
 		};
 		_.extend(d, extras);
-		return d;
+    return d;
 	}
 
 	set_auto_exposure_logging(value) {
@@ -139,7 +140,7 @@ class Experiment {
 		var extra_payload;
 
 		if(extras) {
-			extra_payload = { 'event': event_type, 'extra_data': _.clone(extras)};
+			extra_payload = { 'event': event_type, 'extra_data': clone(extras)};
 		} else {
 			extra_payload = { 'event': event_type };
 		}

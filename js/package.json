@@ -4,7 +4,6 @@
   "dependencies": {
     "underscore": "1.8.3",
     "sha1": "1.1.0",
-    "jquery": "2.1.4",
     "bignumber.js": "2.0.7"
   },
   "jest": {
@@ -24,6 +23,7 @@
     "test": "jest"
   },
   "devDependencies": {
+    "load-grunt-tasks": "3.1.0",
     "babel-jest": "5.0.1",
     "jest-cli": "~0.4.0",
     "grunt": "~0.4.1",
@@ -31,6 +31,7 @@
     "grunt-babel": "5.0.0",
     "grunt-webpack": "1.0.8",
     "grunt-contrib-uglify": "0.9.1",
-    "webpack": "1.8.11"
+    "webpack": "1.8.11",
+    "babel-loader": "5.0.0"
   }
 }

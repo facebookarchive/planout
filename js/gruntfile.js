@@ -10,8 +10,9 @@ module.exports = function(grunt) {
     'webpack': {
       build: {
         progress: true,
+        entry: './index.js',
         output: {
-          path: 'es6/',
+          libraryTarget: 'umd',
           filename: 'planout.js'
         },
         module: {
@@ -20,13 +21,10 @@ module.exports = function(grunt) {
             exclude: /node_modules/,
             loader: 'babel-loader'
           }]
-        },
-        resolve: {
-          extensions: ['', '.js']
         }
       }
     },
-    uglify: {
+    'uglify': {
       options: {
         sourceMap: true,
         sourceMapName: 'planout.map.js'

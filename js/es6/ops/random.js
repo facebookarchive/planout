@@ -1,6 +1,6 @@
 import { PlanOutOpSimple } from "./base";
 import sha1 from "sha1";
-//import _ from "underscore";
+import _ from "underscore";
 import BigNumber from "bignumber.js";
 
 class PlanOutOpRandom extends PlanOutOpSimple {

@@ -1,7 +1,6 @@
 import Assignment from './assignment';
 import { initFactory, operatorInstance, StopPlanOutException } from './ops/utils';
-//import _ from "underscore";
-//import $ from 'jquery';
+import { clone } from "./lib/utils";
 
 class Interpreter {
 	constructor(serialization, experiment_salt='global_salt', inputs={}, environment) {
@@ -14,7 +13,7 @@ class Interpreter {
 		this.experiment_salt = this._experiment_salt = experiment_salt;
 		this._evaluated = false;
 		this._in_experiment = false;
-		this._inputs = _.clone(inputs);
+		this._inputs = clone(inputs);
 	}
 
 	in_experiment() {
@@ -22,7 +21,7 @@ class Interpreter {
 	}
 
 	set_env(new_env) {
-		this._env = $.extend(true, {}, new_env);
+		this._env = clone(true, {}, new_env);
 		return this;
 	}
 
@@ -81,7 +80,7 @@ class Interpreter {
 			return operatorInstance(planout_code).execute(this);
 		} else if (Object.prototype.toString.call( planout_code ) === '[object Array]') {
 			var self = this;
-			return _.map(planout_code, function(obj) {
+			return planout_code.map(function(obj) {
 				return self.evaluate(obj);
 			});
 		} else {

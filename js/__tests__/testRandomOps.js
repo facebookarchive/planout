@@ -71,16 +71,16 @@ describe('Test randomization ops', function() {
 		expect(a.get('x')).toEqual(a.get('z'));
 
 		var b = new Assignment('assign_salt_b');
-        b.set('x', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i}));
-        expect(a.get('x')).not.toEqual(b.get('x'));
+    b.set('x', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i}));
+    expect(a.get('x')).not.toEqual(b.get('x'));
 
-        a.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs'}));
-        b.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs'}));
-        expect(a.get('f')).toEqual(b.get('f'));
+    a.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs'}));
+    b.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs'}));
+    expect(a.get('f')).toEqual(b.get('f'));
 
-       	a.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs2'}));
-        b.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs2'}));
-        expect(a.get('f')).toEqual(b.get('f'));
+   	a.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs2'}));
+    b.set('f', new Random.RandomInteger({ 'min': 0, 'max': 100000, 'unit': i, 'full_salt':'fs2'}));
+    expect(a.get('f')).toEqual(b.get('f'));
 
 	});
 

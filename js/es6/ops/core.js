@@ -1,5 +1,5 @@
 import {PlanOutOp, PlanOutOpSimple, PlanOutOpBinary, PlanOutOpUnary, PlanOutOpCommutative} from "./base";
-// import _ from "underscore";
+import _ from "underscore";
 import {isOperator, StopPlanOutException} from "./utils";
 
 class Literal extends PlanOutOp {

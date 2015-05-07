@@ -24,11 +24,11 @@ describe('Test the assignment module', function() {
 	});
 
 	it('Should work with overrides', function() {
-        var a = new Assignment(tester_salt);
-        a.set_overrides({'x': 42, 'y': 43})
-        a.set('x', 5);
-        a.set('y', 6);
-        expect(a.get('x')).toEqual(42);
-        expect(a.get('y')).toEqual(43);
+    var a = new Assignment(tester_salt);
+    a.set_overrides({'x': 42, 'y': 43})
+    a.set('x', 5);
+    a.set('y', 6);
+    expect(a.get('x')).toEqual(42);
+    expect(a.get('y')).toEqual(43);
 	});
 });
