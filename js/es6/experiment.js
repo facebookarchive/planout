@@ -1,5 +1,5 @@
 import Assignment from './assignment';
-import { clone, extend } from './lib/utils';
+import { clone, extend, isObject } from './lib/utils';
 
 class Experiment {
 	constructor(inputs) {
@@ -9,7 +9,7 @@ class Experiment {
 		this._salt = null;
 		this._in_experiment = true;
 
-		this.name = "EXPERIMENT";
+		this.name = this.getDefaultExperimentName();
 		this._auto_exposure_log = true;
 
 		this.setup();
@@ -17,6 +17,18 @@ class Experiment {
 		this._assignment = new Assignment(this.get_salt());
 		this._assigned = false;	
 	}
+
+
+  //helper function to return the class name of the current experiment class
+  getDefaultExperimentName() {
+    if (isObject(this) && this.constructor && this !== this.window) {
+      var arr = this.constructor.toString().match(/function\s*(\w+)/);
+      if (arr && arr.length === 2) {
+        return arr[1];
+      }
+    }
+    return "GenericExperiment";
+  }
 
 
 	require_assignment() {
