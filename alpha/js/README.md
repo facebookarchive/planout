@@ -44,7 +44,7 @@ class MyExperiment extends PlanOut.Experiment {
 	
 	assign(params, args) {
 		params.set(‘foo’, new PlanOut.UniformChoice({‘choices’: [‘a’, ‘b’], ‘unit’: args.id});
-		args.val++; //args is an arbitrary 
+		args.val++; //args is an arbitrary object passed in on initialization
 	}
 
 }
@@ -59,9 +59,8 @@ console.log(“User has foo param set to “ + exp.get(‘foo’));
 
 If you are using ES5, here is an example of how to use this library: 
 
-```javascript
-TODO
-```
+[See this example](examples/sample_planout_es5.js)
+
 
 ## Transpile to ES5 ##
 -----
