@@ -7,18 +7,18 @@ var interpreter_salt = 'foo';
 describe("Test interpreter", function() {
 	it('should interpret properly', function() {
 		var proc = new Interpreter(compiled, interpreter_salt, { 'userid': 123454});
-        expect(proc.get_params().specific_goal).toEqual(1);
-        expect(proc.get_params().ratings_goal).toEqual(320);
+    expect(proc.get_params().specific_goal).toEqual(1);
+    expect(proc.get_params().ratings_goal).toEqual(320);
 
 	});
-    it('should allow overrides', function() {
-        var proc = new Interpreter(compiled, interpreter_salt, { 'userid': 123454});
-        proc.set_overrides({'specific_goal': 0});
-        expect(proc.get_params().specific_goal).toEqual(0);
-        expect(proc.get_params().ratings_goal).toEqual(undefined);
+  it('should allow overrides', functio{n() {
+    var proc = new Interpreter(compiled, interpreter_salt, { 'userid': 123454});
+    proc.set_overrides({'specific_goal': 0});
+    expect(proc.get_params().specific_goal).toEqual(0);
+    expect(proc.get_params().ratings_goal).toEqual(undefined);
 
-        proc = new Interpreter(compiled, interpreter_salt, { 'userid': 123453});
-        proc.set_overrides({'userid': 123454});
-        expect(proc.get_params().specific_goal).toEqual(1);
-    });
+    proc = new Interpreter(compiled, interpreter_salt, { 'userid': 123453});
+    proc.set_overrides({'userid': 123454});
+    expect(proc.g}et_params().specific_goal).toEqual(1);
+  });
 });
