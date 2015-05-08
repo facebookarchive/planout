@@ -56,12 +56,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	module.exports = function () {
-	  Experiment: __webpack_require__(1);
-	  Interpeter: __webpack_require__(2);
+	var experiment = __webpack_require__(1);
+	var interpreter = __webpack_require__(2);
+	var random = __webpack_require__(3);
+	var core = __webpack_require__(4);
+
+	module.exports = {
+	  Experiment: experiment,
+	  Interpreter: interpreter,
 	  Ops: {
-	    Random: __webpack_require__(3);
-	    Core: __webpack_require__(4);
+	    Random: random,
+	    Core: core
 	  }
 	};
 
@@ -1533,7 +1538,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	/* These functions are all from the wonderful Underscore package http://underscorejs.org/  */
+	/*  Most of these functions are from the wonderful Underscore package http://underscorejs.org/  
+	    This file exists so that the planoutjs library doesn't depend on a few unneeded third party dependencies
+	    so that consumers of the library don't have to include dependencies such as underscore. As well, this helps reduce
+	    the file size of the resulting library.
+	*/
 
 	var deepCopy = function deepCopy(obj) {
 	  return JSON.parse(JSON.stringify(obj));
@@ -1556,7 +1565,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return typeof obj == 'function' || false;
 	};
 
-	//extend functionality from underscore
+	//extend helpers
 
 	var keys = function keys(obj) {
 	  if (!isObject(obj)) return [];
@@ -1596,11 +1605,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	};
 
+	//extend functionality from underscore
+	var extend = extendHolder(allKeys);
+	var extendOwn = extendHolder(keys);
+
+	/* underscore helpers */
 	var identity = function identity(value) {
 	  return value;
 	};
-	var extend = extendHolder(allKeys);
-	var extendOwn = extendHolder(keys);
 
 	var isMatch = function isMatch(object, attrs) {
 	  var keys = keys(attrs),
@@ -1653,6 +1665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	};
 
+	//from underscore
 	var forEach = function forEach(obj, iteratee, context) {
 	  iteratee = optimizeCb(iteratee, context);
 	  var i, length;
@@ -1669,6 +1682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj;
 	};
 
+	//map functionality from underscore
 	var map = function map(obj, iteratee, context) {
 	  iteratee = cb(iteratee, context);
 	  var keys = !isArrayLike(obj) && keys(obj),

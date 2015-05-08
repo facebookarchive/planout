@@ -63,6 +63,11 @@ If you are using ES5, here is an example of how to use this library:
 TODO
 ```
 
+## Transpile to ES5 ##
+-----
+
+If you are making changes to the ES6 implementation, simply run grunt and it will transpile to the corresponding ES5 code.
+
 
 
 

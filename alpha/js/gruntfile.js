@@ -2,7 +2,6 @@ var webpack = require('webpack');
 
 module.exports = function(grunt) {
 	require('load-grunt-tasks')(grunt); 
-	grunt.loadNpmTasks('grunt-contrib-jasmine');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-webpack');
 
