@@ -11,7 +11,7 @@ describe("Test interpreter", function() {
     expect(proc.get_params().ratings_goal).toEqual(320);
 
 	});
-  it('should allow overrides', functio{n() {
+  it('should allow overrides', function() {
     var proc = new Interpreter(compiled, interpreter_salt, { 'userid': 123454});
     proc.set_overrides({'specific_goal': 0});
     expect(proc.get_params().specific_goal).toEqual(0);
@@ -19,6 +19,6 @@ describe("Test interpreter", function() {
 
     proc = new Interpreter(compiled, interpreter_salt, { 'userid': 123453});
     proc.set_overrides({'userid': 123454});
-    expect(proc.g}et_params().specific_goal).toEqual(1);
+    expect(proc.get_params().specific_goal).toEqual(1);
   });
 });

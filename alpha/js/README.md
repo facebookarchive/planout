@@ -62,6 +62,11 @@ If you are using ES5, here is an example of how to use this library:
 [See this example](examples/sample_planout_es5.js)
 
 
+## Development ##
+----- 
+
+This project uses [Jest](https://facebook.github.io/jest/) for testing. The tests can be done in the __tests__ file and running the tests simply requires running the command: npm test
+
 ## Transpile to ES5 ##
 -----
 

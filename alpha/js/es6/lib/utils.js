@@ -6,7 +6,14 @@
 
 
 var deepCopy = function (obj) {
-  return JSON.parse(JSON.stringify(obj));
+  var newObj = obj;
+  if (obj && typeof obj === 'object') {
+      newObj = Object.prototype.toString.call(obj) === "[object Array]" ? [] : {};
+      for (var i in obj) {
+          newObj[i] = deepCopy(obj[i]);
+      }
+  }
+  return newObj;
 }
 
 var isObject = function(obj) {
