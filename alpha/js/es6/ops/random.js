@@ -72,6 +72,7 @@ class BernoulliTrial extends PlanOutOpRandom {
 		if (p < 0 || p > 1) {
 			throw "Invalid probability";
 		}
+
 		if (this.getUniform(0.0, 1.0) <= p) {
 			return 1;
 		} else {

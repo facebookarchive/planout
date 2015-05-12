@@ -44,7 +44,6 @@ class MyExperiment extends PlanOut.Experiment {
 	
 	assign(params, args) {
 		params.set(‘foo’, new PlanOut.Ops.UniformChoice({‘choices’: [‘a’, ‘b’], ‘unit’: args.id});
-		args.val += 1; //args is an arbitrary object passed in on initialization
 	}
 
 }
