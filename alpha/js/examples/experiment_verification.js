@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-var planout = require('../planout.js');
+var planout = require('planout');
 
 var Experiment1 = function(args) {
   var experiment = new planout.Experiment(args);
