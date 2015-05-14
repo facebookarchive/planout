@@ -64,7 +64,7 @@ If you are using ES5, here is an example of how to use this library:
 ## Development ##
 ----- 
 
-This project uses [Jest](https://facebook.github.io/jest/) for testing. The tests can be done in the __tests__ file and running the tests simply requires running the command: npm test
+This project uses [Jest](https://facebook.github.io/jest/) for testing. The tests can be found in the __tests__ folder and running the tests simply requires running the command: npm test
 
 ## Transpile to ES5 ##
 -----
