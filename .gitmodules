@@ -4,3 +4,6 @@
 [submodule "alpha/golang"]
 	path = alpha/golang
 	url = https://github.com/URXtech/planout-golang
+[submodule "java"]
+	path = java
+	url = https://github.com/Glassdoor/planout4j.git
