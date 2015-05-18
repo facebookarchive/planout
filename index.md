@@ -70,20 +70,20 @@ multiple third party ports of PlanOut.
 
 Production-ready ports of PlanOut of PlanOut are available at:
 
-  * Java: full-featured implementation of [PlanOut by Glassdoor](https://github.com/Glassdoor/planout4j),
- including experiment lifecycle management and code-review.
+  * [Java](https://github.com/facebook/planout/tree/master/alpha/ruby): full-featured implementation of PlanOut by Glassdoor,
+ including experiment lifecycle management and code review.
 
-  * PHP: [Vimeo's implementation of PlanOut](https://github.com/vimeo/ABLincoln). Includes native API with PSR logging
+  * [PHP](https://github.com/vimeo/ABLincoln): Vimeo's implementation of PlanOu. tIncludes native API with PSR logging.
 
 Under development:
 
-  * JavaScript: complete port of the PlanOut reference implementation of
-   [PlanOut for JavaScript](https://github.com/facebook/planout/tree/master/alpha/js).
+  * [JavaScript](https://github.com/facebook/planout/tree/master/alpha/js):
+  complete port of the PlanOut reference implementation to JavaScript.
    Includes native APIs for ES5, ES6, as well as the PlanOut interpreter.
 
-  * Go: implementation of the [PlanOut interpreter by URX](https://github.com/URXtech/planout-golang).
+  * [Go](https://github.com/URXtech/planout-golang): implementation of PlanOut interpreter for golang.
 
-  * Ruby: Native API implementation of [PlanOut for Ruby](https://github.com/facebook/planout/tree/master/alpha/ruby)
+  * [Ruby](https://github.com/facebook/planout/tree/master/alpha/ruby): Basic native API implementation of PlanOut for Ruby
 
 
 If you are publishing research using PlanOut, please consider referencing our work,
