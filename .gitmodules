@@ -1,3 +1,6 @@
 [submodule "php"]
 	path = php
 	url = git@github.com:vimeo/ABLincoln.git
+[submodule "alpha/golang"]
+	path = alpha/golang
+	url = https://github.com/URXtech/planout-golang
