@@ -69,15 +69,19 @@ In addition to the Python reference implementation written by Facebook, there ar
 multiple third party ports of PlanOut.
 
 Production-ready ports of PlanOut of PlanOut are available at:
+
  * Java: full-featured implementation of [PlanOut by Glassdoor](https://github.com/Glassdoor/planout4j),
  including experiment lifecycle management and code-review.
+
  * PHP: [Vimeo's implementation of PlanOut](https://github.com/vimeo/ABLincoln). Includes native API with PSR logging
 
 Under development:
  * JavaScript: complete port of the PlanOut reference implementation of
    [PlanOut for JavaScript](https://github.com/facebook/planout/tree/master/alpha/js).
    Includes native APIs for ES5, ES6, as well as the PlanOut interpreter.
+
  * Go: implementation of the [PlanOut interpreter by URX](https://github.com/URXtech/planout-golang).
+
  * Ruby: Native API implementation of [PlanOut for Ruby](https://github.com/facebook/planout/tree/master/alpha/ruby)
 
 
