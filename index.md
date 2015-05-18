@@ -65,6 +65,22 @@ Continue on to the [documentation page](docs/getting-started.html) or try out th
 interactive [PlanOut editor](planout-editor.herokuapp.com).
 For an in-depth look at how we use PlanOut at Facebook, see our paper, [Designing and Deploying Online Field Experiments](http://arxiv.org/pdf/1409.3174v1.pdf).
 
+In addition to the Python reference implementation written by Facebook, there are
+multiple third party ports of PlanOut.
+
+Production-ready ports of PlanOut of PlanOut are available at:
+ * Java: full-featured implementation of [PlanOut by Glassdoor](https://github.com/Glassdoor/planout4j),
+ including experiment lifecycle management and code-review.
+ * PHP: [Vimeo's implementation of PlanOut](https://github.com/vimeo/ABLincoln). Includes native API with PSR logging
+
+Under development:
+ * JavaScript: complete port of the PlanOut reference implementation of
+   [PlanOut for JavaScript](https://github.com/facebook/planout/tree/master/alpha/js).
+   Includes native APIs for ES5, ES6, as well as the PlanOut interpreter.
+ * Go: implementation of the [PlanOut interpreter by URX](https://github.com/URXtech/planout-golang).
+ * Ruby: Native API implementation of [PlanOut for Ruby](https://github.com/facebook/planout/tree/master/alpha/ruby)
+
+
 If you are publishing research using PlanOut, please consider referencing our work,
 
 ```
