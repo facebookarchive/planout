@@ -16,7 +16,7 @@ class PlanOutOpRandom extends PlanOutOpSimple {
 			unit = [unit];
 		}
 		if (appended_unit) {
-			unit += [appended_unit]
+			unit.push(appended_unit);
 		}
 		return unit;
 	}
@@ -141,10 +141,9 @@ class WeightedChoice extends PlanOutOpRandom {
 
 class Sample extends PlanOutOpRandom {
 
-	//http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 	shuffle(array) {
 		for (var i = array.length - 1; i > 0; i--) {
-		  var j = Math.floor(Math.random() * (i + 1));
+		  var j = this.getHash(i).modulo(i+1).toNumber();
 		  var temp = array[i];
 		  array[i] = array[j];
 		  array[j] = temp;
@@ -164,5 +163,6 @@ class Sample extends PlanOutOpRandom {
 		return shuffled_arr.slice(0, num_draws);
 	}
 }
+
 
 export default {PlanOutOpRandom, Sample, WeightedChoice, UniformChoice, BernoulliFilter, BernoulliTrial, RandomInteger, RandomFloat };

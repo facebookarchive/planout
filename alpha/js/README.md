@@ -13,7 +13,7 @@ npm install planout
 ##Comparison with Python Implementation##
 -----
 
-The only two places where this implementation differs from the Python implementation is that it does not include an implementation of namespaces and setting experiment assignment parameters explicitly requires calling .set instead of the setter used in the Python implementation.
+The only two places where this implementation differs from the Python implementation is that setting experiment assignment parameters explicitly requires calling .set instead of the setter used in the Python implementation and that it does not include an implementation of checksum for experiments.
 
 ##Usage##
 -----

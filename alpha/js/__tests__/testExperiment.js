@@ -21,7 +21,6 @@ describe("Test the experiment module", function() {
 
 		experiment_tester = function (exp_class, in_experiment) {
 			if (in_experiment === undefined) { in_experiment = true; }
-			console
 			global_log = [];
 			var e = new exp_class({ 'i': 42});
 			e.set_overrides({'bar': 42});
