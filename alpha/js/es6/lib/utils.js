@@ -237,4 +237,12 @@ var vals = function(obj) {
   return values;
 };
 
-export default { deepCopy, map, reduce, forEach, shallowCopy, extend, isObject, isArray }
+var range = function(max) {
+  var l = [];
+  for (var i = 0; i < max; i++) {
+    l.push(i);
+  }
+  return l;
+}
+
+export default { deepCopy, map, reduce, forEach, shallowCopy, extend, isObject, isArray, range }

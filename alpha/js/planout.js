@@ -60,8 +60,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var interpreter = __webpack_require__(2);
 	var random = __webpack_require__(3);
 	var core = __webpack_require__(4);
+	var namespace = __webpack_require__(5);
 
 	module.exports = {
+	  Namespace: namespace,
 	  Experiment: experiment,
 	  Interpreter: interpreter,
 	  Ops: {
@@ -86,11 +88,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _assignment = __webpack_require__(5);
+	var _assignment = __webpack_require__(6);
 
 	var _assignment2 = _interopRequireDefault(_assignment);
 
-	var _libUtils = __webpack_require__(6);
+	var _libUtils = __webpack_require__(7);
 
 	var Experiment = (function () {
 		function Experiment(inputs) {
@@ -116,7 +118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			//helper function to return the class name of the current experiment class
 			value: function getDefaultExperimentName() {
-				if (_libUtils.isObject(this) && this.constructor && this !== this.window) {
+				if ((0, _libUtils.isObject)(this) && this.constructor && this !== this.window) {
 					var arr = this.constructor.toString().match(/function\s*(\w+)/);
 					if (arr && arr.length === 2) {
 						return arr[1];
@@ -161,7 +163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._assignment.set_overrides(value);
 				var o = this._assignment.get_overrides();
 				var self = this;
-				_libUtils.forEach(Object.keys(o), function (key) {
+				(0, _libUtils.forEach)(Object.keys(o), function (key) {
 					if (self.inputs[key] !== undefined) {
 						self.inputs[key] = o[key];
 					}
@@ -217,7 +219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					'inputs': this.inputs,
 					'params': this._assignment.get_params()
 				};
-				_libUtils.extend(d, extras);
+				(0, _libUtils.extend)(d, extras);
 				return d;
 			}
 		}, {
@@ -265,7 +267,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				var extra_payload;
 
 				if (extras) {
-					extra_payload = { 'event': event_type, 'extra_data': _libUtils.clone(extras) };
+					extra_payload = { 'event': event_type, 'extra_data': (0, _libUtils.clone)(extras) };
 				} else {
 					extra_payload = { 'event': event_type };
 				}
@@ -311,13 +313,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _assignment = __webpack_require__(5);
+	var _assignment = __webpack_require__(6);
 
 	var _assignment2 = _interopRequireDefault(_assignment);
 
-	var _opsUtils = __webpack_require__(7);
+	var _opsUtils = __webpack_require__(8);
 
-	var _libUtils = __webpack_require__(6);
+	var _libUtils = __webpack_require__(7);
 
 	var Interpreter = (function () {
 		function Interpreter(serialization, _x, _x2, environment) {
@@ -335,7 +337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.experiment_salt = this._experiment_salt = experiment_salt;
 			this._evaluated = false;
 			this._in_experiment = false;
-			this._inputs = _libUtils.shallowCopy(inputs);
+			this._inputs = (0, _libUtils.shallowCopy)(inputs);
 		}
 
 		_createClass(Interpreter, [{
@@ -346,7 +348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'set_env',
 			value: function set_env(new_env) {
-				this._env = _libUtils.deepCopy(new_env);
+				this._env = (0, _libUtils.deepCopy)(new_env);
 				return this;
 			}
 		}, {
@@ -408,12 +410,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'evaluate',
 			value: function evaluate(planout_code) {
-				if (_libUtils.isObject(planout_code) && planout_code.op) {
+				if ((0, _libUtils.isObject)(planout_code) && planout_code.op) {
 
-					return _opsUtils.operatorInstance(planout_code).execute(this);
-				} else if (_libUtils.isArray(planout_code)) {
+					return (0, _opsUtils.operatorInstance)(planout_code).execute(this);
+				} else if ((0, _libUtils.isArray)(planout_code)) {
 					var self = this;
-					return _libUtils.map(planout_code, function (obj) {
+					return (0, _libUtils.map)(planout_code, function (obj) {
 						return self.evaluate(obj);
 					});
 				} else {
@@ -440,9 +442,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { desc = parent = getter = undefined; _again = false; var object = _x,
-	    property = _x2,
-	    receiver = _x3; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -450,15 +450,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _base = __webpack_require__(8);
+	var _base = __webpack_require__(9);
 
-	var _sha1 = __webpack_require__(9);
+	var _sha1 = __webpack_require__(10);
 
 	var _sha12 = _interopRequireDefault(_sha1);
 
-	var _libUtils = __webpack_require__(6);
+	var _libUtils = __webpack_require__(7);
 
-	var _bignumberJs = __webpack_require__(10);
+	var _bignumberJs = __webpack_require__(11);
 
 	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
 
@@ -480,7 +480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					unit = [unit];
 				}
 				if (appended_unit) {
-					unit += [appended_unit];
+					unit.push(appended_unit);
 				}
 				return unit;
 			}
@@ -507,7 +507,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return String(element);
 				}).join(".");
 				var hash_str = full_salt + "." + unit_str;
-				var hash = _sha12["default"](hash_str);
+				var hash = (0, _sha12["default"])(hash_str);
 				return new _bignumberJs2["default"](hash.substr(0, 15), 16);
 			}
 		}]);
@@ -579,6 +579,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (p < 0 || p > 1) {
 					throw "Invalid probability";
 				}
+
 				if (this.getUniform(0, 1) <= p) {
 					return 1;
 				} else {
@@ -677,7 +678,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return cum_sum;
 				});
 				var stop_val = this.getUniform(0, cum_sum);
-				return _libUtils.reduce(cum_weights, function (ret_val, cur_val, i) {
+				return (0, _libUtils.reduce)(cum_weights, function (ret_val, cur_val, i) {
 					if (ret_val) {
 						return ret_val;
 					}
@@ -705,11 +706,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		_createClass(Sample, [{
 			key: "shuffle",
-
-			//http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 			value: function shuffle(array) {
 				for (var i = array.length - 1; i > 0; i--) {
-					var j = Math.floor(Math.random() * (i + 1));
+					var j = this.getHash(i).modulo(i + 1).toNumber();
 					var temp = array[i];
 					array[i] = array[j];
 					array[j] = temp;
@@ -719,7 +718,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "simpleExecute",
 			value: function simpleExecute() {
-				var choices = _libUtils.shallowCopy(this.getArgList("choices"));
+				var choices = (0, _libUtils.shallowCopy)(this.getArgList("choices"));
 				var num_draws = 0;
 				if (this.args.draws) {
 					num_draws = this.args.draws;
@@ -753,11 +752,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _base = __webpack_require__(8);
+	var _base = __webpack_require__(9);
 
-	var _utils = __webpack_require__(7);
+	var _utils = __webpack_require__(8);
 
-	var _libUtils = __webpack_require__(6);
+	var _libUtils = __webpack_require__(7);
 
 	var Literal = (function (_PlanOutOp) {
 		function Literal() {
@@ -815,7 +814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Seq, [{
 			key: "execute",
 			value: function execute(mapper) {
-				_libUtils.forEach(this.getArgList("seq"), function (op) {
+				(0, _libUtils.forEach)(this.getArgList("seq"), function (op) {
 					mapper.evaluate(op);
 				});
 			}
@@ -870,7 +869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return;
 				}
 
-				if (_utils.isOperator(value) && !value.salt) {
+				if ((0, _utils.isOperator)(value) && !value.salt) {
 					value.salt = variable;
 				}
 
@@ -898,7 +897,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Arr, [{
 			key: "execute",
 			value: function execute(mapper) {
-				return _libUtils.map(this.getArgList("values"), function (value) {
+				return (0, _libUtils.map)(this.getArgList("values"), function (value) {
 					return mapper.evaluate(value);
 				});
 			}
@@ -1010,7 +1009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(And, [{
 			key: "execute",
 			value: function execute(mapper) {
-				return _libUtils.reduce(this.getArgList("values"), function (ret, clause) {
+				return (0, _libUtils.reduce)(this.getArgList("values"), function (ret, clause) {
 					if (!ret) {
 						return ret;
 					}
@@ -1037,7 +1036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Or, [{
 			key: "execute",
 			value: function execute(mapper) {
-				return _libUtils.reduce(this.getArgList("values"), function (ret, clause) {
+				return (0, _libUtils.reduce)(this.getArgList("values"), function (ret, clause) {
 					if (ret) {
 						return ret;
 					}
@@ -1064,7 +1063,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Product, [{
 			key: "commutativeExecute",
 			value: function commutativeExecute(values) {
-				return _libUtils.reduce(values, function (memo, value) {
+				return (0, _libUtils.reduce)(values, function (memo, value) {
 					return memo * value;
 				}, 1);
 			}
@@ -1087,7 +1086,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(Sum, [{
 			key: "commutativeExecute",
 			value: function commutativeExecute(values) {
-				return _libUtils.reduce(values, function (memo, value) {
+				return (0, _libUtils.reduce)(values, function (memo, value) {
 					return memo + value;
 				}, 0);
 			}
@@ -1421,13 +1420,328 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _experimentJs = __webpack_require__(1);
+
+	var _experimentJs2 = _interopRequireDefault(_experimentJs);
+
+	var _assignmentJs = __webpack_require__(6);
+
+	var _assignmentJs2 = _interopRequireDefault(_assignmentJs);
+
+	var _opsRandomJs = __webpack_require__(3);
+
+	var _libUtilsJs = __webpack_require__(7);
+
+	var DefaultExperiment = (function (_Experiment) {
+	  function DefaultExperiment() {
+	    _classCallCheck(this, DefaultExperiment);
+
+	    if (_Experiment != null) {
+	      _Experiment.apply(this, arguments);
+	    }
+	  }
+
+	  _inherits(DefaultExperiment, _Experiment);
+
+	  _createClass(DefaultExperiment, [{
+	    key: "configure_logger",
+	    value: function configure_logger() {
+	      return;
+	    }
+	  }, {
+	    key: "setup",
+	    value: function setup() {
+	      this.name = "test_name";
+	    }
+	  }, {
+	    key: "log",
+	    value: function log(data) {
+	      return;
+	    }
+	  }, {
+	    key: "previously_logged",
+	    value: function previously_logged() {
+	      return true;
+	    }
+	  }, {
+	    key: "assign",
+	    value: function assign(params, args) {
+	      return;
+	    }
+	  }]);
+
+	  return DefaultExperiment;
+	})(_experimentJs2["default"]);
+
+	var Namespace = (function () {
+	  function Namespace() {
+	    _classCallCheck(this, Namespace);
+	  }
+
+	  _createClass(Namespace, [{
+	    key: "add_experiment",
+	    value: function add_experiment(name, obj, segments) {
+	      throw "IMPLEMENT add_experiment";
+	    }
+	  }, {
+	    key: "remove_experiment",
+	    value: function remove_experiment(name) {
+	      throw "IMPLEMENT remove_experiment";
+	    }
+	  }, {
+	    key: "set_auto_exposure_logging",
+	    value: function set_auto_exposure_logging(value) {
+	      throw "IMPLEMENT set_auto_exposure_logging";
+	    }
+	  }, {
+	    key: "in_experiment",
+	    value: function in_experiment() {
+	      throw "IMPLEMENT in_experiment";
+	    }
+	  }, {
+	    key: "get",
+	    value: function get(name, default_val) {
+	      throw "IMPLEMENT get";
+	    }
+	  }, {
+	    key: "log_exposure",
+	    value: function log_exposure(extras) {
+	      throw "IMPLEMENT log_exposure";
+	    }
+	  }, {
+	    key: "log_event",
+	    value: function log_event(event_type, extras) {
+	      throw "IMPLEMENT log_event";
+	    }
+	  }, {
+	    key: "require_experiment",
+	    value: function require_experiment() {
+	      if (!this._experiment) {
+	        this._assign_experiment();
+	      }
+	    }
+	  }, {
+	    key: "require_default_experiment",
+	    value: function require_default_experiment() {
+	      if (!this._default_experiment) {
+	        this._assign_default_experiment();
+	      }
+	    }
+	  }]);
+
+	  return Namespace;
+	})();
+
+	var SimpleNamespace = (function (_Namespace) {
+	  function SimpleNamespace(args) {
+	    _classCallCheck(this, SimpleNamespace);
+
+	    _get(Object.getPrototypeOf(SimpleNamespace.prototype), "constructor", this).call(this, args);
+	    this.name = this.getDefaultNamespaceName();
+	    this.inputs = args;
+	    this.num_segments = 1;
+	    this.segment_allocations = {};
+	    this.current_experiments = {};
+
+	    this._experiment = null;
+	    this._default_experiment = null;
+	    this.default_experiment_class = DefaultExperiment;
+	    this._in_experiment = false;
+
+	    this.setup();
+	    this.available_segments = (0, _libUtilsJs.range)(this.num_segments);
+
+	    this.setup_experiments();
+	  }
+
+	  _inherits(SimpleNamespace, _Namespace);
+
+	  _createClass(SimpleNamespace, [{
+	    key: "setup",
+	    value: function setup() {
+	      throw "IMPLEMENT setup";
+	    }
+	  }, {
+	    key: "setup_experiments",
+	    value: function setup_experiments() {
+	      throw "IMPLEMENT setup_experiments";
+	    }
+	  }, {
+	    key: "get_primary_unit",
+	    value: function get_primary_unit() {
+	      return this._primary_unit;
+	    }
+	  }, {
+	    key: "set_primary_unit",
+	    value: function set_primary_unit(value) {
+	      this._primary_unit = value;
+	    }
+	  }, {
+	    key: "add_experiment",
+	    value: function add_experiment(name, exp_object, segments) {
+	      var number_available = this.available_segments.length;
+	      if (number_available < segments) {
+	        return false;
+	      } else if (this.current_experiments[name] !== undefined) {
+	        return false;
+	      }
+	      var a = new _assignmentJs2["default"](this.name);
+	      a.set("sampled_segments", new _opsRandomJs.Sample({ "choices": this.available_segments, "draws": segments, "unit": name }));
+	      var sample = a.get("sampled_segments");
+	      for (var i = 0; i < sample.length; i++) {
+	        this.segment_allocations[sample[i]] = name;
+	        this.available_segments.splice(this.available_segments.indexOf(sample[i]), 1);
+	      }
+	      this.current_experiments[name] = exp_object;
+	    }
+	  }, {
+	    key: "remove_experiment",
+	    value: function remove_experiment(name) {
+	      var _this = this;
+
+	      if (this.current_experiments[name] === undefined) {
+	        return false;
+	      }
+
+	      var segments_to_free = [];
+	      (0, _libUtilsJs.forEach)(Object.keys(this.segment_allocations), function (cur) {
+	        if (_this.segment_allocations[cur] === name) {
+	          segments_to_free.push(cur);
+	        }
+	      });
+	      for (var i = 0; i < segments_to_free.length; i++) {
+	        var segment = segments_to_free[i];
+	        delete this.segment_allocations[segment];
+	        this.available_segments.push(segment);
+	      }
+	      delete this.current_experiments[name];
+	      return true;
+	    }
+	  }, {
+	    key: "get_segment",
+	    value: function get_segment() {
+	      var a = new _assignmentJs2["default"](this.name);
+	      var segment = new _opsRandomJs.RandomInteger({ "min": 0, "max": this.num_segments - 1, "unit": this.inputs[this.get_primary_unit()] });
+	      a.set("segment", segment);
+	      return a.get("segment");
+	    }
+	  }, {
+	    key: "_assign_experiment",
+	    value: function _assign_experiment() {
+	      var in_experiment = false;
+	      var segment = this.get_segment();
+
+	      if (this.segment_allocations[segment] !== undefined) {
+	        var experiment_name = this.segment_allocations[segment];
+	        var experiment = new this.current_experiments[experiment_name](this.inputs);
+	        experiment.set_name("" + this.name + "-" + experiment_name);
+	        experiment.set_salt("" + this.name + "-" + experiment_name);
+	        this._experiment = experiment;
+	        this._in_experiment = experiment.in_experiment();
+	        if (!this._in_experiment) {
+	          this._assign_default_experiment();
+	        }
+	      }
+	    }
+	  }, {
+	    key: "_assign_default_experiment",
+	    value: function _assign_default_experiment() {
+	      this._default_experiment = new this.default_experiment_class(this.inputs);
+	    }
+	  }, {
+	    key: "default_get",
+	    value: function default_get(name, default_val) {
+	      _get(Object.getPrototypeOf(SimpleNamespace.prototype), "require_default_experiment", this).call(this);
+	      return this._default_experiment.get(name, default_val);
+	    }
+	  }, {
+	    key: "in_experiment",
+	    value: function in_experiment() {
+	      _get(Object.getPrototypeOf(SimpleNamespace.prototype), "require_experiment", this).call(this);
+	      return this._in_experiment;
+	    }
+	  }, {
+	    key: "set_auto_exposure_logging",
+	    value: function set_auto_exposure_logging(value) {
+	      _get(Object.getPrototypeOf(SimpleNamespace.prototype), "require_experiment", this).call(this);
+	      this._experiment.set_auto_exposure_logging(value);
+	    }
+	  }, {
+	    key: "get",
+	    value: function get(name, default_val) {
+	      _get(Object.getPrototypeOf(SimpleNamespace.prototype), "require_experiment", this).call(this);
+	      if (!this._experiment) {
+	        return this.default_get(name, default_val);
+	      } else {
+	        return this._experiment.get(name, this.default_get(name, default_val));
+	      }
+	    }
+	  }, {
+	    key: "log_exposure",
+	    value: function log_exposure(extras) {
+	      _get(Object.getPrototypeOf(SimpleNamespace.prototype), "require_experiment", this).call(this);
+	      if (!this.experiment) {
+	        return;
+	      }
+	      this._experiment.log_exposure(extras);
+	    }
+	  }, {
+	    key: "log_event",
+	    value: function log_event(event_type, extras) {
+	      _get(Object.getPrototypeOf(SimpleNamespace.prototype), "require_experiment", this).call(this);
+	      if (!this._experiment) {
+	        return;
+	      }
+	      this._experiment.log_event(event_type, extras);
+	    }
+	  }, {
+	    key: "getDefaultNamespaceName",
+
+	    //helper function to return the class name of the current experiment class
+	    value: function getDefaultNamespaceName() {
+	      if ((0, _libUtilsJs.isObject)(this) && this.constructor && this !== this.window) {
+	        var arr = this.constructor.toString().match(/function\s*(\w+)/);
+	        if (arr && arr.length === 2) {
+	          return arr[1];
+	        }
+	      }
+	      return "GenericNamespace";
+	    }
+	  }]);
+
+	  return SimpleNamespace;
+	})(Namespace);
+
+	exports.Namespace = Namespace;
+	exports.SimpleNamespace = SimpleNamespace;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var _opsRandom = __webpack_require__(3);
 
-	var _libUtils = __webpack_require__(6);
+	var _libUtils = __webpack_require__(7);
 
 	var Assignment = (function () {
 	  function Assignment(experiment_salt, overrides) {
@@ -1437,8 +1751,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      overrides = {};
 	    }
 	    this.experiment_salt = experiment_salt;
-	    this._overrides = _libUtils.shallowCopy(overrides);
-	    this._data = _libUtils.shallowCopy(overrides);
+	    this._overrides = (0, _libUtils.shallowCopy)(overrides);
+	    this._data = (0, _libUtils.shallowCopy)(overrides);
 	  }
 
 	  _createClass(Assignment, [{
@@ -1454,9 +1768,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "set_overrides",
 	    value: function set_overrides(overrides) {
-	      this._overrides = _libUtils.shallowCopy(overrides);
+	      this._overrides = (0, _libUtils.shallowCopy)(overrides);
 	      var self = this;
-	      _libUtils.forEach(Object.keys(this._overrides), function (override_key) {
+	      (0, _libUtils.forEach)(Object.keys(this._overrides), function (override_key) {
 	        self._data[override_key] = self._overrides[override_key];
 	      });
 	    }
@@ -1530,22 +1844,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
 	/*  Most of these functions are from the wonderful Underscore package http://underscorejs.org/  
 	    This file exists so that the planoutjs library doesn't depend on a few unneeded third party dependencies
 	    so that consumers of the library don't have to include dependencies such as underscore. As well, this helps reduce
 	    the file size of the resulting library.
 	*/
 
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	var deepCopy = function deepCopy(obj) {
-	  return JSON.parse(JSON.stringify(obj));
+	  var newObj = obj;
+	  if (obj && typeof obj === 'object') {
+	    newObj = Object.prototype.toString.call(obj) === '[object Array]' ? [] : {};
+	    for (var i in obj) {
+	      newObj[i] = deepCopy(obj[i]);
+	    }
+	  }
+	  return newObj;
 	};
 
 	var isObject = function isObject(obj) {
@@ -1776,7 +2097,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1862,7 +2183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.StopPlanOutException = StopPlanOutException;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1877,7 +2198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var _libUtils = __webpack_require__(6);
+	var _libUtils = __webpack_require__(7);
 
 	var PlanOutOp = (function () {
 		function PlanOutOp(args) {
@@ -1973,7 +2294,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function execute(mapper) {
 				this.mapper = mapper;
 				var self = this;
-				_libUtils.forEach(Object.keys(this.args), function (key) {
+				(0, _libUtils.forEach)(Object.keys(this.args), function (key) {
 					self.args[key] = mapper.evaluate(self.args[key]);
 				});
 				return this.simpleExecute();
@@ -2084,13 +2405,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.PlanOutOpUnary = PlanOutOpUnary;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {(function() {
-	  var crypt = __webpack_require__(12),
-	      utf8 = __webpack_require__(13).utf8,
-	      bin = __webpack_require__(13).bin,
+	  var crypt = __webpack_require__(13),
+	      utf8 = __webpack_require__(14).utf8,
+	      bin = __webpack_require__(14).bin,
 
 	  // The core
 	  sha1 = function (message) {
@@ -2170,10 +2491,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  module.exports = api;
 	})();
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).Buffer))
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! bignumber.js v2.0.7 https://github.com/MikeMcl/bignumber.js/LICENCE */
@@ -4862,7 +5183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {/*!
@@ -4872,9 +5193,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @license  MIT
 	 */
 
-	var base64 = __webpack_require__(16)
-	var ieee754 = __webpack_require__(14)
-	var isArray = __webpack_require__(15)
+	var base64 = __webpack_require__(17)
+	var ieee754 = __webpack_require__(15)
+	var isArray = __webpack_require__(16)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -6280,10 +6601,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).Buffer))
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
@@ -6385,7 +6706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var charenc = {
@@ -6424,7 +6745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -6514,7 +6835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6553,7 +6874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
