@@ -70,7 +70,7 @@ multiple third party ports of PlanOut.
 
 Production-ready ports of PlanOut of PlanOut are available at:
 
-  * [Java](https://github.com/facebook/planout/tree/master/alpha/ruby): full-featured implementation of PlanOut by Glassdoor,
+  * [Java](https://github.com/Glassdoor/planout4j): full-featured implementation of PlanOut by Glassdoor,
  including experiment lifecycle management and code review.
 
   * [PHP](https://github.com/vimeo/ABLincoln): Vimeo's implementation of PlanOut. tIncludes native API with PSR logging.
