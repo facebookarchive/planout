@@ -1,6 +1,6 @@
 # PlanOut
 
-PlanOut is a framework and programming language for online field experimentation. PlanOut was created to make it easy to run and iterate on sophisticated experiments, while satisfying the constraints of deployed Internet services with many users.
+PlanOut is a multiplatform framework and programming language for online field experimentation. PlanOut was created to make it easy to run and iterate on sophisticated experiments, while satisfying the constraints of deployed Internet services with many users.
 
 Developers integrate PlanOut by defining experiments that detail how _units_ (e.g., users, cookie IDs) should get mapped onto conditions. For example, to create a 2x2 experiment randomizing both the color and the text on a button, you create a class like this in Python:
 
@@ -29,16 +29,16 @@ The reference implementation for PlanOut is written in Python.  It includes:
   * An interactive Web-based editor and compiler for developing and testing
   PlanOut-language scripts.
 
-A production-ready version of PlanOut is also available for PHP, and can found in the `php/` directory.
+Other production-ready versions of PlanOut are available Java and for PHP, and can found in the `java/` and `php/` directories, respectively.
 
-The `alpha/` directory contains implementations of PlanOut to other languages. Hack and Go-based implementations will be available in early 2015.
+The `alpha/` directory contains implementations of PlanOut to other languages that are currently under development, including JavaScript, Go, and Ruby.
 
 ### Who is PlanOut for?
 PlanOut designed for researchers, students, and small businesses wanting to run experiments. It is built to be extensible, so that it may be adapted for use with large production environments.  The implementation here mirrors many of the key components of Facebook's Hack-based implementation of PlanOut which is used to conduct experiments with hundreds of millions of users.
 
 ### Full Example
 
-To create a basic PlanOut experiment, you subclass ``SimpleExperiment`` object, and implement an assignment method. You can use PlanOut's random assignment operators by setting ``e.varname``, where ``params`` is the first argument passed to the ``assign()`` method, and ``varname`` is the name of the variable you are setting.
+To create a basic PlanOut experiment in Python, you subclass ``SimpleExperiment`` object, and implement an assignment method. You can use PlanOut's random assignment operators by setting ``e.varname``, where ``params`` is the first argument passed to the ``assign()`` method, and ``varname`` is the name of the variable you are setting.
 ```python
 
 from planout.experiment import SimpleExperiment
@@ -73,19 +73,14 @@ Join now! #ff0000
 
 The ``SimpleExperiment`` class will automatically concatenate the name of the experiment, ``FirstExperiment``, the variable name, and the input data (``userid``) and hash that string to perform the random assignment. Parameter assignments and inputs are automatically logged into a file called ``firstexperiment.log'``.
 
-For more information on using PlanOut with PHP, see the README for Vimeo's [port of PlanOut to PHP](https://github.com/vimeo/ABLincoln), ABLincoln.
 
 ### Installation
-You can immediately install PlanOut using `pip` with:
+You can immediately install the reference implementation of PlanOut for Python using `pip` with:
 ```
 pip install planout
 ```
 
-Or you can checkout the Github repository and type:
-
-```
-sudo python setup.py install
-```
+See the `java/`, `php/`, `alpha/js/`, `alpha/golang`, `alpha/ruby` directories for instructions on installing PlanOut for other languages.
 
 ### Learn more
 Learn more about PlanOut visiting the [PlanOut website](http://facebook.github.io/planout/) or by [reading the PlanOut paper](http://arxiv.org/pdf/1409.3174v1.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:
