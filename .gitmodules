@@ -7,3 +7,6 @@
 [submodule "java"]
 	path = java
 	url = https://github.com/Glassdoor/planout4j.git
+[submodule "alpha/js"]
+	path = alpha/js
+	url = https://github.com/HubSpot/PlanOutJS
