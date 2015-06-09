@@ -62,7 +62,7 @@ millions of people.
 
 ### Learn more
 Continue on to the [documentation page](docs/getting-started.html) or try out the
-interactive [PlanOut editor](planout-editor.herokuapp.com).
+interactive [PlanOut editor](http://planout-editor.herokuapp.com).
 For an in-depth look at how we use PlanOut at Facebook, see our paper, [Designing and Deploying Online Field Experiments](http://arxiv.org/pdf/1409.3174v1.pdf).
 
 In addition to the Python reference implementation written by Facebook, there are
