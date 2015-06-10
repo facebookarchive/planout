@@ -77,7 +77,7 @@ Production-ready ports of PlanOut of PlanOut are available at:
 
 Under development:
 
-  * [JavaScript](https://github.com/facebook/planout/tree/master/alpha/js):
+  * [JavaScript](https://github.com/HubSpot/PlanOut.js):
   complete port of the PlanOut reference implementation to JavaScript.
    Includes native APIs for ES5, ES6, as well as the PlanOut interpreter.
 
