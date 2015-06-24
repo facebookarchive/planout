@@ -1,3 +1,4 @@
+from copy import deepcopy
 import six
 
 from .base import (
@@ -88,6 +89,15 @@ class Array(PlanOutOp):
         l = [ops.Operators.pretty(v) for v in self.getArgList('values')]
         f = "[%s]" % ', '.join(l)
         return f
+
+
+class Map(PlanOutOpSimple):
+
+    def simpleExecute(self):
+        m = deepcopy(self.args)
+        del m['op']
+        del m['salt']
+        return m
 
 
 class Coalesce(PlanOutOp):

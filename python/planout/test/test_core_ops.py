@@ -45,6 +45,15 @@ class TestBasicOperators(unittest.TestCase):
         a = self.run_config_single({'op': 'array', 'values': arr})
         self.assertEquals(arr, a)
 
+    def test_map(self):
+        my_map = {'a': 2, 'b': 'c', 'd': False}
+        m = self.run_config_single({'op': 'map', 'a': 2, 'b': 'c', 'd': False})
+        self.assertEquals(my_map, m)
+        
+        my_map = {}
+        m = self.run_config_single({'op': 'map'})
+        self.assertEquals(my_map, m)
+
     def test_cond(self):
         getInput = lambda i, r: {'op': 'equals', 'left': i, 'right': r}
         testIf = lambda i: self.runConfig({

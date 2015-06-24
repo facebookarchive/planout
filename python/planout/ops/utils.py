@@ -23,6 +23,7 @@ class Operators():
             "return": core.Return,
             "index": core.Index,
             "array": core.Array,
+            "map": core.Map,
             "equals": core.Equals,
             "cond": core.Cond,
             "and": core.And,
