@@ -53,7 +53,8 @@ class Experiment(object):
         self._exposure_logged = False
         self._salt = None              # Experiment-level salt
         # Determines whether or not results should be logged
-        self._in_experiment = True
+        self._default_in_experiment_val = True
+        self._in_experiment = self._default_in_experiment_val 
 
         # use the name of the class as the default name
         self._name = self.__class__.__name__
@@ -72,7 +73,7 @@ class Experiment(object):
 
         #consumers can optionally return False from assign if they don't want exposure to be logged
         assign_val = self.assign(self._assignment, **self.inputs)
-        if self._in_experiment:
+        if self._in_experiment is self._default_in_experiment_val:
             self._in_experiment = assign_val is not False
         self._checksum = self.checksum()
         self._assigned = True
