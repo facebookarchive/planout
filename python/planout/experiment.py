@@ -69,7 +69,11 @@ class Experiment(object):
     def _assign(self):
         """Assignment and setup that only happens when we need to log data"""
         self.configure_logger()  # sets up loggers
-        self.assign(self._assignment, **self.inputs)
+
+        #consumers can optionally return False from assign if they don't want exposure to be logged
+        assign_val = self.assign(self._assignment, **self.inputs)
+        if self._in_experiment:
+            self._in_experiment = assign_val is not False
         self._checksum = self.checksum()
         self._assigned = True
 

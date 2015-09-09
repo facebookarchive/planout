@@ -166,6 +166,44 @@ class ExperimentTest(unittest.TestCase):
 
         self.experiment_tester(TestInterpretedExperiment)
 
+    def test_short_circuit_exposure_logging(self):
+        class TestNoExposure(Experiment):
+
+            def configure_logger(self):
+                pass
+
+            def log(self, stuff):
+                global_log.append(stuff)
+
+            def previously_logged(self):
+                pass
+
+            def setup(self):
+                self.name = 'test_name'
+
+            def assign(self, params, i):
+                params.foo = UniformChoice(choices=['a', 'b'], unit=i)
+                return False
+        self.experiment_tester(TestNoExposure, False)
+
+        class TestNoExposure(Experiment):
+
+            def configure_logger(self):
+                pass
+
+            def log(self, stuff):
+                global_log.append(stuff)
+
+            def previously_logged(self):
+                pass
+
+            def setup(self):
+                self.name = 'test_name'
+
+            def assign(self, params, i):
+                params.foo = UniformChoice(choices=['a', 'b'], unit=i)
+                return True
+        self.experiment_tester(TestNoExposure, True)
 
 if __name__ == '__main__':
     unittest.main()
