@@ -52,9 +52,9 @@ class Experiment(object):
         # True when assignments have been exposure logged
         self._exposure_logged = False
         self._salt = None              # Experiment-level salt
-        # Determines whether or not results should be logged
-        self._default_in_experiment_val = True
-        self._in_experiment = self._default_in_experiment_val 
+
+        # Determines whether or not exposure should be logged
+        self._in_experiment = True
 
         # use the name of the class as the default name
         self._name = self.__class__.__name__
@@ -73,8 +73,7 @@ class Experiment(object):
 
         #consumers can optionally return False from assign if they don't want exposure to be logged
         assign_val = self.assign(self._assignment, **self.inputs)
-        if self._in_experiment is self._default_in_experiment_val:
-            self._in_experiment = assign_val is not False
+        self._in_experiment = True if assign_val or assign_val is None else False
         self._checksum = self.checksum()
         self._assigned = True
 
@@ -321,6 +320,7 @@ class SimpleInterpretedExperiment(SimpleExperiment):
         results = interpreterInstance.get_params()
         # insert results into param object dictionary
         params.update(results)
+        return interpreterInstance.in_experiment
 
     def checksum(self):
         # self.script must be a dictionary
