@@ -52,7 +52,8 @@ class Experiment(object):
         # True when assignments have been exposure logged
         self._exposure_logged = False
         self._salt = None              # Experiment-level salt
-        # Determines whether or not results should be logged
+
+        # Determines whether or not exposure should be logged
         self._in_experiment = True
 
         # use the name of the class as the default name
@@ -69,7 +70,10 @@ class Experiment(object):
     def _assign(self):
         """Assignment and setup that only happens when we need to log data"""
         self.configure_logger()  # sets up loggers
-        self.assign(self._assignment, **self.inputs)
+
+        #consumers can optionally return False from assign if they don't want exposure to be logged
+        assign_val = self.assign(self._assignment, **self.inputs)
+        self._in_experiment = True if assign_val or assign_val is None else False
         self._checksum = self.checksum()
         self._assigned = True
 
@@ -316,6 +320,7 @@ class SimpleInterpretedExperiment(SimpleExperiment):
         results = interpreterInstance.get_params()
         # insert results into param object dictionary
         params.update(results)
+        return interpreterInstance.in_experiment
 
     def checksum(self):
         # self.script must be a dictionary

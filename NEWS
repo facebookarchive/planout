@@ -1,3 +1,11 @@
+* Noteworthy changes in release 0.6 (TBD)
+- The return value of assign now determines whether or not an exposure event will
+  be automatically logged. If either a truth-y value or nothing is returned from assign, then exposure
+  will be logged. If a false-y value (excluding None) is returned then exposure will not be logged.
+
+- The SimpleInterpretedExperiment now correctly respects the return op and does not log exposure if a
+  false-y value is returned
+
 * Noteworthy changes in release 0.5 (2014-11-23)
 - A SimpleInterpretedExperiment to make it easier to get up and running with
   the PlanOut language and interpreter.

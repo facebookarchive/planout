@@ -8,7 +8,7 @@
 import json
 import unittest
 
-from planout.experiment import Experiment
+from planout.experiment import Experiment, SimpleInterpretedExperiment
 from planout.interpreter import Interpreter
 from planout.ops.random import UniformChoice
 
@@ -96,7 +96,7 @@ class ExperimentTest(unittest.TestCase):
 
             def assign(self, params, i):
                 params.foo = UniformChoice(choices=['a', 'b'], unit=i)
-                self._in_experiment = False
+                return 0
 
         self.experiment_tester(TestVanillaExperiment, False)
 
@@ -129,7 +129,59 @@ class ExperimentTest(unittest.TestCase):
         self.assertEqual(assignment_count['count'], 1)
 
     def test_interpreted_experiment(self):
-        class TestInterpretedExperiment(Experiment):
+        class TestInterpretedExperiment(SimpleInterpretedExperiment):
+
+            def log(self, stuff):
+                global_log.append(stuff)
+
+            def loadScript(self):
+                self.script = json.loads("""
+                  {"op":"seq",
+                   "seq": [
+                    {"op":"set",
+                     "var":"foo",
+                     "value":{
+                       "choices":["a","b"],
+                       "op":"uniformChoice",
+                       "unit": {"op": "get", "var": "i"}
+                       }
+                    },
+                    {"op":"set",
+                     "var":"bar",
+                     "value": 41
+                    }
+                   ]}
+                """)
+
+        self.experiment_tester(TestInterpretedExperiment)
+
+    def test_disabled_interpreted_experiment(self):
+        class TestInterpretedDisabled(SimpleInterpretedExperiment):
+            def log(self, stuff):
+                global_log.append(stuff)
+
+            def loadScript(self):
+                self.script = json.loads("""
+                    {
+                     "op": "seq",
+                     "seq": [
+                      {
+                       "op": "set",
+                       "var": "foo",
+                       "value": "b"
+                      },
+                      {
+                       "op": "return",
+                       "value": false
+                      }
+                     ]
+                    }
+                    """)
+
+        self.experiment_tester(TestInterpretedDisabled, False)
+
+    def test_short_circuit_exposure_logging(self):
+        class TestNoExposure(Experiment):
 
             def configure_logger(self):
                 pass
@@ -143,29 +195,29 @@ class ExperimentTest(unittest.TestCase):
             def setup(self):
                 self.name = 'test_name'
 
-            def assign(self, params, **kwargs):
-                compiled = json.loads("""
-          {"op":"seq",
-           "seq": [
-            {"op":"set",
-             "var":"foo",
-             "value":{
-               "choices":["a","b"],
-               "op":"uniformChoice",
-               "unit": {"op": "get", "var": "i"}
-               }
-            },
-            {"op":"set",
-             "var":"bar",
-             "value": 41
-            }
-           ]}
-        """)
-                proc = Interpreter(compiled, self.salt, kwargs, params)
-                params.update(proc.get_params())
+            def assign(self, params, i):
+                params.foo = UniformChoice(choices=['a', 'b'], unit=i)
+                return False
+        self.experiment_tester(TestNoExposure, False)
 
-        self.experiment_tester(TestInterpretedExperiment)
+        class TestNoExposure(Experiment):
 
+            def configure_logger(self):
+                pass
+
+            def log(self, stuff):
+                global_log.append(stuff)
+
+            def previously_logged(self):
+                pass
+
+            def setup(self):
+                self.name = 'test_name'
+
+            def assign(self, params, i):
+                params.foo = UniformChoice(choices=['a', 'b'], unit=i)
+                return True
+        self.experiment_tester(TestNoExposure, True)
 
 if __name__ == '__main__':
     unittest.main()
