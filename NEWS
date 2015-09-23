@@ -6,6 +6,8 @@
 - The SimpleInterpretedExperiment now correctly respects the return op and does not log exposure if a
   false-y value is returned
 
+- Adds a ProductionExperiment class that includes the ability assert what variables an experiment sets so that exposure is not incorrectly logged when calls to the experiment request parameters that are not defined.
+
 * Noteworthy changes in release 0.5 (2014-11-23)
 - A SimpleInterpretedExperiment to make it easier to get up and running with
   the PlanOut language and interpreter.
