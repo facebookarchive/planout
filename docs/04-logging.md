@@ -28,7 +28,7 @@ class Exp1(SimpleExperiment):
     return e
 ```
 
-It takes a `userid` as input, and assigns three paramers, `group_size`, `specific_goal`, and `ratings goal`. It does not specify a [custom salt or experiment name](how-planout-works.html), so the experiment salt and parameter name are automatically set to the class name `Exp3`. The default logger in `SimpleExperiment` log all of these fields:
+It takes a `userid` as input, and assigns three parameters, `group_size`, `specific_goal`, and `ratings goal`. It does not specify a [custom salt or experiment name](how-planout-works.html), so the experiment salt and parameter name are automatically set to the class name `Exp3`. If you wanted to prevent certain scenarios or certain users from getting exposure logged, then you could simply return a false-y value from the assign function. The default logger in `SimpleExperiment` log all of these fields:
 
 ```json
 {
