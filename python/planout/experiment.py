@@ -334,9 +334,13 @@ class SimpleInterpretedExperiment(SimpleExperiment):
             src = src.encode("ascii")
         return hashlib.sha1(src).hexdigest()[:8]
 
-class ProductionExperiment(SimpleExperiment):
+class ProductionExperiment(Experiment):
 
-    """A variant of SimpleExperiment that verifies that """
+    """ 
+    A variant of SimpleExperiment that verifies that exposure is only logged 
+    when a valid parameter is fetched via the get method
+    """
+    
     __metaclass__ = ABCMeta
 
 
