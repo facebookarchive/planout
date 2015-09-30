@@ -62,7 +62,7 @@
 %left EQUALS NEQ LTE GTE '>' '<'
 %left '+' '-'
 %left '*' '/' '%'
-
+%left '(' '!'
 %left '['
 
 %%
