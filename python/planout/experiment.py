@@ -32,10 +32,13 @@ def requires_assignment(f):
 
 def requires_exposure_logging(f):
     def wrapped_f(self, *args, **kwargs):
-        if \
-                self._auto_exposure_log and \
-                not self._exposure_logged:
-            self.log_exposure()
+        if self._auto_exposure_log and not self._exposure_logged:
+            should_log_exposure = True
+            if f.__name__ == 'get' and hasattr(self, 'get_param_names') and callable(self.get_param_names):
+                params = self.get_param_names()
+                should_log_exposure = any(i in params for i in args)
+            if should_log_exposure:
+                self.log_exposure()
         return f(self, *args, **kwargs)
     return wrapped_f
 
@@ -330,3 +333,19 @@ class SimpleInterpretedExperiment(SimpleExperiment):
         if not isinstance(src, six.binary_type):
             src = src.encode("ascii")
         return hashlib.sha1(src).hexdigest()[:8]
+
+class ProductionExperiment(Experiment):
+
+    """ 
+    A variant of SimpleExperiment that verifies that exposure is only logged 
+    when a valid parameter is fetched via the get method
+    """
+    
+    __metaclass__ = ABCMeta
+
+
+    """Returns a list of assignment parameter values that this experiment can take"""
+    @abstractmethod
+    def get_param_names(self):
+        pass
+

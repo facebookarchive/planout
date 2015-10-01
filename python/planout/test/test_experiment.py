@@ -8,7 +8,7 @@
 import json
 import unittest
 
-from planout.experiment import Experiment, SimpleInterpretedExperiment
+from planout.experiment import Experiment, SimpleInterpretedExperiment, ProductionExperiment
 from planout.interpreter import Interpreter
 from planout.ops.random import UniformChoice
 
@@ -218,6 +218,32 @@ class ExperimentTest(unittest.TestCase):
                 params.foo = UniformChoice(choices=['a', 'b'], unit=i)
                 return True
         self.experiment_tester(TestNoExposure, True)
+
+    def test_demo_production_experiment(self):
+        class TestDemoProductionExperiment(ProductionExperiment):
+            def configure_logger(self):
+                pass
+
+            def log(self, stuff):
+                global_log.append(stuff)
+
+            def previously_logged(self):
+                pass
+
+            def setup(self):
+                self.name = 'test_name'
+
+            def assign(self, params, i):
+                params.foo = UniformChoice(choices=['a', 'b'], unit=i)
+
+            def get_param_names(self):
+                return ['foo']
+        
+        e = TestDemoProductionExperiment(i=42)
+        self.assertEqual(e.get('nobar'), None)
+        self.assertEqual(len(global_log), 0)
+        self.assertEqual(e.get('foo'), 'b')
+        self.assertEqual(len(global_log), 1)
 
 if __name__ == '__main__':
     unittest.main()
