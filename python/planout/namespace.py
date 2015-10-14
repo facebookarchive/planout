@@ -162,7 +162,6 @@ class SimpleNamespace(Namespace):
 
     def _assign_experiment(self):
         "assign primary unit to an experiment"
-        in_experiment = False
         segment = self.get_segment()
         # is the unit allocated to an experiment?
         if segment in self.segment_allocations:
