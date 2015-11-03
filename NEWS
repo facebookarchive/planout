@@ -1,4 +1,5 @@
 * Noteworthy changes in release 0.6 (TBD)
+- The Sample Op is more efficient now, but will break existing uses (including namespace segment assignments)
 - The return value of assign now determines whether or not an exposure event will
   be automatically logged. If either a truth-y value or nothing is returned from assign, then exposure
   will be logged. If a false-y value (excluding None) is returned then exposure will not be logged.
