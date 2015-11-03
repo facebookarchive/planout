@@ -122,7 +122,10 @@ class Sample(PlanOutOpRandom):
         else:
             num_draws = len(choices)
 
+        stopping_point = len(choices) - num_draws
         for i in six.moves.range(len(choices) - 1, 0, -1):
             j = self.getHash(i) % (i + 1)
             choices[i], choices[j] = choices[j], choices[i]
-        return choices[:num_draws]
+            if stopping_point == i:
+              return choices[i:]
+        return choices

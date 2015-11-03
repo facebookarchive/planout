@@ -164,6 +164,7 @@ class TestRandomOperators(unittest.TestCase):
             @experiment_decorator(','.join(map(str, choices)))
             def exp_func(e, i):
                 e.x = Sample(choices=choices, draws=draws, unit=i)
+                self.assertTrue(len(e.x) == draws)
                 return e
             return exp_func
 
