@@ -128,7 +128,7 @@ class SimpleNamespace(Namespace):
         a = Assignment(self.name)
         a.sampled_segments = \
             Sample(choices=list(self.available_segments),
-                   draws=segments, unit=name)
+                   draws=segments, unit=name, use_old_sample=self.inputs.get('use_old_sample'))
 
         # assign each segment to the experiment name
         for segment in a.sampled_segments:

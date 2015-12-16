@@ -186,6 +186,14 @@ class TestRandomOperators(unittest.TestCase):
         listDistributionTester(
             sample(['a', 'a', 'b'], draws=3), (('a', 2), ('b', 1)))
 
+        a = Assignment('assign_salt_a')
+        a.old_sample = Sample(choices=[1, 2, 3, 4], draws=1, unit=1, use_old_sample=True)
+        new_sample = a.old_sample
+        a.old_sample = Sample(choices=[1, 2, 3, 4], draws=1, unit=1, use_old_sample=False)
+        self.assertTrue(len(a.old_sample), 1)
+        self.assertTrue(len(new_sample), 1)
+        self.assertTrue(a.old_sample != new_sample)
+
 
 if __name__ == '__main__':
     unittest.main()
