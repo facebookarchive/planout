@@ -64,7 +64,7 @@ Changing the variable name `button_text` changes the assignment, since it is use
 
 Changing the number of choices for the `button_text` also affects users previously randomized into other conditions.  For example, removing the 'Share' item from the `choices` list, will allocate some users who were previosuly in the 'Share' condition to the 'OK' and 'Share with friends group'. Their outcomes will now be a weighted average of the two, which may decrease the observed difference between 'OK' and 'Share with friends'.
 
-If an additional choice were added to `choices`, some percentage of each prior choice would be allocated to the new choice, whose outcome represents an average of all groups. Comparisons between users still in the old groups (the newly added parameters may be subject to greater novelty effects.
+If an additional choice were added to `choices`, some percentage of each prior choice would be allocated to the new choice, whose outcome represents an average of all groups. Comparisons between users still in the old groups (the newly added parameters may be subject to greater novelty effects).
 
 ## Detecting problems
 If you suspect your experiment might have changed, check the `salt` and `checksum` fields of your log. If either of these items change, it is likely that your assignments have also changed mid-way through the experiment.
