@@ -70,9 +70,10 @@ For instance, suppose you are running an experiment on a new feature and want to
 ```python
 class Exp1(SimpleExperiment):
   def assign(self, params, userid):
+    params.feature_enabled = False
+
     country = get_user_country(userid)
     if country != 'Germany':
-      params.feature_enabled = false
       return False
     params.feature_enabled = UniformChoice(choices=[True, False], unit=userid)
 ```
@@ -85,7 +86,7 @@ Suppose you are running an experiment that tests 4 difference prices for a trade
 params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.99], unit=userid)
 ```
 
-and it turns out that 0.99 performs very poorly, If we were to simply change the experiment to say,
+and it turns out that 0.99 performs very poorly. If we were to simply change the experiment to say,
 
 ```
 params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50], unit=userid)
