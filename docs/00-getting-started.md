@@ -64,8 +64,7 @@ inputs to randomized values [through hashing](how-planout-works.html).
 
 The next block of code says to create a child class of `SimpleExperiment`,
 called `VotingExperiment`. All experiments which subclass `SimpleExperiment` must
-implement an `assign()` method, which takes an, which we call
-it `params` by convention, along with whatever input variables are expected by
+implement an `assign()` method, which takes an `Assignment` object, which we call `params` by convention, along with whatever input variables are expected by
 your experiment.  Here, the only argument is `userid`.
 
 The next two lines set the parameters, `button_color` and `button_text` to

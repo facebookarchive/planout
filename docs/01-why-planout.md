@@ -31,4 +31,4 @@ Experiments can also be specified through JSON code. This can enable separate re
 PlanOut experiments can be specified through the PlanOut language, which concisely describes an experiment using a set of primitive operations.  PlanOut language code is compiled into the JSON serialization, which can be executed by the PlanOut interpreter as needed.
 
 #### Iterative experimentation
-The PlanOut library includes a basic namespace class (link) for managing multiple, iterative experiments that run concurrently.
+The PlanOut library includes a basic [namespace class](namespaces.html) for managing multiple, iterative experiments that run concurrently.
