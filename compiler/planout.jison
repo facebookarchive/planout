@@ -2,7 +2,7 @@
 
 %%
 
-"#"(.)*\n                                 /* skip comments */
+"#"(.)*(\n|$)                             /* skip comments */
 \s+                                       /* skip whitespace */
 
 "true"                                    return 'TRUE'
@@ -18,7 +18,7 @@
 
 [a-zA-Z_][a-zA-Z0-9_]*                    return 'IDENTIFIER'
 
-[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?    { yytext = Number(yytext); return 'CONST'; }
+[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?         { yytext = Number(yytext); return 'CONST'; }
 \"(\\.|[^\\"])*\"                         { yytext = yytext.substr(1, yyleng-2); return 'CONST'; }
 \'[^\']*\'                                { yytext = yytext.substr(1, yyleng-2); return 'CONST'; }
 
