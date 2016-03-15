@@ -167,6 +167,7 @@ array
 json: /* true, false, null, etc. */
   IDENTIFIER { $$ = JSON.parse($1); }
   | CONST { $$ = $1; }
+  | '-' json_neg_num {$$ = $2; }
   | '[' json_array ']' { $$ = $2; }
   | '{' json_map '}' { $$ = $2; }
   ;
@@ -180,6 +181,8 @@ json_map: /* empty */ { $$ = {}; }
   | json ':' json { $$ = {}; $$[$1] = $3; }
   | json_map ',' json ':' json { $$ = $1; $$[$3] = $5; }
   ;
+
+json_neg_num: CONST { $$ = -$1; };
 
 arguments
   : /* empty */
