@@ -29,6 +29,10 @@ class Interpreter(object):
         self._in_experiment = True
         self._inputs = inputs.copy()
 
+    def register_operators(self, operators):
+        Operators.registerOperators(operators)
+        return self
+
     def get_params(self):
         """Get all assigned parameter values from an executed interpreter script"""
         # evaluate code if it hasn't already been evaluated

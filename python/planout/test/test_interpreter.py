@@ -38,6 +38,20 @@ class InterpreterTest(unittest.TestCase):
         proc.set_overrides({'userid': 123454})
         self.assertEqual(proc.get_params().get('specific_goal'), 1)
 
+    def test_register_ops(self):
+        from planout.ops.base import PlanOutOpCommutative
+        class CustomOp(PlanOutOpCommutative):
+            def commutativeExecute(self, values):
+                return sum(values)
+
+        custom_op_script = {"op":"seq","seq":[{"op":"set","var":"x","value":{"values":[2,4],"op":"customOp"}}]}
+        proc = Interpreter(
+            custom_op_script, self.interpreter_salt, {'userid': 123454})
+
+        proc.register_operators({'customOp': CustomOp})
+        self.assertEqual(proc.get_params().get('x'), 6)
+
+
 
 if __name__ == '__main__':
     unittest.main()
