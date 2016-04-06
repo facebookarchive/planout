@@ -24,12 +24,22 @@ class Assignment(MutableMapping):
         self.experiment_salt = experiment_salt
         self._overrides = overrides.copy()
         self._data = overrides.copy()
+        self._salt_func = self._default_salt_func
 
     def evaluate(self, value):
         return value
 
     def get_overrides(self):
         return self._overrides
+
+    def _default_salt_func(self, experiment_salt, var_salt):
+        return '%s.%s.' % (experiment_salt, var_salt)
+
+    def get_salt(self, salt):
+        return self._salt_func(self.experiment_salt, salt)
+
+    def set_salt_func(self, func):
+        self._salt_func = func
 
     def set_overrides(self, overrides):
         # maybe this should be a deep copy?
@@ -38,7 +48,7 @@ class Assignment(MutableMapping):
             self._data[var] = self._overrides[var]
 
     def __setitem__(self, name, value):
-        if name in ('_data', '_overrides', 'experiment_salt'):
+        if name in ('_data', '_overrides', '_salt_func', 'experiment_salt'):
             self.__dict__[name] = value
             return
 
