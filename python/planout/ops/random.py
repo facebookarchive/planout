@@ -16,12 +16,12 @@ class PlanOutOpRandom(PlanOutOpSimple):
 
     def getHash(self, appended_unit=None):
         if 'full_salt' in self.args:
-            full_salt = self.getArgString('full_salt')  # do typechecking
+            full_salt = self.getArgString('full_salt') + '.'  # do typechecking
         else:
-            salt = self.getArgString('salt')
-            full_salt = '%s.%s' % (self.mapper.experiment_salt, salt)
+            full_salt = self.mapper.get_salt(self.getArgString('salt'))
+
         unit_str = '.'.join(map(str, self.getUnit(appended_unit)))
-        hash_str = '%s.%s' % (full_salt, unit_str)
+        hash_str = '%s%s' % (full_salt, unit_str)
         if not isinstance(hash_str, six.binary_type):
             hash_str = hash_str.encode("ascii")
         return int(hashlib.sha1(hash_str).hexdigest()[:15], 16)

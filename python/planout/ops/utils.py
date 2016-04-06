@@ -1,7 +1,6 @@
 import json
 import six
 
-
 class StopPlanOutException(Exception):
 
     """Exception that gets raised when "return" op is evaluated"""
@@ -15,8 +14,7 @@ class Operators():
 
     @staticmethod
     def initFactory():
-        import planout.ops.core as core
-        import planout.ops.random as random
+        from . import core, random
         Operators.operators = {
             "literal": core.Literal,
             "get": core.Get,
