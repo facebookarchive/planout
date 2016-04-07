@@ -25,7 +25,6 @@ class Exp1(SimpleExperiment):
       params.ratings_per_user_goal = UniformChoice(
         choices=[8, 16, 32, 64], unit=userid)
       params.ratings_goal = params.group_size * params.ratings_per_user_goal
-    return e
 ```
 
 It takes a `userid` as input, and assigns three parameters, `group_size`, `specific_goal`, and `ratings goal`. It does not specify a [custom salt or experiment name](how-planout-works.html), so the experiment salt and parameter name are automatically set to the class name `Exp3`. If you wanted to prevent certain scenarios or certain users from getting exposure logged, then you could simply return a false-y value from the assign function. The default logger in `SimpleExperiment` log all of these fields:
@@ -58,6 +57,59 @@ will be completely different.
 checksum can only be computed when Python is running in non-interactive mode,
 so if you are following along this tutorial via the Python shell, you won't
 see a checksum in your log file.
+
+## Logging return values
+
+PlanOut provides the ability to dynamically disable exposure logging by returning `False` from the assignment function. There are many cases where this may be useful, both when initially creating your experiment and when iterating on it.
+
+
+### Example use when initially creating an experiment
+
+For instance, suppose you are running an experiment on a new feature and want to only target users in Germany for your experiment. By returning `False` from your assignment function for users that are not from Germany, PlanOut ensures that you will only have exposure logs for users that are from Germany and can still fix parameters for the users that are not from Germany. In this case your `assign` function may look something like this if it pulls the current user's country from an external service:
+
+```python
+class Exp1(SimpleExperiment):
+  def assign(self, params, userid):
+    params.feature_enabled = False
+
+    country = get_user_country(userid)
+    if country != 'Germany':
+      return False
+    params.feature_enabled = UniformChoice(choices=[True, False], unit=userid)
+```
+
+### Example use when iterating on an experiment
+
+Suppose you are running an experiment that tests 4 difference prices for a trade in a prediction market:
+
+```
+params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.99], unit=userid)
+```
+
+and it turns out that 0.99 performs very poorly. If we were to simply change the experiment to say,
+
+```
+params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50], unit=userid)
+```
+
+Doing this can have a number of negative effects: (1) it will reshuffle all users (2) in some cases (particularly with weightedChoice), doing this can create carryover effects, where users get re-shuffled in non-random ways.
+
+One solution would be to simply replace 0.99 with your best guess of what works best (say it's 0.5):
+
+```
+params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.50], unit=userid)
+```
+
+This would break randomization in your experiment because potential carryover effects from those previously in the 0.99 condition could bias your estimates from the 0.50 condition.
+
+To prevent this from happening, you can move all users who were previously in the 0.99 condition over to what you presently believe works best, and then tell PlanOut not to log the outcomes from those users:
+
+```python
+params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.99], unit=userid)
+if params.trade_price == 0.99:
+  params.trade_price = 0.5
+  return False
+```
 
 ## Types of logs
 
