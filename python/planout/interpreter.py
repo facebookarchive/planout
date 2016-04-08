@@ -50,6 +50,10 @@ class Interpreter(object):
     def in_experiment(self):
         return self._in_experiment
 
+    @property
+    def salt_sep(self):
+        return self._env.salt_sep
+
     def set_env(self, new_env):
         """Replace the current environment with a dictionary"""
         self._env = deepcopy(new_env)
