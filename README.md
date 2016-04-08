@@ -80,7 +80,7 @@ You can immediately install the reference implementation of PlanOut for Python u
 pip install planout
 ```
 
-See the `java/`, `php/`, `js/`, `alpha/golang`, `alpha/ruby`, `alpha/julia` directories for instructions on installing PlanOut for other languages.
+See the `java/`, `php/`, `js/`, `alpha/golang`, `alpha/ruby` directories for instructions on installing PlanOut for other languages.
 
 ### Learn more
 Learn more about PlanOut visiting the [PlanOut website](http://facebook.github.io/planout/) or by [reading the PlanOut paper](http://arxiv.org/pdf/1409.3174v1.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:

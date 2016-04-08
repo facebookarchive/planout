@@ -1,8 +1,5 @@
 * Noteworthy changes in release 0.6 (TBD)
-- The Sample Op is more efficient now, but will break existing uses (including namespace segment assignments). If you want to 
-  migrate to v0.6 and have existing uses of the Sample op return the same values, add 'use_old_sample=True' as an input to the 
-  sample op. If you're using namespaces and want to preserve segment assignments in an existing namespace just add
-  'use_old_sample=True' as an input to the namespace.
+- There is now an alternative Sample Op called FastSample that is more efficient than the existing Sample Op especially when sampling k elements from a population of n when k << n. If you want to enable this op to speed up Namespace segment allocation then when instantiating your Namespace you should pass through use_fast_sample=True in the constructor 
 
 - The return value of assign now determines whether or not an exposure event will
   be automatically logged. If either a truth-y value or nothing is returned from assign, then exposure

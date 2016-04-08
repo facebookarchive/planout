@@ -10,6 +10,3 @@
 [submodule "php"]
 	path = php
 	url = https://github.com/vimeo/ABLincoln
-[submodule "alpha/julia"]
-	path = alpha/julia
-	url = git@github.com:rawls238/PlanOut.jl

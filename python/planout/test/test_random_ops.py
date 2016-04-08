@@ -160,10 +160,13 @@ class TestRandomOperators(unittest.TestCase):
 
         # returns experiment function with x = sample(c, draws)
         # experiment salt is a string version of c
-        def sample(choices, draws):
+        def sample(choices, draws, fast_sample=False):
             @experiment_decorator(','.join(map(str, choices)))
             def exp_func(e, i):
-                e.x = Sample(choices=choices, draws=draws, unit=i)
+                if fast_sample:
+                    e.x = FastSample(choices=choices, draws=draws, unit=i)
+                else:
+                    e.x = Sample(choices=choices, draws=draws, unit=i)
                 self.assertTrue(len(e.x) == draws)
                 return e
             return exp_func
@@ -184,12 +187,14 @@ class TestRandomOperators(unittest.TestCase):
         listDistributionTester(
             sample([1, 2, 3], draws=2), ((1, 1), (2, 1), (3, 1)))
         listDistributionTester(
+            sample([1, 2, 3], draws=2, fast_sample=True), ((1, 1), (2, 1), (3, 1)))
+        listDistributionTester(
             sample(['a', 'a', 'b'], draws=3), (('a', 2), ('b', 1)))
 
         a = Assignment('assign_salt_a')
-        a.old_sample = Sample(choices=[1, 2, 3, 4], draws=1, unit=1, use_old_sample=True)
+        a.old_sample = Sample(choices=[1, 2, 3, 4], draws=1, unit=1)
         new_sample = a.old_sample
-        a.old_sample = Sample(choices=[1, 2, 3, 4], draws=1, unit=1, use_old_sample=False)
+        a.old_sample = FastSample(choices=[1, 2, 3, 4], draws=1, unit=1)
         self.assertTrue(len(a.old_sample), 1)
         self.assertTrue(len(new_sample), 1)
         self.assertTrue(a.old_sample != new_sample)

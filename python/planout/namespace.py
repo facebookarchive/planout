@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 from operator import itemgetter
 
 from .experiment import Experiment, DefaultExperiment
-from .ops.random import Sample, RandomInteger
+from .ops.random import Sample, FastSample, RandomInteger
 from .assignment import Assignment
 
 # decorator for methods that assume assignments have been made
@@ -126,9 +126,14 @@ class SimpleNamespace(Namespace):
         # randomly select the given number of segments from all available
         # segments
         a = Assignment(self.name)
-        a.sampled_segments = \
-            Sample(choices=list(self.available_segments),
-                   draws=segments, unit=name, use_old_sample=self.inputs.get('use_old_sample'))
+        if 'use_fast_sample' in self.inputs:
+            a.sampled_segments = \
+                FastSample(choices=list(self.available_segments),
+                    draws=segments, unit=name)
+        else:
+            a.sampled_segments = \
+                Sample(choices=list(self.available_segments),
+                       draws=segments, unit=name)
 
         # assign each segment to the experiment name
         for segment in a.sampled_segments:
