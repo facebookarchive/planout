@@ -18,7 +18,10 @@ class PlanOutOpRandom(PlanOutOpSimple):
         if 'full_salt' in self.args:
             full_salt = self.getArgString('full_salt') + '.'  # do typechecking
         else:
-            full_salt = self.mapper.get_salt(self.getArgString('salt'))
+            full_salt = '%s.%s%s' % (
+                self.mapper.experiment_salt,
+                self.getArgString('salt'),
+                self.mapper.salt_sep)
 
         unit_str = '.'.join(map(str, self.getUnit(appended_unit)))
         hash_str = '%s%s' % (full_salt, unit_str)
