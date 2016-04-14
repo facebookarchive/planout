@@ -1,14 +1,23 @@
-* Noteworthy changes in release 0.6 (TBD)
-- There is now an alternative Sample Op called FastSample that is more efficient than the existing Sample Op especially when sampling k elements from a population of n when k << n. If you want to enable this op to speed up Namespace segment allocation then when instantiating your Namespace you should pass through use_fast_sample=True in the constructor 
-
-- The return value of assign now determines whether or not an exposure event will
-  be automatically logged. If either a truth-y value or nothing is returned from assign, then exposure
-  will be logged. If a false-y value (excluding None) is returned then exposure will not be logged.
-
-- The SimpleInterpretedExperiment now correctly respects the return op and does not log exposure if a
-  false-y value is returned
-
-- Adds a ProductionExperiment class that includes the ability assert what variables an experiment sets so that exposure is not incorrectly logged when calls to the experiment request parameters that are not defined.
+* Noteworthy changes in release 0.6.0
+- Python 3 compatibility
+- Language-level control of logging: The return value of assign now determines
+  whether or not an exposure event will be automatically logged. If either a
+  truth-y value or nothing is returned from assign, then an exposure will be
+  logged. If a false-y value (excluding None) is returned then exposure will not
+  be logged.
+- SimpleInterpretedExperiment has been updated to take utilize the return op
+- Ability to register custom operators with the PlanOut interpreter.  This
+  allows developers to more easily integrate PlanOut with other aspects of their
+  production stack, including gating / eligibility checks.
+- Fast sampling: There is now an alternative Sample Op called FastSample that is
+  more efficient than the existing Sample Op especially when sampling k elements
+  from a population of n when k << n. If you want to enable this op to speed up
+  namespace segment allocation then when instantiating your Namespace you can
+  use the optional keyword argument, use_fast_sample=True in the Namespace
+  constructor.  Thanks to Guy Aridor for this excellent speed up!
+- ProductionExperiment class which enforces runtime checks on what PlanOut
+  variables are available.  If undefined variables are requested, exposure log
+  events do not occur.
 
 * Noteworthy changes in release 0.5 (2014-11-23)
 - A SimpleInterpretedExperiment to make it easier to get up and running with
