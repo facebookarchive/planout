@@ -39,8 +39,8 @@ class AssignmentTest(unittest.TestCase):
 
     def test_custom_salt(self):
         a = Assignment(self.tester_salt)
-	custom_salt = lambda x,y: '%s-%s' % (x,y)
-        a.foo = UniformChoice(choices=range(8), unit=self.tester_unit)
+        custom_salt = lambda x,y: '%s-%s' % (x,y)
+        a.foo = UniformChoice(choices=list(range(8)), unit=self.tester_unit)
         self.assertEqual(a.foo, 7)
 
 if __name__ == '__main__':
