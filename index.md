@@ -68,7 +68,7 @@ For an in-depth look at how we use PlanOut at Facebook, see our paper, [Designin
 In addition to the Python reference implementation written by Facebook, there are
 multiple third party ports of PlanOut.
 
-Production-ready ports of PlanOut of PlanOut are available at:
+Production-ready ports of PlanOut are available at:
 
   * [Java](https://github.com/Glassdoor/planout4j): full-featured implementation of PlanOut by Glassdoor,
  including experiment lifecycle management and code review.

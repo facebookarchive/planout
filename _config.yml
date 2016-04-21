@@ -4,12 +4,12 @@ url: http://facebook.github.io
 permalink: /blog/:year/:month/:day/:title.html
 name: PlanOut
 relative_permalinks: false
-markdown: redcarpet
 description: A framework for online field experiments
+gems: [jekyll-paginate]
 paginate: 5
 paginate_path: /blog/page:num/
 timezone: America/Los_Angeles
 
 safe: true
 lsi: false
-pygments: true
+highlighter: rouge
