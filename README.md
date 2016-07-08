@@ -31,7 +31,7 @@ The reference implementation for PlanOut is written in Python.  It includes:
 
 Other production-ready versions of PlanOut are available for Java, JavaScript, and PHP, and can found in the `java/`, `js/`, and `php/` directories, respectively.
 
-The `alpha/` directory contains implementations of PlanOut to other languages that are currently under development, including Go and Ruby.
+The `alpha/` directory contains implementations of PlanOut to other languages that are currently under development, including Go, Julia, and Ruby.
 
 ### Who is PlanOut for?
 PlanOut designed for researchers, students, and small businesses wanting to run experiments. It is built to be extensible, so that it may be adapted for use with large production environments.  The implementation here mirrors many of the key components of Facebook's Hack-based implementation of PlanOut which is used to conduct experiments with hundreds of millions of users.
@@ -80,7 +80,7 @@ You can immediately install the reference implementation of PlanOut for Python u
 pip install planout
 ```
 
-See the `java/`, `php/`, `js/`, `alpha/golang`, `alpha/ruby` directories for instructions on installing PlanOut for other languages.
+See the `java/`, `php/`, `js/`, `alpha/golang`, `alpha/ruby`, `alpha/julia` directories for instructions on installing PlanOut for other languages.
 
 ### Learn more
 Learn more about PlanOut visiting the [PlanOut website](http://facebook.github.io/planout/) or by [reading the PlanOut paper](http://arxiv.org/pdf/1409.3174v1.pdf). You can cite PlanOut as "Designing and Deploying Online Field Experiments". Eytan Bakshy, Dean Eckles, Michael S. Bernstein. Proceedings of the 23rd ACM conference on the World Wide Web. April 7–11, 2014, Seoul, Korea, or by copying and pasting the bibtex below:
