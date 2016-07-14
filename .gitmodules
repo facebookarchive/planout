@@ -12,4 +12,4 @@
 	url = https://github.com/vimeo/ABLincoln
 [submodule "alpha/julia"]
 	path = alpha/julia
-	url = git@github.com:rawls238/PlanOut.jl
+	url = https://github.com/rawls238/PlanOut.jl
