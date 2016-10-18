@@ -1,0 +1,3 @@
+# Basic assignment / expression test
+a = 2 * 2;
+b = a * 2;

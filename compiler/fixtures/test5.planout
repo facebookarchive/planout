@@ -1,0 +1,7 @@
+# Test assignment operators
+a = 1;
+b <- 2;
+c = a;
+d <- c;
+e = a * b;
+f <- a * b;

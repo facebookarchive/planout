@@ -10,7 +10,6 @@
 "null"                                    return 'NULL'
 "@"                                       return 'JSON_START'
 
-"switch"                                  return 'SWITCH';
 "if"                                      return 'IF';
 "else"                                    return 'ELSE';
 
@@ -53,7 +52,6 @@
 %token NEQ
 %token OR
 %token COALESCE
-%token SWITCH
 %token THEN
 %token RETURN
 
@@ -91,9 +89,7 @@ rule
   ;
 
 expression
-  : switch_expression
-    { $$ = $1; }
-  | if_expression
+  : if_expression
     { $$ = $1; }
   | return_expression
     { $$ = $1; }
@@ -215,11 +211,6 @@ values_list
     { $$ = $1; $$["values"].push($3); }
   ;
 
-switch_expression
-  : SWITCH '{' cases_list '}'
-    { $$ = {"op": "switch", "cases": $3}; }
-  ;
-
 if_expression
   : IF '(' simple_expression ')' simple_expression optional_else_expression
     { $$ = {"op": "cond", "cond": [{"if": $3, "then": $5}]};
@@ -241,16 +232,4 @@ optional_else_expression
     { $$ = $2; }
   | ELSE simple_expression
     { $$ = {"op": "cond", "cond": [{"if": true, "then": $2}]}; }
-  ;
-
-cases_list
-  : /* empty */
-    { $$ = []; }
-  | cases_list case END_STATEMENT
-    { $$ = $1; $$.push($2); }
-  ;
-
-case
-  : simple_expression THEN expression
-    { $$ = {"op": "case", "condidion": $1, "result": $3}; }
   ;

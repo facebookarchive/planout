@@ -1,0 +1,14 @@
+# Basic program test
+ident = id;
+ident2 = id;
+ident3 = true;
+ident4 = false;
+ident5 = null;
+ident6 = [true,false,true,null];
+
+# Is this invalid ?
+uniformChoice(1,2,3);
+
+if ( 1 > 2 ) {
+    ident7 = 2;   
+}
