@@ -70,6 +70,10 @@ multiple third party ports of PlanOut.
 
 Production-ready ports of PlanOut are available at:
 
+  * [JavaScript](https://github.com/HubSpot/PlanOut.js):
+  complete port of the PlanOut reference implementation to JavaScript.
+   Includes native APIs for ES5 and ES6, as wll as React integration.
+
   * [Java](https://github.com/Glassdoor/planout4j): full-featured implementation of PlanOut by Glassdoor,
  including experiment lifecycle management and code review.
 
@@ -77,13 +81,12 @@ Production-ready ports of PlanOut are available at:
 
 Under development:
 
-  * [JavaScript](https://github.com/HubSpot/PlanOut.js):
-  complete port of the PlanOut reference implementation to JavaScript.
-   Includes native APIs for ES5, ES6, as well as the PlanOut interpreter.
-
   * [Go](https://github.com/URXtech/planout-golang): implementation of PlanOut interpreter for golang.
+  
+  * [Lua](https://github.com/Fanatics/planout.lua): a complete port of the PlanOut API and language interpreter.
 
-  * [Ruby](https://github.com/facebook/planout/tree/master/alpha/ruby): Basic native API implementation of PlanOut for Ruby
+  * [Ruby](https://github.com/facebook/planout/tree/master/alpha/ruby): basic native API implementation of PlanOut for Ruby
+  
 
 
 If you are publishing research using PlanOut, please consider referencing our work,
