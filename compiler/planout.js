@@ -791,6 +791,8 @@ exports.main = function commonjsMain(args) {
         process.exit(1);
     }
     var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+    var foo = exports.parser.parse(source);
+    console.log(JSON.stringify(foo, false, ' '));
     return exports.parser.parse(source);
 };
 if (typeof module !== 'undefined' && require.main === module) {
