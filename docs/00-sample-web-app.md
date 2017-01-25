@@ -176,7 +176,7 @@ Data is logged to `anchoring_webapp.log`. Here is some sample log data:
 {"inputs": {"userid": "d2d73446-302e-4605-834c-e547d5c7a7aa"}, "name": "AnchoringExperiment", "checksum": "3467a5ec", "params": {"price": 247796, "use_round_number": 0}, "time": 1396508182, "salt": "AnchoringExperiment", "event": "exposure"}
 {"inputs": {"userid": "4fa255a1-8bd9-48ab-a8c2-4ecd5b15559c"}, "name": "AnchoringExperiment", "checksum": "3467a5ec", "params": {"price": 250906, "use_round_number": 0}, "time": 1396508184, "salt": "AnchoringExperiment", "event": "exposure"}
 {"inputs": {"userid": "d4f235a6-bc76-435e-8a4c-f56f1caf0770"}, "name": "AnchoringExperiment", "checksum": "3467a5ec", "params": {"price": 260000, "use_round_number": 1}, "time": 1396508187, "salt": "AnchoringExperiment", "event": "exposure"}
-{"inputs": {"userid": "d4f235a6-bc76-435e-8a4c-f56f1caf0770"}, "name": "AnchoringExperiment", "checksum": "3467a5ec", "params": {"price": 260000, "use_round_number": 1}, "time": 1396508205, "extra_data": {"bid_amount": 250000}, "salt": "AnchoringExperiment", "event": "bid"}```
+{"inputs": {"userid": "d4f235a6-bc76-435e-8a4c-f56f1caf0770"}, "name": "AnchoringExperiment", "checksum": "3467a5ec", "params": {"price": 260000, "use_round_number": 1}, "time": 1396508205, "extra_data": {"bid_amount": 250000}, "salt": "AnchoringExperiment", "event": "bid"}
 ```
 
 The first few lines correspond to exposures. We visited the page once, triggering

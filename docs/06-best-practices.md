@@ -22,7 +22,7 @@ Experiments are used to test the change of one or more parameters on some averag
 
 In practice, there are a number of common ways for two groups to not be equivalent (beyond random imbalance), including:
 
- - Some units from one group were previously in a different group, while users from the other group were not.
+ - Some units from one group were previously in a different group, while units from the other group were not.
 
  - Some units in one group were recently added to the experiment.
 
