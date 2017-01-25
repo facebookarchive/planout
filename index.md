@@ -36,7 +36,7 @@ text = my_exp.get('button_text')
 ```
 
 PlanOut takes care of correctly randomizing each ``userid`` to parameter values.
-It does so by determnisitcally hashing the input, so each ``userid`` will always map onto the
+It does so by deterministically hashing the input, so each ``userid`` will always map onto the
 same parameter values for that experiment. As soon as you access any of the parameters,
 core parts of the data you need to analyze your experiment are automatically
 logged.
