@@ -9,7 +9,7 @@ next: extending-logging.html
 
 PlanOut makes it easy to implement bug-free code that randomly assigns users (or other units) to parameters. The Experiment and Namespace classes are designed to reduce common errors in deploying and logging experiments. Here are a few tips for running experiments:
 
-* Use [auto-exposure logging](logging.html), which is enabled by default.  Auto-exposure logging makes it easier to check that your assignment procedure is working correctly, increases the precision of your experiment, and reduces errors in downstream analysis.
+* Use [auto-exposure logging](logging.html#auto-exposure-logging), which is enabled by default.  Auto-exposure logging makes it easier to check that your assignment procedure is working correctly, increases the precision of your experiment, and reduces errors in downstream analysis.
 * Avoid changing an experiment while it is running. Instead, either run a follow-up experiment using a [namespace](namespaces.html), or create a new experiment with a different salt to re-randomize the units. These experiments should be analyzed separately from the original experiment.
 * Automate the analysis of your experiment. If you are running multiple related experiments, create a pipeline to automatically do the analysis.
 
@@ -60,7 +60,7 @@ class SharingExperiment(SimpleExperiment):
       unit=userid
     )
 ```
-Changing the variable name `button_text` changes the assignment, since it is used to salt (link) to assignment procedure (see `Experiment` intro document).
+Changing the variable name `button_text` changes the assignment, since it is used to [salt](how-planout-works.html#salts) to [assignment procedure](how-planout-works.html#pseudo-random-assignment-through-hashing).
 
 Changing the number of choices for the `button_text` also affects users previously randomized into other conditions.  For example, removing the 'Share' item from the `choices` list, will allocate some users who were previosuly in the 'Share' condition to the 'OK' and 'Share with friends group'. Their outcomes will now be a weighted average of the two, which may decrease the observed difference between 'OK' and 'Share with friends'.
 
