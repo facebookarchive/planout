@@ -9,7 +9,7 @@ next: logging.html
 
 PlanOut comes built in with several built-in random assignment operators that
 map units to randomized values. All operators require
-one to specify an input `unit`, and and optionally allow one to specify a salt.
+one to specify an input `unit`, and optionally allow one to specify a salt.
 For more details on how randomization works, see the [how PlanOut works](how-planout-works.html) page.
 
 ### UniformChoice
@@ -33,9 +33,8 @@ params.y = WeightedChoice(choices=['a', 'b', 'c'], weights=[8, 1, 1],
 ```
 
 Both `x` and `y` will take on the values 'a', 'b', and 'c' with a 80%, 10%, and
-10% chance each. Because `x` and `y` have different salts, they will not
-necessarily always have the same values for a given `userid`
-(link to how-planout-works #salt section).
+10% chance each. Because `x` and `y` have [different salts](how-planout-works.html#salts), they will not
+necessarily always have the same values for a given `userid`.
 
 ### BernoulliTrial
 `WeightedChoice` flips a coin that lands on `1` with probability `p`, and `0`

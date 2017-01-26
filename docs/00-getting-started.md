@@ -79,7 +79,7 @@ deterministic.
 
 ### Getting a random assignment
 To get the parameter assignment for a given input, you simply create an instance of the
-class, and and call the `get()` method for the desired parameter.
+class, and call the `get()` method for the desired parameter.
 
 ```python
 exp = VotingExperiment(userid=14)
@@ -126,6 +126,7 @@ Here, we can see a few main keys that are logged by default:
  * `name`: the name of the experiment. By default this is the same as the name
 
  of the class.
+
  * `params`: all the parameters assigned by the experiment.
 
  * `time`: a unix-formatted timestamp of the event.

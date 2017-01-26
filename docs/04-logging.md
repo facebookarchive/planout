@@ -27,7 +27,7 @@ class Exp1(SimpleExperiment):
       params.ratings_goal = params.group_size * params.ratings_per_user_goal
 ```
 
-It takes a `userid` as input, and assigns three parameters, `group_size`, `specific_goal`, and `ratings goal`. It does not specify a [custom salt or experiment name](how-planout-works.html), so the experiment salt and parameter name are automatically set to the class name `Exp3`. If you wanted to prevent certain scenarios or certain users from getting exposure logged, then you could simply return a false-y value from the assign function. The default logger in `SimpleExperiment` log all of these fields:
+It takes a `userid` as input, and assigns three parameters, `group_size`, `specific_goal`, and `ratings goal`. It does not specify a [custom salt or experiment name](how-planout-works.html), so the experiment salt and parameter name are automatically set to the class name `Exp1`. If you wanted to prevent certain scenarios or certain users from getting exposure logged, then you could simply return a false-y value from the assign function. The default logger in `SimpleExperiment` logs all of these fields:
 
 ```json
 {
@@ -83,21 +83,21 @@ class Exp1(SimpleExperiment):
 Suppose you are running an experiment that tests 4 difference prices for a trade in a prediction market:
 
 ```
-params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.99], unit=userid)
+params.trade_price = UniformChoice(choices=[0.10, 0.25, 0.50, 0.99], unit=userid)
 ```
 
 and it turns out that 0.99 performs very poorly. If we were to simply change the experiment to say,
 
 ```
-params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50], unit=userid)
+params.trade_price = UniformChoice(choices=[0.10, 0.25, 0.50], unit=userid)
 ```
 
-Doing this can have a number of negative effects: (1) it will reshuffle all users (2) in some cases (particularly with weightedChoice), doing this can create carryover effects, where users get re-shuffled in non-random ways.
+Doing this can have a number of negative effects: (1) it will reshuffle all users (2) in some cases (particularly with `WeightedChoice`), doing this can create carryover effects, where users get re-shuffled in non-random ways.
 
 One solution would be to simply replace 0.99 with your best guess of what works best (say it's 0.5):
 
 ```
-params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.50], unit=userid)
+params.trade_price = UniformChoice(choices=[0.10, 0.25, 0.50, 0.50], unit=userid)
 ```
 
 This would break randomization in your experiment because potential carryover effects from those previously in the 0.99 condition could bias your estimates from the 0.50 condition.

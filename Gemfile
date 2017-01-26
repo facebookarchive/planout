@@ -1,18 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'rake'
-
-# jekyll, which builds it all
-gem 'jekyll', '~>1.3.0'
-
-# JSON
-gem 'json'
-
-# For `rake watch`
-gem 'rb-fsevent'
-
-# Redcarpet for Markdown
-gem 'redcarpet'
-
-# For markdown header cleanup
-gem 'sanitize'
+gem 'jekyll'

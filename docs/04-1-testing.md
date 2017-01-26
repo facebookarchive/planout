@@ -89,7 +89,7 @@ yields,
 
 ## Testing with the PlanOut editor
 The experiment can be expressed in the
-[PlanOut language](interpreter.html) as:
+[PlanOut language](planout-language.html) as:
 
 ```javascript
 group_size = uniformChoice(choices=[1, 10], unit=userid);
