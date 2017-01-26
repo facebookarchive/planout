@@ -83,21 +83,21 @@ class Exp1(SimpleExperiment):
 Suppose you are running an experiment that tests 4 difference prices for a trade in a prediction market:
 
 ```
-params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.99], unit=userid)
+params.trade_price = UniformChoice(choices=[0.10, 0.25, 0.50, 0.99], unit=userid)
 ```
 
 and it turns out that 0.99 performs very poorly. If we were to simply change the experiment to say,
 
 ```
-params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50], unit=userid)
+params.trade_price = UniformChoice(choices=[0.10, 0.25, 0.50], unit=userid)
 ```
 
-Doing this can have a number of negative effects: (1) it will reshuffle all users (2) in some cases (particularly with weightedChoice), doing this can create carryover effects, where users get re-shuffled in non-random ways.
+Doing this can have a number of negative effects: (1) it will reshuffle all users (2) in some cases (particularly with `WeightedChoice`), doing this can create carryover effects, where users get re-shuffled in non-random ways.
 
 One solution would be to simply replace 0.99 with your best guess of what works best (say it's 0.5):
 
 ```
-params.trade_price = uniformChoice(choices=[0.10, 0.25, 0.50, 0.50], unit=userid)
+params.trade_price = UniformChoice(choices=[0.10, 0.25, 0.50, 0.50], unit=userid)
 ```
 
 This would break randomization in your experiment because potential carryover effects from those previously in the 0.99 condition could bias your estimates from the 0.50 condition.
