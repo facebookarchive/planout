@@ -1,7 +1,14 @@
-language: ruby
-rvm:
-  - 2.0.0
-  - 2.1.1
-env:
-  - TEST_DIR=alpha/ruby
-script: cd $TEST_DIR && bundle && rake
+language: python
+python:
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.5-dev"
+  - "nightly"
+
+install: 
+  - python python/setup.py install
+
+script: python -m unittest discover python/planout/test
