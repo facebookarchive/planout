@@ -1,4 +1,5 @@
 import json
+import six
 
 class StopPlanOutException(Exception):
 
@@ -9,6 +10,7 @@ class StopPlanOutException(Exception):
 
 
 class Operators():
+    """Singleton class for inspecting and registering operators"""
 
     @staticmethod
     def initFactory():
@@ -47,8 +49,15 @@ class Operators():
             "bernoulliFilter": random.BernoulliFilter,
             "uniformChoice": random.UniformChoice,
             "weightedChoice": random.WeightedChoice,
-            "sample": random.Sample
+            "sample": random.Sample,
+            "fastSample": random.FastSample
         }
+
+    @staticmethod
+    def registerOperators(operators):
+        for op, obj in six.iteritems(operators):
+            assert op not in Operators.operators
+            Operators.operators[op] = operators[op]
 
     @staticmethod
     def isOperator(op):

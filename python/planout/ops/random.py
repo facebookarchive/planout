@@ -108,19 +108,40 @@ class WeightedChoice(PlanOutOpRandom):
                 return choices[index]
 
 
-class Sample(PlanOutOpRandom):
+class BaseSample(PlanOutOpRandom):
 
-    # implements Fisher-Yates shuffle
-    def simpleExecute(self):
-        # copy the list of choices so that we don't mutate it
-        choices = [x for x in self.getArgList('choices')]
+    def copyChoices(self):
+        return [x for x in self.getArgList('choices')]
+
+    def getNumDraws(self, choices):
         if 'draws' in self.args:
             num_draws = self.getArgInt('draws')
             assert num_draws <= len(choices), \
                 "%s: cannot make %s draws when only %s choices are available" \
                 % (self.__class__, num_draws, len(choices))
+            return num_draws
         else:
-            num_draws = len(choices)
+            return len(choices)
+
+class FastSample(BaseSample):
+
+    def simpleExecute(self):
+        choices = self.copyChoices()
+        num_draws = self.getNumDraws(choices)
+        stopping_point = len(choices) - num_draws
+
+        for i in six.moves.range(len(choices) - 1, 0, -1):
+            j = self.getHash(i) % (i + 1)
+            choices[i], choices[j] = choices[j], choices[i]
+            if stopping_point == i:
+                return choices[i:]
+        return choices[:num_draws]
+
+class Sample(BaseSample):
+
+    def simpleExecute(self):
+        choices = self.copyChoices()
+        num_draws = self.getNumDraws(choices)
 
         for i in six.moves.range(len(choices) - 1, 0, -1):
             j = self.getHash(i) % (i + 1)

@@ -167,6 +167,9 @@ array
 json: /* true, false, null, etc. */
   IDENTIFIER { $$ = JSON.parse($1); }
   | CONST { $$ = $1; }
+  | TRUE { $$ = true; }
+  | FALSE { $$ = false; }
+  | NULL { $$ = null; }
   | '-' json_neg_num {$$ = $2; }
   | '[' json_array ']' { $$ = $2; }
   | '{' json_map '}' { $$ = $2; }
