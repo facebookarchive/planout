@@ -2,7 +2,7 @@
 
 %%
 
-"#"(.)*\n                                 /* skip comments */
+"#"(.)*(\n|$)                             /* skip comments */
 \s+                                       /* skip whitespace */
 
 "true"                                    return 'TRUE'
@@ -16,9 +16,9 @@
 
 "return"                                  return 'RETURN';
 
-[a-zA-Z][a-zA-Z0-9_]*                     return 'IDENTIFIER'
+[a-zA-Z_][a-zA-Z0-9_]*                    return 'IDENTIFIER'
 
-[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?    { yytext = Number(yytext); return 'CONST'; }
+[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?         { yytext = Number(yytext); return 'CONST'; }
 \"(\\.|[^\\"])*\"                         { yytext = yytext.substr(1, yyleng-2); return 'CONST'; }
 \'[^\']*\'                                { yytext = yytext.substr(1, yyleng-2); return 'CONST'; }
 
@@ -62,7 +62,7 @@
 %left EQUALS NEQ LTE GTE '>' '<'
 %left '+' '-'
 %left '*' '/' '%'
-
+%left '(' '!'
 %left '['
 
 %%
@@ -167,6 +167,10 @@ array
 json: /* true, false, null, etc. */
   IDENTIFIER { $$ = JSON.parse($1); }
   | CONST { $$ = $1; }
+  | TRUE { $$ = true; }
+  | FALSE { $$ = false; }
+  | NULL { $$ = null; }
+  | '-' json_neg_num {$$ = $2; }
   | '[' json_array ']' { $$ = $2; }
   | '{' json_map '}' { $$ = $2; }
   ;
@@ -180,6 +184,8 @@ json_map: /* empty */ { $$ = {}; }
   | json ':' json { $$ = {}; $$[$1] = $3; }
   | json_map ',' json ':' json { $$ = $1; $$[$3] = $5; }
   ;
+
+json_neg_num: CONST { $$ = -$1; };
 
 arguments
   : /* empty */

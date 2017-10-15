@@ -5,7 +5,7 @@
 ## Using the Compiler
 The script can be run from the command line via [node.js](http://nodejs.org/) as follows.
 ```
-node planout.js ../demos/exp1.planout
+node planout.js ../demos/sample_scripts/exp1.planout
 ```
 
 Alternatively, the script may be run from a web page.

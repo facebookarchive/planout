@@ -29,6 +29,10 @@ class Interpreter(object):
         self._in_experiment = True
         self._inputs = inputs.copy()
 
+    def register_operators(self, operators):
+        Operators.registerOperators(operators)
+        return self
+
     def get_params(self):
         """Get all assigned parameter values from an executed interpreter script"""
         # evaluate code if it hasn't already been evaluated
@@ -45,6 +49,10 @@ class Interpreter(object):
     @property
     def in_experiment(self):
         return self._in_experiment
+
+    @property
+    def salt_sep(self):
+        return self._env.salt_sep
 
     def set_env(self, new_env):
         """Replace the current environment with a dictionary"""

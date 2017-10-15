@@ -24,6 +24,7 @@ class Assignment(MutableMapping):
         self.experiment_salt = experiment_salt
         self._overrides = overrides.copy()
         self._data = overrides.copy()
+        self.salt_sep = '.' # separates unit from experiment/variable salt
 
     def evaluate(self, value):
         return value
@@ -38,7 +39,7 @@ class Assignment(MutableMapping):
             self._data[var] = self._overrides[var]
 
     def __setitem__(self, name, value):
-        if name in ('_data', '_overrides', 'experiment_salt'):
+        if name in ('_data', '_overrides', 'salt_sep', 'experiment_salt'):
             self.__dict__[name] = value
             return
 

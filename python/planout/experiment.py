@@ -32,10 +32,13 @@ def requires_assignment(f):
 
 def requires_exposure_logging(f):
     def wrapped_f(self, *args, **kwargs):
-        if \
-                self._auto_exposure_log and \
-                not self._exposure_logged:
-            self.log_exposure()
+        if self._auto_exposure_log and not self._exposure_logged:
+            should_log_exposure = True
+            if f.__name__ == 'get' and hasattr(self, 'get_param_names') and callable(self.get_param_names):
+                params = self.get_param_names()
+                should_log_exposure = any(i in params for i in args)
+            if should_log_exposure:
+                self.log_exposure()
         return f(self, *args, **kwargs)
     return wrapped_f
 
@@ -52,7 +55,8 @@ class Experiment(object):
         # True when assignments have been exposure logged
         self._exposure_logged = False
         self._salt = None              # Experiment-level salt
-        # Determines whether or not results should be logged
+
+        # Determines whether or not exposure should be logged
         self._in_experiment = True
 
         # use the name of the class as the default name
@@ -69,7 +73,10 @@ class Experiment(object):
     def _assign(self):
         """Assignment and setup that only happens when we need to log data"""
         self.configure_logger()  # sets up loggers
-        self.assign(self._assignment, **self.inputs)
+
+        #consumers can optionally return False from assign if they don't want exposure to be logged
+        assign_val = self.assign(self._assignment, **self.inputs)
+        self._in_experiment = True if assign_val or assign_val is None else False
         self._checksum = self.checksum()
         self._assigned = True
 
@@ -316,6 +323,7 @@ class SimpleInterpretedExperiment(SimpleExperiment):
         results = interpreterInstance.get_params()
         # insert results into param object dictionary
         params.update(results)
+        return interpreterInstance.in_experiment
 
     def checksum(self):
         # self.script must be a dictionary
@@ -325,3 +333,19 @@ class SimpleInterpretedExperiment(SimpleExperiment):
         if not isinstance(src, six.binary_type):
             src = src.encode("ascii")
         return hashlib.sha1(src).hexdigest()[:8]
+
+class ProductionExperiment(Experiment):
+
+    """ 
+    A variant of SimpleExperiment that verifies that exposure is only logged 
+    when a valid parameter is fetched via the get method
+    """
+    
+    __metaclass__ = ABCMeta
+
+
+    """Returns a list of assignment parameter values that this experiment can take"""
+    @abstractmethod
+    def get_param_names(self):
+        pass
+

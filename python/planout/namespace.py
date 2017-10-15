@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 from operator import itemgetter
 
 from .experiment import Experiment, DefaultExperiment
-from .ops.random import Sample, RandomInteger
+from .ops.random import Sample, FastSample, RandomInteger
 from .assignment import Assignment
 
 # decorator for methods that assume assignments have been made
@@ -116,19 +116,24 @@ class SimpleNamespace(Namespace):
     def add_experiment(self, name, exp_object, segments):
         num_avail = len(self.available_segments)
         if num_avail < segments:
-            print 'error: %s segments requested, only %s available.' % \
-                (segments, num_avail)
+            print('error: %s segments requested, only %s available.' %
+                  (segments, num_avail))
             return False
         if name in self.current_experiments:
-            print 'error: there is already an experiment called %s.' % name
+            print('error: there is already an experiment called %s.' % name)
             return False
 
         # randomly select the given number of segments from all available
         # segments
         a = Assignment(self.name)
-        a.sampled_segments = \
-            Sample(choices=list(self.available_segments),
-                   draws=segments, unit=name)
+        if 'use_fast_sample' in self.inputs:
+            a.sampled_segments = \
+                FastSample(choices=list(self.available_segments),
+                    draws=segments, unit=name)
+        else:
+            a.sampled_segments = \
+                Sample(choices=list(self.available_segments),
+                       draws=segments, unit=name)
 
         # assign each segment to the experiment name
         for segment in a.sampled_segments:
@@ -140,7 +145,7 @@ class SimpleNamespace(Namespace):
 
     def remove_experiment(self, name):
         if name not in self.current_experiments:
-            print 'error: there is no experiment called %s.' % name
+            print('error: there is no experiment called %s.' % name)
             return False
 
         segments_to_free = \
@@ -162,7 +167,6 @@ class SimpleNamespace(Namespace):
 
     def _assign_experiment(self):
         "assign primary unit to an experiment"
-        in_experiment = False
         segment = self.get_segment()
         # is the unit allocated to an experiment?
         if segment in self.segment_allocations:
