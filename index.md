@@ -72,7 +72,7 @@ Production-ready ports of PlanOut are available at:
 
   * [JavaScript](https://github.com/HubSpot/PlanOut.js):
   complete port of the PlanOut reference implementation to JavaScript.
-   Includes native APIs for ES5 and ES6, as wll as React integration.
+   Includes native APIs for ES5 and ES6, as well as React integration.
 
   * [Java](https://github.com/Glassdoor/planout4j): full-featured implementation of PlanOut by Glassdoor,
  including experiment lifecycle management and code review.
