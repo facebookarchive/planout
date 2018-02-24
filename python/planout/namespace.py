@@ -1,3 +1,4 @@
+import six
 from abc import ABCMeta, abstractmethod, abstractproperty
 from operator import itemgetter
 
@@ -149,7 +150,7 @@ class SimpleNamespace(Namespace):
             return False
 
         segments_to_free = \
-            [s for s, n in self.segment_allocations.iteritems() if n == name]
+            [s for s, n in six.iteritems(self.segment_allocations) if n == name]
 
         for segment in segments_to_free:
             del self.segment_allocations[segment]
