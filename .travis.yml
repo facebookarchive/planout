@@ -1,14 +1,15 @@
 language: python
 python:
-  - "2.7"
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.5-dev"
-  - "nightly"
+  - 2.7
+  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
+  - nightly
 
-install: 
-  - python python/setup.py install
+install:
+  - pip install -e python
 
-script: python -m unittest discover python/planout/test
+script: 
+  - python -m unittest discover python/planout/test
