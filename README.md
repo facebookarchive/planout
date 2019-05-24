@@ -1,6 +1,10 @@
 # PlanOut
 
-PlanOut is a multiplatform framework and programming language for online field experimentation. PlanOut was created to make it easy to run and iterate on sophisticated experiments, while satisfying the constraints of deployed Internet services with many users.
+[![Build Status](https://img.shields.io/pypi/v/planout.svg)](https://pypi.org/project/planout/)
+[![Build Status](https://img.shields.io/pypi/pyversions/planout.svg)](https://pypi.org/project/planout/)
+[![Build Status](https://travis-ci.com/facebook/planout.svg?branch=master)](https://travis-ci.com/facebook/planout)
+
+PlanOut is a multi-platform framework and programming language for online field experimentation. PlanOut was created to make it easy to run and iterate on sophisticated experiments, while satisfying the constraints of deployed Internet services with many users.
 
 Developers integrate PlanOut by defining experiments that detail how _units_ (e.g., users, cookie IDs) should get mapped onto conditions. For example, to create a 2x2 experiment randomizing both the color and the text on a button, you create a class like this in Python:
 
