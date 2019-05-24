@@ -8,10 +8,13 @@ If you are planning on porting PlanOut to other languages or platforms,
 please let us know! We are happy to review ports in detail, and either post
 them on our own repository, or link to your own repository as a submodule.
 
+## Code of Conduct
+The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
+
 ## Our Development Process
 The Python reference implementation mirrors the functionality of PlanOut and
-core parts of Facebook's experimentation stack, which is written in Hack (we
-  hope to open source parts of this implementation in the near future). As
+core parts of Facebook's experimentation stack, which is written in Hack (we 
+hope to open source parts of this implementation in the near future). As
 we improve PlanOut internally, we will continue to maintain the Python
 implementation as to maintain feature parity.
 
