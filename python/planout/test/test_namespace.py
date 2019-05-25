@@ -1,10 +1,10 @@
 import unittest
 
 from planout.namespace import SimpleNamespace
-from planout.experiment import Experiment, DefaultExperiment
+from planout.experiment import DefaultExperiment
 
 
-class VanillaExperiment(Experiment):
+class VanillaExperiment(DefaultExperiment):
     def setup(self):
         self.name = 'test_name'
 
