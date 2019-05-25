@@ -96,7 +96,7 @@ class SimpleNamespace(Namespace):
         pass
 
     @abstractmethod
-    def setup_experiments():
+    def setup_experiments(self):
         # e.g.,
         # self.add_experiment('first experiment', Exp1, 100)
         pass
