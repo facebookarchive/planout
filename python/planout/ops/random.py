@@ -99,11 +99,11 @@ class WeightedChoice(PlanOutOpRandom):
             return []
         cum_weights = dict(enumerate(weights))
         cum_sum = 0.0
-        for index in cum_weights:
+        for index in sorted(cum_weights.keys()):
             cum_sum += cum_weights[index]
             cum_weights[index] = cum_sum
         stop_value = self.getUniform(0.0, cum_sum)
-        for index in cum_weights:
+        for index in sorted(cum_weights.keys()):
             if stop_value <= cum_weights[index]:
                 return choices[index]
 
