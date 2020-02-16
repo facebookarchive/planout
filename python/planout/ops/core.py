@@ -1,5 +1,6 @@
 from copy import deepcopy
 import six
+from math import exp, sqrt
 
 from .base import (
     PlanOutOp,
@@ -292,3 +293,13 @@ class Length(PlanOutOpUnary):
 
     def unaryExecute(self, value):
         return len(value)
+
+class Exp(PlanOutOpUnary):
+
+    def unaryExecute(self, value):
+        return exp(value)
+
+class Sqrt(PlanOutOpUnary):
+
+    def unaryExecute(self, value):
+        return sqrt(value)

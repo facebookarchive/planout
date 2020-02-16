@@ -258,6 +258,35 @@ class TestBasicOperators(unittest.TestCase):
         i = return_runner(0)
         self.assertEquals({'x': 2}, i.get_params())
         self.assertEquals(False, i.in_experiment)
+    
+    def test_exp(self):
+        # test exp
+        x = self.run_config_single({'op': 'exp', 'value': 1})
+        self.assertEqual(2.718281828459045, x)
+
+        x = self.run_config_single({'op': 'exp', 'value': -0.5})
+        self.assertEqual(0.6065306597126334, x)
+
+        x = self.run_config_single({'op': 'exp', 'value': 0.123})
+        self.assertEqual(1.1308844209474893, x)
+
+        x = self.run_config_single({'op': 'exp', 'value': 1.88})
+        self.assertEqual(6.553504862191148, x)
+
+    
+    def test_sqrt(self):
+        # test sqrt
+        x = self.run_config_single({'op': 'sqrt', 'value': 1})
+        self.assertEqual(1, x)
+
+        with self.assertRaises(ValueError):
+            x = self.run_config_single({'op': 'sqrt', 'value': -0.5})
+        
+        x = self.run_config_single({'op': 'sqrt', 'value': 0.123})
+        self.assertEqual(0.3507135583350036, x)
+
+        x = self.run_config_single({'op': 'sqrt', 'value': 1.88})
+        self.assertEqual(1.3711309200802089, x)
 
 
 if __name__ == '__main__':
