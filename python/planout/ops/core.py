@@ -1,6 +1,8 @@
 from copy import deepcopy
-from math import exp
-from math import sqrt
+from math import (
+    exp, 
+    sqrtg,
+)
 import six
 
 
