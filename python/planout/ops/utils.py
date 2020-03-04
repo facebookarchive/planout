@@ -43,6 +43,8 @@ class Operators():
             "coalesce": core.Coalesce,
             "product": core.Product,
             "sum": core.Sum,
+            "exp": core.Exp,
+            "sqrt": core.Sqrt,
             "randomFloat": random.RandomFloat,
             "randomInteger": random.RandomInteger,
             "bernoulliTrial": random.BernoulliTrial,
