@@ -10,3 +10,6 @@
 [submodule "alpha/julia"]
 	path = alpha/julia
 	url = https://github.com/rawls238/PlanOut.jl
+[submodule "alpha/golang"]
+	path = alpha/golang
+	url = https://github.com/biased-unit/planout-golang
