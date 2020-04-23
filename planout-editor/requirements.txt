@@ -1,4 +1,4 @@
-Flask==0.10.0
+Flask==1.0
 Jinja2==2.7.3
 MarkupSafe==0.23
 PlanOut==0.5
