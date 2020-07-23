@@ -92,7 +92,7 @@ class Operators():
             try:
                 # if an op is invalid, we may not be able to pretty print it
                 my_pretty = Operators.operatorInstance(params).pretty()
-            except:
+            except AssertionError:
                 my_pretty = params
             return my_pretty
         elif type(params) is list:
