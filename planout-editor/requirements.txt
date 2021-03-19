@@ -1,5 +1,5 @@
 Flask==0.10.0
-Jinja2==2.7.3
+Jinja2==2.11.3
 MarkupSafe==0.23
 PlanOut==0.5
 Werkzeug==0.9.6
